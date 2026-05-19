@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1A1A1A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="syg3.png">
+    <title>SYGLab</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1A1A1A;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* ─── Header ─── */
+        .header {
+            background: #212121;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #FF980033;
+        }
+        .header img { height: 32px; }
+        .header h1 { color: #FF9800; font-size: 20px; }
+        .header .logout { color: #FF9800; background: none; border: 1px solid #FF980055; border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+
+        /* ─── Login ─── */
+        .login-container {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; min-height: 100vh; padding: 32px;
+        }
+        .login-container img { height: 70px; margin-bottom: 20px; }
+        .login-container h2 { color: #FF9800; margin-bottom: 6px; }
+        .login-container p { color: #888; margin-bottom: 24px; font-size: 14px; }
+        .login-form { width: 100%; max-width: 360px; }
+        .login-form input {
+            width: 100%; padding: 14px; margin-bottom: 12px;
+            background: #3A3A3A; border: 1px solid #FF980044; border-radius: 12px;
+            color: #fff; font-size: 15px; outline: none;
+        }
+        .login-form input:focus { border-color: #FF9800; }
+        .login-form input::placeholder { color: #666; }
+        .row-inputs { display: flex; gap: 10px; }
+        .row-inputs input:first-child { flex: 3; }
+        .row-inputs input:last-child { flex: 1; }
+        .btn-login {
+            width: 100%; padding: 14px; background: #FF9800; color: #000;
+            border: none; border-radius: 12px; font-size: 16px; font-weight: bold;
+            cursor: pointer; margin-top: 8px;
+        }
+        .btn-login:active { background: #E65100; }
+
+        /* ─── Dashboard ─── */
+        .content { padding: 16px; }
+        .section-title { color: #FF9800; font-size: 18px; font-weight: bold; margin-bottom: 12px; }
+        .resumen-row { display: flex; gap: 8px; margin-bottom: 24px; }
+        .resumen-card {
+            flex: 1; padding: 18px 8px; border-radius: 12px; text-align: center;
+        }
+        .resumen-card .valor { font-size: 28px; font-weight: bold; }
+        .resumen-card .label { font-size: 12px; margin-top: 4px; }
+        .resumen-total { background: #FF980022; border: 1px solid #FF980044; }
+        .resumen-total .valor, .resumen-total .label { color: #FF9800; }
+        .resumen-ok { background: #4CAF5022; border: 1px solid #4CAF5044; }
+        .resumen-ok .valor, .resumen-ok .label { color: #4CAF50; }
+        .resumen-falla { background: #E5393522; border: 1px solid #E5393544; }
+        .resumen-falla .valor, .resumen-falla .label { color: #E53935; }
+
+        .divider {
+            height: 2px; margin: 8px 0 24px;
+            background: linear-gradient(90deg, transparent, #FF9800, transparent);
+        }
+
+        /* ─── Menu Cards ─── */
+        .menu-card {
+            background: #2A2A2A; border: 1px solid #FF980022; border-radius: 12px;
+            padding: 16px; margin-bottom: 10px; display: flex; align-items: center;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .menu-card:active { background: #3A3A3A; }
+        .menu-icon {
+            width: 48px; height: 48px; border-radius: 12px; display: flex;
+            align-items: center; justify-content: center; font-size: 24px;
+            margin-right: 14px;
+        }
+        .menu-card h3 { font-size: 15px; margin-bottom: 2px; }
+        .menu-card p { color: #888; font-size: 12px; }
+        .arrow { margin-left: auto; color: #FF980066; font-size: 20px; }
+
+        /* ─── Historial ─── */
+        .search-bar {
+            width: 100%; padding: 12px 16px; background: #3A3A3A;
+            border: 1px solid #FF980044; border-radius: 12px; color: #fff;
+            font-size: 14px; margin-bottom: 12px; outline: none;
+        }
+        .search-bar:focus { border-color: #FF9800; }
+        .count { color: #888; font-size: 13px; margin-bottom: 10px; }
+        .ensayo-card {
+            background: #2A2A2A; border: 1px solid #FF980022; border-radius: 12px;
+            padding: 14px; margin-bottom: 8px;
+        }
+        .ensayo-header { display: flex; justify-content: space-between; align-items: center; }
+        .ensayo-title { color: #FF9800; font-weight: bold; font-size: 15px; }
+        .ensayo-sub { color: #888; font-size: 12px; margin-top: 4px; }
+        .ensayo-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+        .chip {
+            background: #3A3A3A; border: 1px solid #4A4A4A; border-radius: 8px;
+            padding: 4px 8px; font-size: 11px; color: #ccc;
+        }
+        .veredicto {
+            display: inline-block; padding: 3px 8px; border-radius: 6px;
+            font-size: 11px; font-weight: bold;
+        }
+        .v-ok { background: #4CAF5022; border: 1px solid #4CAF5044; color: #4CAF50; }
+        .v-falla { background: #E5393522; border: 1px solid #E5393544; color: #E53935; }
+        .v-default { background: #3A3A3A; color: #888; }
+
+        .back-btn {
+            color: #FF9800; background: none; border: none; font-size: 24px;
+            cursor: pointer; padding: 0 8px;
+        }
+
+        .footer {
+            text-align: center; padding: 30px; opacity: 0.3;
+        }
+        .footer img { height: 24px; }
+        .footer p { font-size: 11px; color: #666; margin-top: 6px; }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════ LOGIN ═══════════ -->
+<div id="loginPage" class="login-container">
+    <img src="syg3.png" alt="SYGLab">
+    <h2>Ensayos Eléctricos</h2>
+    <p>Ingrese los datos del equipo</p>
+    <div class="login-form">
+        <input type="text" id="inputUrl" placeholder="URL del equipo (dejar vacío si es local)" style="width:100%;padding:14px;margin-bottom:12px;background:#3A3A3A;border:1px solid #FF980044;border-radius:12px;color:#fff;font-size:15px;outline:none;">
+        <p style="color:#888;font-size:11px;margin-bottom:12px;text-align:center;">
+            Ejemplos: vacío para este servidor, o https://xxxx.ngrok-free.app
+        </p>
+        <input type="text" id="inputUser" placeholder="Usuario">
+        <input type="password" id="inputPass" placeholder="Contraseña">
+        <button class="btn-login" onclick="login()">⚡ Ingresar</button>
+        <p id="loginError" style="color:#E53935;text-align:center;margin-top:12px;" class="hidden"></p>
+    </div>
+</div>
+
+<!-- ═══════════ HOME ═══════════ -->
+<div id="homePage" class="hidden">
+    <div class="header">
+        <div style="display:flex;align-items:center;gap:10px;">
+            <img src="syg3.png" alt="Logo">
+            <h1>SYGLab</h1>
+        </div>
+        <button class="logout" onclick="logout()">Salir</button>
+    </div>
+    <div class="content">
+        <div class="section-title">📊 Resumen del día</div>
+        <div class="resumen-row">
+            <div class="resumen-card resumen-total">
+                <div class="valor" id="rTotal">-</div>
+                <div class="label">Total</div>
+            </div>
+            <div class="resumen-card resumen-ok">
+                <div class="valor" id="rOk">-</div>
+                <div class="label">OK</div>
+            </div>
+            <div class="resumen-card resumen-falla">
+                <div class="valor" id="rFalla">-</div>
+                <div class="label">Falla</div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-title">📋 Historiales</div>
+
+        <div class="menu-card" onclick="showPage('fdlPage'); loadFDL()">
+            <div class="menu-icon" style="background:#FF980022;color:#FF9800;">⚡</div>
+            <div><h3 style="color:#FF9800">Final de Línea (FDL)</h3><p>Consumo, fuga, PAT, rigidez dieléctrica</p></div>
+            <span class="arrow">›</span>
+        </div>
+        <div class="menu-card" onclick="showPage('consumoPage'); loadConsumo()">
+            <div class="menu-icon" style="background:#FFA72622;color:#FFA726;">⏱</div>
+            <div><h3 style="color:#FFA726">Consumo</h3><p>Tensión, corriente, FP, potencia</p></div>
+            <span class="arrow">›</span>
+        </div>
+        <div class="menu-card" onclick="showPage('verificacionPage'); loadVerificacion()">
+            <div class="menu-icon" style="background:#FFCC8022;color:#FFCC80;">✓</div>
+            <div><h3 style="color:#FFCC80">Verificación</h3><p>Fuga, PAT, rigidez dieléctrica</p></div>
+            <span class="arrow">›</span>
+        </div>
+
+        <div class="footer">
+            <img src="syg3.png"><p>SYGLab © 2026</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ FDL ═══════════ -->
+<div id="fdlPage" class="hidden">
+    <div class="header">
+        <button class="back-btn" onclick="showPage('homePage')">‹</button>
+        <h1>Historial FDL</h1>
+        <div></div>
+    </div>
+    <div class="content">
+        <input class="search-bar" id="fdlSearch" placeholder="🔍 Buscar..." onkeyup="filterFDL()">
+        <div class="count" id="fdlCount"></div>
+        <div id="fdlList"></div>
+    </div>
+</div>
+
+<!-- ═══════════ CONSUMO ═══════════ -->
+<div id="consumoPage" class="hidden">
+    <div class="header">
+        <button class="back-btn" onclick="showPage('homePage')">‹</button>
+        <h1>Historial Consumo</h1>
+        <div></div>
+    </div>
+    <div class="content">
+        <input class="search-bar" id="consumoSearch" placeholder="🔍 Buscar..." onkeyup="filterConsumo()">
+        <div class="count" id="consumoCount"></div>
+        <div id="consumoList"></div>
+    </div>
+</div>
+
+<!-- ═══════════ VERIFICACION ═══════════ -->
+<div id="verificacionPage" class="hidden">
+    <div class="header">
+        <button class="back-btn" onclick="showPage('homePage')">‹</button>
+        <h1>Verificación</h1>
+        <div></div>
+    </div>
+    <div class="content">
+        <div id="verificacionList"></div>
+    </div>
+</div>
+
+<script>
+let API_URL = '';
+let AUTH = '';
+let fdlData = [];
+let consumoData = [];
+
+function headers() { return { 'Authorization': 'Basic ' + AUTH }; }
+
+function showPage(id) {
+    document.querySelectorAll('#loginPage,#homePage,#fdlPage,#consumoPage,#verificacionPage')
+        .forEach(el => el.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+}
+
+async function login() {
+    const url = document.getElementById('inputUrl').value.trim();
+    const user = document.getElementById('inputUser').value.trim();
+    const pass = document.getElementById('inputPass').value.trim();
+
+    // Si está vacío, usa la misma URL donde está la PWA
+    API_URL = url || '';
+    AUTH = btoa(`${user}:${pass}`);
+
+    try {
+        const r = await fetch(`${API_URL}/api/resumen-hoy`, { headers: headers() });
+        if (r.ok) {
+            const data = await r.json();
+            document.getElementById('rTotal').textContent = data.total;
+            document.getElementById('rOk').textContent = data.ok;
+            document.getElementById('rFalla').textContent = data.falla;
+            showPage('homePage');
+        } else {
+            document.getElementById('loginError').textContent = 'Usuario o contraseña incorrectos';
+            document.getElementById('loginError').classList.remove('hidden');
+        }
+    } catch(e) {
+        document.getElementById('loginError').textContent = 'No se pudo conectar al equipo';
+        document.getElementById('loginError').classList.remove('hidden');
+    }
+}
+
+function logout() { showPage('loginPage'); }
+
+function vClass(v) {
+    if (!v) return 'v-default';
+    const u = v.trim().toUpperCase();
+    if (u === 'OK' || u === 'OK - OK') return 'v-ok';
+    if (u.includes('FALLA')) return 'v-falla';
+    return 'v-default';
+}
+
+// ─── FDL ───
+async function loadFDL() {
+    const r = await fetch(`${API_URL}/api/historial-fdl`, { headers: headers() });
+    const data = await r.json();
+    fdlData = data.historiales;
+    renderFDL(fdlData);
+}
+
+function filterFDL() {
+    const q = document.getElementById('fdlSearch').value.toLowerCase();
+    const filtered = fdlData.filter(h =>
+        Object.values(h).some(v => v.toLowerCase().includes(q))
+    );
+    renderFDL(filtered);
+}
+
+function renderFDL(list) {
+    document.getElementById('fdlCount').textContent = `${list.length} ensayos`;
+    document.getElementById('fdlList').innerHTML = list.map(h => `
+        <div class="ensayo-card">
+            <div class="ensayo-header">
+                <span class="ensayo-title">${h.marca} ${h.modelo}</span>
+                <span class="veredicto ${vClass(h.consumo_v)}">${h.consumo_v || '-'}</span>
+            </div>
+            <div class="ensayo-sub">S/N: ${h.nro_serie} • ${h.fecha} ${h.hora}</div>
+            <div class="ensayo-chips">
+                <span class="chip">${h.tension} V</span>
+                <span class="chip">${h.corriente} A</span>
+                <span class="chip">FP: ${h.fp}</span>
+                <span class="chip">${h.potencia} W</span>
+            </div>
+            <div class="ensayo-chips" style="margin-top:6px">
+                <span class="veredicto ${vClass(h.fuga_activa_v)}">Fuga A: ${h.fuga_activa_v||'-'}</span>
+                <span class="veredicto ${vClass(h.fuga_pasiva_v)}">Fuga P: ${h.fuga_pasiva_v||'-'}</span>
+                <span class="veredicto ${vClass(h.pat_v)}">PAT: ${h.pat_v||'-'}</span>
+                <span class="veredicto ${vClass(h.rigidez_dielectrica_v)}">R.D: ${h.rigidez_dielectrica_v||'-'}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ─── CONSUMO ───
+async function loadConsumo() {
+    const r = await fetch(`${API_URL}/api/historial-consumo`, { headers: headers() });
+    const data = await r.json();
+    consumoData = data.historiales;
+    renderConsumo(consumoData);
+}
+
+function filterConsumo() {
+    const q = document.getElementById('consumoSearch').value.toLowerCase();
+    const filtered = consumoData.filter(h =>
+        Object.values(h).some(v => v.toLowerCase().includes(q))
+    );
+    renderConsumo(filtered);
+}
+
+function renderConsumo(list) {
+    document.getElementById('consumoCount').textContent = `${list.length} registros`;
+    document.getElementById('consumoList').innerHTML = list.map(h => `
+        <div class="ensayo-card">
+            <div class="ensayo-header">
+                <span class="ensayo-title">${h.marca} ${h.modelo}</span>
+                <span class="chip" style="color:#FF9800;border-color:#FF980044">E${h.n_ensayo}/M${h.n_muestra}</span>
+            </div>
+            <div class="ensayo-sub">S/N: ${h.nro_serie} • ${h.fecha} ${h.hora}</div>
+            <div class="ensayo-chips">
+                <span class="chip">${h.tension} V</span>
+                <span class="chip">${h.corriente} A</span>
+                <span class="chip">FP: ${h.fp}</span>
+                <span class="chip">${h.potencia} W</span>
+                <span class="chip">${h.fuga_activa} μA</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ─── VERIFICACION ───
+async function loadVerificacion() {
+    const r = await fetch(`${API_URL}/api/historial-verificacion`, { headers: headers() });
+    const data = await r.json();
+    document.getElementById('verificacionList').innerHTML = data.historiales.map(h => `
+        <div class="ensayo-card">
+            <div class="ensayo-header">
+                <span class="ensayo-title">Verificación #${h.id}</span>
+                <span class="chip" style="color:#FF9800;border-color:#FF980044">${h.fecha} ${h.hora}</span>
+            </div>
+            <div style="margin-top:12px;padding:10px;background:#4CAF5012;border:1px solid #4CAF5033;border-radius:10px">
+                <div style="color:#4CAF50;font-weight:bold;font-size:13px;margin-bottom:8px">✓ Patrón PASA</div>
+                <div style="display:flex;gap:6px">
+                    <div style="flex:1;text-align:center;background:#4CAF5018;border-radius:8px;padding:8px">
+                        <div style="font-size:11px;color:#888">FUGA</div>
+                        <div style="font-weight:bold;color:#4CAF50">${h.fuga_1||'-'}</div>
+                    </div>
+                    <div style="flex:1;text-align:center;background:#4CAF5018;border-radius:8px;padding:8px">
+                        <div style="font-size:11px;color:#888">PAT</div>
+                        <div style="font-weight:bold;color:#4CAF50">${h.pat_1||'-'}</div>
+                    </div>
+                    <div style="flex:1;text-align:center;background:#4CAF5018;border-radius:8px;padding:8px">
+                        <div style="font-size:11px;color:#888">RD</div>
+                        <div style="font-weight:bold;color:#4CAF50">${h.rd_1||'-'}</div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top:8px;padding:10px;background:#E5393512;border:1px solid #E5393533;border-radius:10px">
+                <div style="color:#E53935;font-weight:bold;font-size:13px;margin-bottom:8px">✗ Patrón FALLA</div>
+                <div style="display:flex;gap:6px">
+                    <div style="flex:1;text-align:center;background:#E5393518;border-radius:8px;padding:8px">
+                        <div style="font-size:11px;color:#888">FUGA</div>
+                        <div style="font-weight:bold;color:#E53935">${h.fuga_2||'-'}</div>
+                    </div>
+                    <div style="flex:1;text-align:center;background:#E5393518;border-radius:8px;padding:8px">
+                        <div style="font-size:11px;color:#888">PAT</div>
+                        <div style="font-weight:bold;color:#E53935">${h.pat_2||'-'}</div>
+                    </div>
+                    <div style="flex:1;text-align:center;background:#E5393518;border-radius:8px;padding:8px">
+                        <div style="font-size:11px;color:#888">RD</div>
+                        <div style="font-weight:bold;color:#E53935">${h.rd_2||'-'}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+</script>
+
+</body>
+</html>

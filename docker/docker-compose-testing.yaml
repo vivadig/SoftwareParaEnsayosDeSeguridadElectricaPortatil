@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: ensayos-seguridad-test
+    user: "0"
+    command: >
+      bash -c "
+        uv run pytest tests/ -v --junitxml=/app/test-results/junit.xml --cov=src --cov-report=xml:/app/test-results/coverage.xml --cov-report=html:/app/test-results/htmlcov
+      "
+    volumes:
+      - ../test-results:/app/test-results
+    environment:
+      - PYTHONPATH=/app
+      - ENV=test

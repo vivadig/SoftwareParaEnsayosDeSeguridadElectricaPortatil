@@ -1,0 +1,1 @@
+"""Configuración parametrizable del sistema."""
