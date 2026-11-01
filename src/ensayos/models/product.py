@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from ensayos.models.enums import DeviceClass
+from ensayos.models.enums import ApplianceType, DeviceClass
 
 
 @dataclass
@@ -26,6 +26,8 @@ class Product:
     # IEC 60335-1, A.1: con cable de alimentación fijo la medición desde la ficha
     # incluye el cable y el límite es 0,2 Ω; sin él (borne o ficha de aparato), 0,1 Ω.
     con_cable_alimentacion: bool = True
+    # IEC 60335-1, Tablas 1 y 2: define la tolerancia del ensayo de consumo.
+    tipo_aparato: ApplianceType = ApplianceType.HEATING
 
     @property
     def power_w(self) -> float:

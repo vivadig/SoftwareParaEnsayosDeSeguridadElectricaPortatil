@@ -3,7 +3,7 @@
 import logging
 
 from ensayos.database.schemas import get_connection
-from ensayos.models.enums import DeviceClass
+from ensayos.models.enums import ApplianceType, DeviceClass
 from ensayos.models.product import Product
 from ensayos.models.test_result import ConsumptionSample, FdlTestRecord
 
@@ -22,8 +22,8 @@ class SQLiteProductRepository:
                 conn.execute(
                     """INSERT INTO productos
                        (marca, modelo, descripcion, potencia, tension, corriente, frecuencia,
-                        clase, fuga_pasiva_duplicada, con_cable_alimentacion)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                        clase, fuga_pasiva_duplicada, con_cable_alimentacion, tipo_aparato)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                     (
                         product.marca,
                         product.modelo,
@@ -35,6 +35,7 @@ class SQLiteProductRepository:
                         product.clase.value,
                         int(product.fuga_pasiva_duplicada),
                         int(product.con_cable_alimentacion),
+                        product.tipo_aparato.value,
                     ),
                 )
             return True
@@ -74,7 +75,7 @@ class SQLiteProductRepository:
                 conn.execute(
                     """UPDATE productos SET marca=?, modelo=?, descripcion=?,
                        potencia=?, tension=?, corriente=?, frecuencia=?, clase=?,
-                       fuga_pasiva_duplicada=?, con_cable_alimentacion=?
+                       fuga_pasiva_duplicada=?, con_cable_alimentacion=?, tipo_aparato=?
                        WHERE id=?""",
                     (
                         product.marca,
@@ -87,6 +88,7 @@ class SQLiteProductRepository:
                         product.clase.value,
                         int(product.fuga_pasiva_duplicada),
                         int(product.con_cable_alimentacion),
+                        product.tipo_aparato.value,
                         product.id,
                     ),
                 )
@@ -118,6 +120,7 @@ class SQLiteProductRepository:
             clase=DeviceClass(row["clase"]),
             fuga_pasiva_duplicada=bool(row["fuga_pasiva_duplicada"]),
             con_cable_alimentacion=bool(row["con_cable_alimentacion"]),
+            tipo_aparato=ApplianceType(row["tipo_aparato"] or ApplianceType.HEATING.value),
         )
 
 

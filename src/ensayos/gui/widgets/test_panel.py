@@ -367,7 +367,7 @@ class TestPanel(QWidget):
             )
 
             if isinstance(measurement, ConsumptionMeasurement):
-                text = f"{measurement.power_w:.1f} W"
+                text = f"{measurement.power:.1f} W"
             elif isinstance(measurement, LeakageMeasurement):
                 text = f"{measurement.leakage_ua:.1f} μA"
             elif isinstance(measurement, GroundingMeasurement):
@@ -446,10 +446,10 @@ class TestPanel(QWidget):
             if r.test_type == TestType.CONSUMPTION and m is not None:
                 from ensayos.models.measurement import ConsumptionMeasurement
                 if isinstance(m, ConsumptionMeasurement):
-                    record.tension = m.voltage_v
-                    record.corriente = m.current_a
+                    record.tension = m.voltage
+                    record.corriente = m.current
                     record.factor_potencia = m.power_factor
-                    record.potencia = m.power_w
+                    record.potencia = m.power
                 record.veredicto_consumo = r.verdict
             elif r.test_type == TestType.ACTIVE_LEAKAGE:
                 if m is not None:

@@ -17,12 +17,14 @@ def _get_int(key: str, default: int) -> int:
 
 @dataclass(frozen=True)
 class ConsumptionThresholds:
-    """Umbrales de aprobación para ensayo de consumo (% del nominal)."""
+    """Parámetros del ensayo de consumo.
 
-    current_min_pct: float = _get_float("CONSUMPTION_CURRENT_MIN_PCT", 50.0)
-    current_max_pct: float = _get_float("CONSUMPTION_CURRENT_MAX_PCT", 105.0)
-    power_min_pct: float = _get_float("CONSUMPTION_POWER_MIN_PCT", 75.0)
-    power_max_pct: float = _get_float("CONSUMPTION_POWER_MAX_PCT", 110.0)
+    Las tolerancias son las de IEC 60335-1, Tablas 1 y 2 (ver engine.verdict).
+    Cuando la norma solo fija un límite superior, se aplica un mínimo funcional
+    (no normativo) para detectar aparatos que no funcionan.
+    """
+
+    functional_min_pct: float = _get_float("CONSUMPTION_FUNCTIONAL_MIN_PCT", 50.0)
 
 
 @dataclass(frozen=True)

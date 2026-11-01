@@ -19,7 +19,7 @@ from PyQt5.QtWidgets import (
 )
 
 from ensayos.database.sqlite_repository import SQLiteProductRepository
-from ensayos.models.enums import DeviceClass
+from ensayos.models.enums import ApplianceType, DeviceClass
 from ensayos.models.product import Product
 
 logger = logging.getLogger(__name__)
@@ -129,6 +129,16 @@ class ProductForm(QWidget):
         )
         row_extra.addWidget(self.check_cable)
 
+        self.combo_tipo = QComboBox()
+        self.combo_tipo.addItems(["Calefacción / combinado", "Motor"])
+        self.combo_tipo.setToolTip(
+            "IEC 60335-1, Tablas 1 y 2: define la tolerancia del ensayo de consumo.\n"
+            "Un aparato combinado se considera 'Motor' si los motores consumen\n"
+            "más del 50 % de la potencia nominal."
+        )
+        row_extra.addWidget(QLabel("Tipo"))
+        row_extra.addWidget(self.combo_tipo)
+
         form.addLayout(row_extra)
         layout.addLayout(form)
 
@@ -179,6 +189,7 @@ class ProductForm(QWidget):
             self.combo_clase.setCurrentIndex(0 if p.clase == DeviceClass.CLASS_1 else 1)
             self.check_fuga_duplicada.setChecked(p.fuga_pasiva_duplicada)
             self.check_cable.setChecked(p.con_cable_alimentacion)
+            self.combo_tipo.setCurrentIndex(0 if p.tipo_aparato == ApplianceType.HEATING else 1)
             self.boton_editar.setEnabled(True)
             self.boton_eliminar.setEnabled(True)
         else:
@@ -188,6 +199,8 @@ class ProductForm(QWidget):
 
     def _read_form(self) -> Product:
         clase = DeviceClass.CLASS_1 if self.combo_clase.currentIndex() == 0 else DeviceClass.CLASS_2
+        is_heating = self.combo_tipo.currentIndex() == 0
+        tipo = ApplianceType.HEATING if is_heating else ApplianceType.MOTOR
         return Product(
             marca=self.input_marca.text().strip(),
             modelo=self.input_modelo.text().strip(),
@@ -199,6 +212,7 @@ class ProductForm(QWidget):
             clase=clase,
             fuga_pasiva_duplicada=self.check_fuga_duplicada.isChecked(),
             con_cable_alimentacion=self.check_cable.isChecked(),
+            tipo_aparato=tipo,
         )
 
     def _agregar(self) -> None:

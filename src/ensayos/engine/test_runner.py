@@ -101,6 +101,7 @@ class TestRunner:
                 rated_current=product.corriente,
                 rated_power=product.potencia,
                 include_leakage=include_leakage,
+                appliance_type=product.tipo_aparato,
             )
         elif test_type == TestType.DIELECTRIC:
             return DielectricTest(

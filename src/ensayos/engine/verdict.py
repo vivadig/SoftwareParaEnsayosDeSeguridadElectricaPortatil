@@ -5,65 +5,55 @@ y retorna un Verdict (OK / FAIL). Sin efectos secundarios ni dependencias de UI.
 """
 
 from ensayos.config.config_tests import tests_config
-from ensayos.models.enums import DeviceClass, Verdict
+from ensayos.models.enums import ApplianceType, DeviceClass, Verdict
 
 
-def evaluate_consumption_current(
-    measured_current: float,
-    rated_current: float,
-    min_pct: float | None = None,
-    max_pct: float | None = None,
-) -> Verdict:
-    """Evalúa si la corriente medida está dentro del rango aceptable.
-
-    Args:
-        measured_current: Corriente medida (A).
-        rated_current: Corriente nominal del producto (A).
-        min_pct: Porcentaje mínimo aceptable (default: config).
-        max_pct: Porcentaje máximo aceptable (default: config).
+def _consumption_limits(
+    rated: float,
+    appliance_type: ApplianceType,
+    small_max: float,
+    heating_mid_max: float,
+    motor_mid_max: float,
+    heating_abs: float,
+    motor_abs: float,
+) -> tuple[float | None, float]:
+    """Límites (inferior, superior) según la estructura común de las Tablas 1 y 2.
 
     Returns:
-        Verdict.OK si está dentro del rango, Verdict.FAIL si no.
+        Tupla (límite inferior o None si la norma no lo fija, límite superior).
     """
-    cfg = tests_config.consumption
-    min_pct = min_pct if min_pct is not None else cfg.current_min_pct
-    max_pct = max_pct if max_pct is not None else cfg.current_max_pct
+    if rated <= small_max:
+        return None, rated * 1.20
+    if appliance_type == ApplianceType.HEATING:
+        if rated <= heating_mid_max:
+            return rated * 0.90, rated * 1.10
+        return rated * 0.90, rated + max(rated * 0.05, heating_abs)
+    if rated <= motor_mid_max:
+        return None, rated * 1.20
+    return None, rated + max(rated * 0.15, motor_abs)
 
-    lower = rated_current * (min_pct / 100.0)
-    upper = rated_current * (max_pct / 100.0)
 
-    if lower < measured_current < upper:
-        return Verdict.OK
-    return Verdict.FAIL
+def power_limits(rated_w: float, appliance_type: ApplianceType) -> tuple[float | None, float]:
+    """Desviación admisible de la potencia (IEC 60335-1, 10.1, Tabla 1)."""
+    return _consumption_limits(rated_w, appliance_type, 25.0, 200.0, 300.0, 20.0, 60.0)
 
 
-def evaluate_consumption_power(
-    measured_power: float,
-    rated_power: float,
-    min_pct: float | None = None,
-    max_pct: float | None = None,
+def current_limits(rated_a: float, appliance_type: ApplianceType) -> tuple[float | None, float]:
+    """Desviación admisible de la corriente (IEC 60335-1, 10.2, Tabla 2)."""
+    return _consumption_limits(rated_a, appliance_type, 0.2, 1.0, 1.5, 0.10, 0.30)
+
+
+def _within(
+    measured: float,
+    rated: float,
+    limits: tuple[float | None, float],
+    functional_min_pct: float,
 ) -> Verdict:
-    """Evalúa si la potencia medida está dentro del rango aceptable.
-
-    Args:
-        measured_power: Potencia aparente medida (W).
-        rated_power: Potencia nominal del producto (W).
-        min_pct: Porcentaje mínimo aceptable (default: config).
-        max_pct: Porcentaje máximo aceptable (default: config).
-
-    Returns:
-        Verdict.OK si está dentro del rango, Verdict.FAIL si no.
-    """
-    cfg = tests_config.consumption
-    min_pct = min_pct if min_pct is not None else cfg.power_min_pct
-    max_pct = max_pct if max_pct is not None else cfg.power_max_pct
-
-    lower = rated_power * (min_pct / 100.0)
-    upper = rated_power * (max_pct / 100.0)
-
-    if lower < measured_power < upper:
-        return Verdict.OK
-    return Verdict.FAIL
+    lower, upper = limits
+    if lower is None:
+        # La norma no fija mínimo: control funcional (no normativo)
+        lower = rated * functional_min_pct / 100.0
+    return Verdict.OK if lower <= measured <= upper else Verdict.FAIL
 
 
 def evaluate_consumption(
@@ -71,16 +61,41 @@ def evaluate_consumption(
     rated_current: float,
     measured_power: float,
     rated_power: float,
-) -> tuple[Verdict, Verdict]:
-    """Evalúa el ensayo de consumo completo.
+    appliance_type: ApplianceType = ApplianceType.HEATING,
+    functional_min_pct: float | None = None,
+) -> Verdict:
+    """Evalúa el ensayo de consumo (IEC 60335-1, 10.1 y 10.2).
+
+    Solo se evalúan los valores nominales declarados (mayores a cero).
+
+    Args:
+        measured_current: Corriente medida (A).
+        rated_current: Corriente nominal del producto (A); 0 si no está declarada.
+        measured_power: Potencia activa medida (W).
+        rated_power: Potencia nominal del producto (W); 0 si no está declarada.
+        appliance_type: Tipo de aparato (define la tolerancia).
+        functional_min_pct: Mínimo funcional (%) cuando la norma no fija límite
+            inferior (default: config).
 
     Returns:
-        Tupla (veredicto_corriente, veredicto_potencia).
+        Verdict.OK si todos los valores declarados están dentro de tolerancia,
+        Verdict.FAIL si alguno no lo está, Verdict.NOT_RUN si no hay ninguno
+        declarado.
     """
-    return (
-        evaluate_consumption_current(measured_current, rated_current),
-        evaluate_consumption_power(measured_power, rated_power),
-    )
+    if functional_min_pct is None:
+        functional_min_pct = tests_config.consumption.functional_min_pct
+
+    verdicts = []
+    if rated_power > 0:
+        limits = power_limits(rated_power, appliance_type)
+        verdicts.append(_within(measured_power, rated_power, limits, functional_min_pct))
+    if rated_current > 0:
+        limits = current_limits(rated_current, appliance_type)
+        verdicts.append(_within(measured_current, rated_current, limits, functional_min_pct))
+
+    if not verdicts:
+        return Verdict.NOT_RUN
+    return Verdict.OK if all(v == Verdict.OK for v in verdicts) else Verdict.FAIL
 
 
 def evaluate_active_leakage(
