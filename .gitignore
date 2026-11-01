@@ -127,6 +127,8 @@ Thumbs.db
 # Documentación LaTeX
 # Norma IEC con derechos de autor: no redistribuir en el repositorio
 Documentation/IEC-*.pdf
+# Folletos de terceros (catálogos de fabricantes): no redistribuir
+Documentation/Folleto_*.pdf
 # Archivos auxiliares de compilación
 *.aux
 *.bbl
