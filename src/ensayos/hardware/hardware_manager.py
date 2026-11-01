@@ -110,8 +110,15 @@ class HardwareManager:
     # ---- Watchdog ----
 
     def watchdog_reset(self) -> None:
-        """Ejecuta un pulso de reset en el relé watchdog."""
+        """Ejecuta un pulso de reset en el relé watchdog.
+
+        Con ``RELAY_WATCHDOG=0`` no hay relé de watchdog cableado: no se hace nada
+        más que registrar un aviso. La lectura fallida igual se trata como falla.
+        """
         watchdog_relay = self._cfg.relay.mapping.watchdog
+        if watchdog_relay == 0:
+            logger.warning("Watchdog desactivado (RELAY_WATCHDOG=0): no se reinicia el ESP32.")
+            return
         self.activate_relay(watchdog_relay)
         time.sleep(0.2)
         self.deactivate_relay(watchdog_relay)
