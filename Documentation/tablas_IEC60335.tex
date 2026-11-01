@@ -1,0 +1,479 @@
+% ============================================================
+%  TABLAS DE VALORES DE REFERENCIA — IEC 60335-1
+%  Tesis: Equipo de Ensayos de Seguridad Eléctrica Portátil
+%  Autor: Valentina Ferrini
+% ============================================================
+%
+% Paquetes requeridos en el preámbulo principal:
+%   \usepackage{booktabs}
+%   \usepackage{multirow}
+%   \usepackage{array}
+%   \usepackage{float}
+%   \usepackage[table]{xcolor}
+%   \usepackage{siunitx}
+%   \sisetup{output-decimal-marker={,}}
+%   \usepackage[spanish]{babel}
+%
+% Uso: \input{tablas_IEC60335}
+% ============================================================
+
+\section{Valores de referencia según IEC~60335-1}
+\label{sec:valores_referencia}
+
+Las tablas presentadas en esta sección sintetizan los valores límite
+y los parámetros de ensayo definidos por la norma IEC~60335-1
+(\textit{Household and similar electrical appliances -- Safety --
+Part~1: General requirements}), edición~4.1 (IEC~60335-1:2001+A1:2004),
+para los ensayos contemplados en el equipo desarrollado.
+Todos los valores corresponden a aparatos monofásicos con tensión nominal
+mayor a \SI{150}{\volt} y hasta \SI{250}{\volt} (\SIrange{220}{240}{\volt},
+\SI{50}{\hertz}), rango habitual en el mercado argentino.
+
+La norma distingue dos tipos de ensayo:
+\begin{itemize}
+    \item \textbf{Ensayos de tipo} (cláusulas~10 a~32): se realizan sobre
+          muestras representativas para certificar un diseño.
+    \item \textbf{Ensayos de rutina} (Anexo~A, informativo): se realizan
+          sobre cada unidad producida para detectar variaciones de
+          fabricación que puedan comprometer la seguridad.
+\end{itemize}
+Por tratarse de un equipo de final de línea, el sistema adopta los
+criterios del Anexo~A para rigidez dieléctrica y puesta a tierra.
+Para la corriente de fuga y el consumo, que el Anexo~A no contempla,
+se adoptan los límites de los ensayos de tipo correspondientes.
+
+% ============================================================
+\subsection{Ensayo de consumo}
+\label{subsec:tabla_potencia}
+% ============================================================
+
+La norma fija la desviación admisible de la potencia
+(cláusula~10.1, tabla~1) y de la corriente (cláusula~10.2, tabla~2)
+respecto del valor nominal marcado en el aparato.
+La tolerancia depende del tipo de aparato y del valor nominal
+(tabla~\ref{tab:potencia_desviacion}).
+Los aparatos combinados se tratan como aparatos a motor si la potencia
+(o corriente) de los motores supera el \SI{50}{\percent} del valor nominal;
+en caso contrario, como aparatos de calefacción.
+
+\begin{table}[H]
+\centering
+\caption{Desviación admisible del consumo respecto del valor nominal --- IEC~60335-1, tablas~1 y~2}
+\label{tab:potencia_desviacion}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l l l l @{}}
+\toprule
+\textbf{Tipo de aparato}
+    & \textbf{Potencia nominal}
+    & \textbf{Corriente nominal}
+    & \textbf{Desviación admisible} \\
+\midrule
+Todos
+    & $\leq \SI{25}{\watt}$
+    & $\leq \SI{0.2}{\ampere}$
+    & $+\SI{20}{\percent}$ \\
+\addlinespace
+\multirow{2}{*}{Calefacción y combinados}
+    & \SIrange[range-phrase={ a }]{25}{200}{\watt}
+    & \SIrange[range-phrase={ a }]{0.2}{1}{\ampere}
+    & $\pm\SI{10}{\percent}$ \\
+    & $> \SI{200}{\watt}$
+    & $> \SI{1}{\ampere}$
+    & \begin{tabular}[t]{@{}l@{}}
+        $+\SI{5}{\percent}$ o $+\SI{20}{\watt}$ ($+\SI{0.10}{\ampere}$),\\
+        el mayor; $-\SI{10}{\percent}$
+      \end{tabular} \\
+\addlinespace
+\multirow{2}{*}{A motor}
+    & \SIrange[range-phrase={ a }]{25}{300}{\watt}
+    & \SIrange[range-phrase={ a }]{0.2}{1.5}{\ampere}
+    & $+\SI{20}{\percent}$ \\
+    & $> \SI{300}{\watt}$
+    & $> \SI{1.5}{\ampere}$
+    & \begin{tabular}[t]{@{}l@{}}
+        $+\SI{15}{\percent}$ o $+\SI{60}{\watt}$ ($+\SI{0.30}{\ampere}$),\\
+        el mayor
+      \end{tabular} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Condiciones del ensayo de consumo --- IEC~60335-1, cláusulas~5.7, 10.1 y~10.2}
+\label{tab:potencia_condiciones}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} p{4.5cm} p{6cm} p{2.5cm} @{}}
+\toprule
+\textbf{Parámetro} & \textbf{Condición / valor} & \textbf{Referencia} \\
+\midrule
+Tensión de alimentación
+    & Tensión nominal declarada por el fabricante
+    & Cl.~10.1 \\
+\addlinespace
+Condición de funcionamiento
+    & Funcionamiento normal, con todos los circuitos que pueden
+      operar simultáneamente en funcionamiento
+    & Cl.~10.1 \\
+\addlinespace
+Momento de la medición
+    & Cuando el consumo se ha estabilizado; si varía durante el ciclo,
+      se toma el valor medio en un período representativo
+    & Cl.~10.1 \\
+\addlinespace
+Temperatura ambiente
+    & \SI{20 \pm 5}{\celsius}, sin corrientes de aire
+    & Cl.~5.7 \\
+\addlinespace
+Magnitud evaluada
+    & Potencia activa [\si{\watt}] y corriente eficaz [\si{\ampere}]
+    & Cl.~10.1 y~10.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Para los aparatos a motor y los de muy bajo consumo la norma
+solo fija un límite superior. El sistema agrega un mínimo funcional
+\emph{no normativo}, configurable (por defecto \SI{50}{\percent} del valor
+nominal), para detectar aparatos que no funcionan.
+
+% ============================================================
+\subsection{Ensayo de corriente de fuga}
+\label{subsec:tabla_fuga}
+% ============================================================
+
+La norma define dos mediciones de corriente de fuga con los mismos
+límites (tabla~\ref{tab:fuga_limites}):
+\begin{itemize}
+    \item \textbf{Fuga a temperatura de funcionamiento} (cláusula~13.2),
+          con el aparato funcionando. En este trabajo se la denomina
+          \emph{fuga activa}.
+    \item \textbf{Fuga con tensión de ensayo} (cláusula~16.2), aplicando
+          $\num{1.06}$ veces la tensión nominal sin que el aparato esté en
+          funcionamiento normal. En este trabajo se la denomina
+          \emph{fuga pasiva}. Solo en este caso los límites se duplican
+          bajo ciertas condiciones (tabla~\ref{tab:fuga_duplicacion}).
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Límites de corriente de fuga --- IEC~60335-1, cláusulas~13.2 y~16.2}
+\label{tab:fuga_limites}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l r @{}}
+\toprule
+\textbf{Tipo de aparato} & \textbf{Límite máximo} \\
+\midrule
+Clase~II
+    & \SI{0.25}{\milli\ampere} \\
+Clase~0, Clase~0I y Clase~III
+    & \SI{0.5}{\milli\ampere} \\
+Clase~I portátil
+    & \SI{0.75}{\milli\ampere} \\
+Clase~I fijo, a motor
+    & \SI{3.5}{\milli\ampere} \\
+Clase~I fijo, de calefacción
+    & \begin{tabular}[t]{@{}r@{}}
+        \SI{0.75}{\milli\ampere} o \SI{0.75}{\milli\ampere} por \si{\kilo\watt}\\
+        (máximo \SI{5}{\milli\ampere}), el mayor
+      \end{tabular} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Condiciones que duplican el límite de fuga del ensayo de la cláusula~16.2}
+\label{tab:fuga_duplicacion}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} p{12cm} @{}}
+\toprule
+\textbf{El límite se duplica si se cumple alguna de las siguientes condiciones} \\
+\midrule
+Todos los controles tienen posición de apagado en todos los polos. \\
+\addlinespace
+El aparato no tiene más control que un protector térmico. \\
+\addlinespace
+Ningún termostato, limitador de temperatura ni regulador de energía
+tiene posición de apagado. \\
+\addlinespace
+El aparato tiene filtros de interferencia de radio; en ese caso, la
+corriente de fuga con el filtro desconectado no debe superar el límite
+sin duplicar. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Condiciones de ensayo para corriente de fuga --- IEC~60335-1, cláusulas~13.1, 13.2 y~16.2}
+\label{tab:fuga_condiciones}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} p{4.5cm} p{8cm} @{}}
+\toprule
+\textbf{Parámetro de ensayo} & \textbf{Valor / descripción} \\
+\midrule
+Alimentación (fuga activa, 13.1)
+    & Aparatos de calefacción: \num{1.15} veces la potencia nominal. \newline
+      Aparatos a motor y combinados: \num{1.06} veces la tensión nominal \\
+\addlinespace
+Tensión de ensayo (fuga pasiva, 16.2)
+    & \num{1.06} veces la tensión nominal (aparatos monofásicos);
+      la fuga se mide dentro de los \SI{5}{\second} de aplicada \\
+\addlinespace
+Red de medición
+    & Circuito de la figura~4 de IEC~60990; voltímetro de valor
+      eficaz verdadero (\textit{true RMS}) \\
+\addlinespace
+Puntos de medición
+    & Entre cualquier polo de la alimentación y las partes metálicas
+      accesibles, incluida una lámina metálica de hasta
+      \SI{20 x 10}{\centi\meter} sobre superficies accesibles de
+      material aislante \\
+\addlinespace
+Repetición
+    & Se mide con el selector en las posiciones~a y~b
+      (ambas polaridades de alimentación) \\
+\addlinespace
+Aparatos con capacitores e interruptor unipolar
+    & Se repite la medición con el interruptor en posición de apagado
+      (cláusula~13.2) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\subsection{Ensayo de resistencia de puesta a tierra}
+\label{subsec:tabla_tierra}
+% ============================================================
+
+\begin{table}[H]
+\centering
+\caption{Parámetros del ensayo de continuidad a tierra --- IEC~60335-1, cláusula~27.5 y Anexo~A.1}
+\label{tab:tierra_referencia}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} p{3.4cm} p{4.4cm} p{4.4cm} @{}}
+\toprule
+\textbf{Parámetro}
+    & \textbf{Ensayo de tipo (Cl.~27.5)}
+    & \textbf{Ensayo de rutina (Anexo~A.1)} \\
+\midrule
+Corriente de ensayo
+    & \num{1.5} veces la corriente nominal o \SI{25}{\ampere}, la mayor
+    & Al menos \SI{10}{\ampere}
+      (nominal \SI{15}{\ampere} en este equipo) \\
+\addlinespace
+Tensión de la fuente (en vacío)
+    & $\leq \SI{12}{\volt}$ (CA o CC)
+    & $\leq \SI{12}{\volt}$ (CA o CC)
+      (\SI{2.2}{\volt} CA en este equipo) \\
+\addlinespace
+Resistencia máxima
+    & \SI{100}{\milli\ohm}, sin incluir el cable de alimentación
+    & Con cable de alimentación: \SI{200}{\milli\ohm}, o
+      \SI{100}{\milli\ohm} más la resistencia del cable. \newline
+      Otros aparatos: \SI{100}{\milli\ohm} \\
+\addlinespace
+Puntos de medición
+    & Entre el borne o contacto de tierra y cada parte metálica accesible
+    & Entre cada parte metálica accesible puesta a tierra y la
+      espiga de tierra de la ficha (o de la ficha del aparato) \\
+\addlinespace
+Duración
+    & En caso de duda, hasta alcanzar condiciones estables
+    & Solo el tiempo necesario para medir la caída de tensión \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent El ensayo solo aplica a aparatos Clase~0I y Clase~I: los aparatos
+Clase~0, Clase~II y Clase~III no deben tener provisión para puesta a tierra
+(cláusula~27.1).
+En ambos casos la norma advierte que la resistencia de contacto entre la
+punta de medición y la parte metálica no debe influir en el resultado;
+por eso se recomienda el método de cuatro terminales (Kelvin), que elimina
+la resistencia de los cables de prueba.
+
+% ============================================================
+\subsection{Ensayo de rigidez dieléctrica (tensión resistida)}
+\label{subsec:tabla_dielectrica}
+% ============================================================
+
+\begin{table}[H]
+\centering
+\caption{Tensiones de ensayo de rigidez dieléctrica para tensión nominal entre \SI{150}{\volt} y \SI{250}{\volt} --- IEC~60335-1, tablas~4, 7 y~A.1}
+\label{tab:hipot_tensiones}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l r r r @{}}
+\toprule
+\textbf{Aislamiento}
+    & \textbf{Cl.~13.3}
+    & \textbf{Cl.~16.3}
+    & \textbf{Anexo~A.2} \\
+    & \textbf{(tipo, en caliente)}
+    & \textbf{(tipo, tras humedad)}
+    & \textbf{(rutina)} \\
+\midrule
+Básico (Clase~I)
+    & \SI{1000}{\volt}
+    & \SI{1250}{\volt}
+    & \SI{1000}{\volt} \\
+Suplementario
+    & \SI{1750}{\volt}
+    & \SI{1750}{\volt}
+    & --- \\
+Doble o reforzado (Clase~II)
+    & \SI{3000}{\volt}
+    & \SI{3000}{\volt}
+    & \SI{2500}{\volt} \\
+\midrule
+Duración
+    & \SI{1}{\minute}
+    & \SI{1}{\minute}
+    & \SI{1}{\second} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Condiciones del ensayo de rigidez dieléctrica de rutina --- IEC~60335-1, Anexo~A.2}
+\label{tab:hipot_condiciones}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} p{4.5cm} p{8cm} @{}}
+\toprule
+\textbf{Parámetro} & \textbf{Valor / descripción} \\
+\midrule
+Forma de onda
+    & Sensiblemente sinusoidal, aproximadamente \SI{50}{\hertz} o
+      \SI{60}{\hertz}. Alternativamente, tensión continua de \num{1.5}
+      veces el valor de la tabla~\ref{tab:hipot_tensiones} \\
+\addlinespace
+Duración
+    & \SI{1}{\second} \\
+\addlinespace
+Puntos de aplicación
+    & Entre partes activas y partes metálicas accesibles separadas
+      de ellas por aislamiento básico (Clase~I) o por aislamiento doble
+      o reforzado (Clase~II) \\
+\addlinespace
+Criterio de aprobación
+    & No debe producirse ruptura. Se considera que hay ruptura cuando
+      la corriente del circuito de ensayo supera \SI{5}{\milli\ampere};
+      el límite puede elevarse hasta \SI{30}{\milli\ampere} para aparatos
+      con alta corriente de fuga \\
+\addlinespace
+Fuente de alta tensión
+    & Debe mantener la tensión especificada con la corriente límite y
+      contar con un dispositivo que corte al superarla \\
+\addlinespace
+Condición del aparato
+    & Puede ser necesario que el aparato funcione durante el ensayo
+      para que la tensión alcance todo el aislamiento (por ejemplo,
+      resistencias calefactoras comandadas por relé) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Para los ensayos de tipo (cláusulas~13.3 y~16.3), la fuente de alta
+tensión debe poder entregar una corriente de cortocircuito de al menos
+\SI{200}{\milli\ampere}, y su protección no debe actuar por debajo de
+\SI{100}{\milli\ampere} (tabla~5 de la norma).
+El transformador del equipo, con una corriente de cortocircuito limitada
+a algunas decenas de \si{\milli\ampere}, es adecuado para el ensayo de
+rutina pero no para los ensayos de tipo.
+
+% ============================================================
+\subsection{Resumen consolidado de cotas de referencia}
+\label{subsec:tabla_resumen}
+% ============================================================
+
+La siguiente tabla consolida los límites que aplica el equipo,
+facilitando la comparación rápida de los resultados obtenidos frente
+a la norma.
+
+\begin{table}[H]
+\centering
+\caption{Resumen de cotas aplicadas por el equipo --- IEC~60335-1}
+\label{tab:resumen_cotas}
+\renewcommand{\arraystretch}{1.4}
+\rowcolors{2}{gray!10}{white}
+\begin{tabular}{@{} l l l l @{}}
+\toprule
+\textbf{Ensayo}
+    & \textbf{Parámetro controlado}
+    & \textbf{Límite}
+    & \textbf{Referencia} \\
+\midrule
+Consumo
+    & Desviación respecto del valor nominal
+    & Según tabla~\ref{tab:potencia_desviacion}
+    & Cl.~10.1 y~10.2 \\
+Fuga activa
+    & $I_{\text{fuga}}$ (Clase~I portátil)
+    & $\leq \SI{0.75}{\milli\ampere}$
+    & Cl.~13.2 \\
+Fuga pasiva
+    & $I_{\text{fuga}}$ (Clase~I portátil)
+    & \begin{tabular}[t]{@{}l@{}}
+        $\leq \SI{0.75}{\milli\ampere}$\\
+        ($\leq \SI{1.5}{\milli\ampere}$ con duplicación)
+      \end{tabular}
+    & Cl.~16.2 \\
+Puesta a tierra
+    & $R_{\text{PE}}$ con $I \geq \SI{10}{\ampere}$
+    & \begin{tabular}[t]{@{}l@{}}
+        $\leq \SI{200}{\milli\ohm}$ con cable de alimentación\\
+        $\leq \SI{100}{\milli\ohm}$ sin cable
+      \end{tabular}
+    & Anexo~A.1 \\
+Rigidez dieléctrica
+    & $I_{\text{HV}}$ a \SI{1000}{\volt} (Clase~I) / \SI{2500}{\volt} (Clase~II)
+    & $\leq \SI{5}{\milli\ampere}$ (hasta \SI{30}{\milli\ampere})
+    & Anexo~A.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Parámetros medidos por el equipo en cada ensayo}
+\label{tab:parametros_medidos}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} p{3.5cm} p{8.5cm} @{}}
+\toprule
+\textbf{Ensayo} & \textbf{Parámetros registrados por el sistema} \\
+\midrule
+Consumo
+    & Tensión $V_{\text{rms}}$ [\si{\volt}], corriente $I_{\text{rms}}$
+      [\si{\ampere}], potencia activa $P$ [\si{\watt}], factor de potencia
+      $\cos\varphi$, tiempo de ensayo [\si{\second}]; se evalúa el promedio
+      del intervalo \\
+\addlinespace
+Corriente de fuga (pasiva y activa)
+    & Corriente de fuga $I_{\text{fuga}}$ [\si{\micro\ampere}],
+      tiempo de ensayo [\si{\second}] \\
+\addlinespace
+Puesta a tierra
+    & Corriente de ensayo $I$ [\si{\ampere}] y resistencia calculada
+      $R_{\text{PE}}$ [\si{\milli\ohm}]; se evalúa el peor caso del
+      intervalo (resistencia máxima y corriente mínima) \\
+\addlinespace
+Rigidez dieléctrica
+    & Tensión aplicada $V_{\text{HV}}$ [\si{\volt}] y corriente en el
+      circuito de alta tensión $I_{\text{HV}}$ [\si{\milli\ampere}]; se
+      evalúa el peor caso del intervalo (tensión mínima y corriente máxima) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{Nota sobre la incertidumbre de medición:}
+los valores límite de la norma son valores máximos absolutos.
+Para garantizar que el equipo no declare como aprobado un DUT
+que se encuentra en el margen de tolerancia, se aplica el
+criterio de \emph{guardia metrológica}: el sistema emite una
+alerta de \emph{valor próximo al límite} cuando el resultado
+supera el \SI{80}{\percent} del límite normativo
+(p.ej., alerta en $I_{\text{fuga}} > \SI{600}{\micro\ampere}$ para Clase~I),
+permitiendo al operario decidir si realiza una medición adicional
+con un instrumento patrón antes de emitir el reporte final.
