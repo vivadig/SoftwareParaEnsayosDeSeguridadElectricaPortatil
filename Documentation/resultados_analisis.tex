@@ -1,0 +1,553 @@
+% ============================================================
+%  SECCIÓN: RESULTADOS Y ANÁLISIS — ENSAYO DE CONSUMO DE POTENCIA
+%  Tesis: Equipo de Ensayos de Seguridad Eléctrica Portátil
+%  Autor: Valentina Ferrini
+% ============================================================
+%
+% Paquetes requeridos en el preámbulo principal:
+%   \usepackage{booktabs}
+%   \usepackage{multirow}
+%   \usepackage{array}
+%   \usepackage{float}
+%   \usepackage{graphicx}
+%   \usepackage{amsmath}
+%   \usepackage{amssymb}
+%   \usepackage{siunitx}
+%   \usepackage[table]{xcolor}
+%   \usepackage{pgfplots}        % para gráficos (opcional, ver nota)
+%   \pgfplotsset{compat=1.18}
+%   \usepackage[spanish]{babel}
+%
+% INSTRUCCIONES PARA COMPLETAR:
+%   Buscar todas las ocurrencias de \PLACEHOLDER{...} y reemplazar
+%   con los valores reales obtenidos durante el ensayo.
+%   Los comentarios junto a cada placeholder indican el tipo de dato
+%   esperado y su unidad.
+%
+% Uso: \input{resultados_analisis}
+% ============================================================
+
+% Comando auxiliar para resaltar placeholders visualmente en Overleaf
+% (comentar o eliminar antes de la entrega final)
+\newcommand{\PLACEHOLDER}[1]{\textcolor{red}{\textbf{[#1]}}}
+
+% ============================================================
+\section{Resultados y Análisis}
+\label{sec:resultados}
+% ============================================================
+
+Esta sección presenta los resultados obtenidos durante la campaña
+de ensayos de validación del prototipo desarrollado.
+Se exponen las mediciones realizadas sobre el dispositivo bajo
+prueba (DUT), se comparan con los valores de referencia
+establecidos por la norma IEC~60335-1 y con un instrumento patrón,
+y se analiza el desempeño del sistema en términos de exactitud,
+repetibilidad y cumplimiento normativo.
+
+% ------------------------------------------------------------
+\subsection{Configuración experimental}
+\label{subsec:config_experimental}
+% ------------------------------------------------------------
+
+\subsubsection{Dispositivo bajo prueba (DUT)}
+
+Las mediciones se realizaron sobre un electrodoméstico de uso
+doméstico de la categoría \textbf{\PLACEHOLDER{nombre del aparato,
+p.ej.: plancha a vapor}}, cuyas características declaradas por
+el fabricante se resumen en la Tabla~\ref{tab:dut_datos}.
+
+\begin{table}[H]
+\centering
+\caption{Datos de placa del dispositivo bajo prueba}
+\label{tab:dut_datos}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l l @{}}
+\toprule
+\textbf{Parámetro} & \textbf{Valor declarado} \\
+\midrule
+Marca / modelo          & \PLACEHOLDER{Marca — Modelo} \\
+Clase de aislamiento    & \PLACEHOLDER{Clase I / Clase II} \\
+Tensión nominal         & \PLACEHOLDER{220 / 230} V AC, 50 Hz \\
+Potencia nominal        & \PLACEHOLDER{XXX} W \\
+Corriente nominal       & \PLACEHOLDER{X{,}X} A \\
+Factor de potencia      & \PLACEHOLDER{X{,}XX} (si figura en placa) \\
+Norma de producto       & \PLACEHOLDER{IEC 60335-2-3 (planchas) u otra} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Instrumentación utilizada}
+
+El ensayo se ejecutó con el prototipo desarrollado en este proyecto.
+Adicionalmente, como instrumento de referencia para la validación
+de las mediciones, se empleó \PLACEHOLDER{nombre y modelo del
+instrumento patrón, p.ej.: analizador de potencia Fluke 435-II /
+multímetro Fluke 87V / vatímetro patrón del laboratorio}.
+
+Las especificaciones de exactitud del instrumento patrón se
+detallan en la Tabla~\ref{tab:instrumento_patron}.
+
+\begin{table}[H]
+\centering
+\caption{Especificaciones del instrumento de referencia utilizado}
+\label{tab:instrumento_patron}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l l @{}}
+\toprule
+\textbf{Parámetro} & \textbf{Especificación} \\
+\midrule
+Marca / modelo              & \PLACEHOLDER{Marca — Modelo} \\
+Exactitud en tensión        & \PLACEHOLDER{$\pm$X{,}X\% + X dígitos} \\
+Exactitud en corriente      & \PLACEHOLDER{$\pm$X{,}X\% + X dígitos} \\
+Exactitud en potencia       & \PLACEHOLDER{$\pm$X{,}X\%} \\
+Trazabilidad de calibración & \PLACEHOLDER{Calibrado por laboratorio
+                              acreditado OAA N\textsuperscript{o}~XXX,
+                              fecha: MM/AAAA} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Condiciones ambientales}
+
+Las condiciones del laboratorio durante la realización de los
+ensayos se registraron al inicio y al final de la sesión de
+mediciones y se presentan en la Tabla~\ref{tab:condiciones_amb}.
+
+\begin{table}[H]
+\centering
+\caption{Condiciones ambientales durante el ensayo}
+\label{tab:condiciones_amb}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l r r r @{}}
+\toprule
+\textbf{Parámetro} & \textbf{Inicio} & \textbf{Final} & \textbf{Límite IEC} \\
+\midrule
+Temperatura ambiente [°C]   & \PLACEHOLDER{XX,X} & \PLACEHOLDER{XX,X} & $(20 \pm 5)$~°C \\
+Humedad relativa [\%]        & \PLACEHOLDER{XX}   & \PLACEHOLDER{XX}   & $< 85$\% \\
+Tensión de red [V$_{\text{rms}}$] & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{XXX,X} & $V_n \pm 1\%$ \\
+Frecuencia de red [Hz]       & \PLACEHOLDER{XX,X} & \PLACEHOLDER{XX,X} & $50 \pm 0{,}5$~Hz \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ------------------------------------------------------------
+\subsection{Resultados del ensayo de consumo de potencia}
+\label{subsec:resultados_potencia}
+% ------------------------------------------------------------
+
+\subsubsection{Mediciones individuales}
+
+Se realizaron \PLACEHOLDER{N} mediciones consecutivas
+con el DUT en condición térmica estable
+(temperatura de operación normal alcanzada tras
+\PLACEHOLDER{X}~minutos de precalentamiento).
+Cada medición corresponde a un ciclo completo de adquisición
+del módulo PZEM-004T~v3.0, con un intervalo de muestreo de
+\PLACEHOLDER{X}~segundos.
+Los valores registrados se presentan en la
+Tabla~\ref{tab:mediciones_pzem}.
+
+\begin{table}[H]
+\centering
+\caption{Mediciones de parámetros eléctricos — DUT: \PLACEHOLDER{nombre del aparato}}
+\label{tab:mediciones_pzem}
+\renewcommand{\arraystretch}{1.3}
+\rowcolors{2}{gray!8}{white}
+\begin{tabular}{@{} c r r r r r @{}}
+\toprule
+\textbf{Muestra} &
+\textbf{$V_{\text{rms}}$ [V]} &
+\textbf{$I_{\text{rms}}$ [A]} &
+\textbf{$P$ [W]} &
+\textbf{$\cos\varphi$} &
+\textbf{$f$ [Hz]} \\
+\midrule
+1  & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{XXXX,X} & \PLACEHOLDER{X,XX} & \PLACEHOLDER{XX,X} \\
+2  & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{XXXX,X} & \PLACEHOLDER{X,XX} & \PLACEHOLDER{XX,X} \\
+3  & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{XXXX,X} & \PLACEHOLDER{X,XX} & \PLACEHOLDER{XX,X} \\
+4  & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{XXXX,X} & \PLACEHOLDER{X,XX} & \PLACEHOLDER{XX,X} \\
+5  & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{XXXX,X} & \PLACEHOLDER{X,XX} & \PLACEHOLDER{XX,X} \\
+6  & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{XXXX,X} & \PLACEHOLDER{X,XX} & \PLACEHOLDER{XX,X} \\
+7  & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{XXXX,X} & \PLACEHOLDER{X,XX} & \PLACEHOLDER{XX,X} \\
+8  & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{XXXX,X} & \PLACEHOLDER{X,XX} & \PLACEHOLDER{XX,X} \\
+9  & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{XXXX,X} & \PLACEHOLDER{X,XX} & \PLACEHOLDER{XX,X} \\
+10 & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{XXXX,X} & \PLACEHOLDER{X,XX} & \PLACEHOLDER{XX,X} \\
+\midrule
+\textbf{Media} $\bar{x}$
+   & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{XXXX,X} & \PLACEHOLDER{X,XX} & \PLACEHOLDER{XX,X} \\
+\textbf{Desv. est.} $s$
+   & \PLACEHOLDER{X,X}   & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{X,X}    & \PLACEHOLDER{X,XX} & \PLACEHOLDER{X,X}  \\
+\textbf{Mín.}
+   & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{XXXX,X} & \PLACEHOLDER{X,XX} & \PLACEHOLDER{XX,X} \\
+\textbf{Máx.}
+   & \PLACEHOLDER{XXX,X} & \PLACEHOLDER{X,XXX} & \PLACEHOLDER{XXXX,X} & \PLACEHOLDER{X,XX} & \PLACEHOLDER{XX,X} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Análisis estadístico}
+
+A partir de las \PLACEHOLDER{N} mediciones registradas,
+se calcularon los estadísticos descriptivos de la potencia activa $P$:
+
+\begin{align}
+    \bar{P} &= \frac{1}{N}\sum_{i=1}^{N} P_i
+             = \PLACEHOLDER{XXXX{,}X}~\text{W}
+    \label{eq:media_potencia} \\[6pt]
+    s_P &= \sqrt{\frac{1}{N-1}\sum_{i=1}^{N}(P_i - \bar{P})^2}
+          = \PLACEHOLDER{X{,}X}~\text{W}
+    \label{eq:std_potencia} \\[6pt]
+    u_{\bar{P}} &= \frac{s_P}{\sqrt{N}}
+                 = \PLACEHOLDER{X{,}X}~\text{W}
+    \label{eq:incertidumbre_estadistica}
+\end{align}
+
+\noindent donde $u_{\bar{P}}$ es la incertidumbre estándar tipo~A
+asociada a la dispersión de las mediciones.
+
+El \textbf{coeficiente de variación} (CV) de la potencia medida es:
+
+\begin{equation}
+    \text{CV} = \frac{s_P}{\bar{P}} \times 100\%
+              = \PLACEHOLDER{X{,}X}\%
+    \label{eq:cv_potencia}
+\end{equation}
+
+Un CV menor al 2\% indica una buena repetibilidad del sistema
+de medición bajo las condiciones de ensayo.
+
+% ------------------------------------------------------------
+\subsection{Validación frente al instrumento de referencia}
+\label{subsec:validacion_patron}
+% ------------------------------------------------------------
+
+\subsubsection{Comparación de mediciones}
+
+Con el objetivo de verificar la exactitud del prototipo,
+se realizaron mediciones simultáneas con el equipo desarrollado
+y con el instrumento de referencia sobre el mismo DUT y en las
+mismas condiciones de carga.
+Los resultados comparativos se presentan en la
+Tabla~\ref{tab:comparacion_patron}.
+
+\begin{table}[H]
+\centering
+\caption{Comparación entre el prototipo y el instrumento de referencia}
+\label{tab:comparacion_patron}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{} l r r r r @{}}
+\toprule
+\textbf{Parámetro}
+    & \textbf{Prototipo}
+    & \textbf{Referencia}
+    & \textbf{Error abs.}
+    & \textbf{Error rel. [\%]} \\
+\midrule
+$V_{\text{rms}}$ [V]
+    & \PLACEHOLDER{XXX,X}
+    & \PLACEHOLDER{XXX,X}
+    & \PLACEHOLDER{$\pm$X,X}
+    & \PLACEHOLDER{X,XX} \\
+$I_{\text{rms}}$ [A]
+    & \PLACEHOLDER{X,XXX}
+    & \PLACEHOLDER{X,XXX}
+    & \PLACEHOLDER{$\pm$X,XXX}
+    & \PLACEHOLDER{X,XX} \\
+$P$ [W]
+    & \PLACEHOLDER{XXXX,X}
+    & \PLACEHOLDER{XXXX,X}
+    & \PLACEHOLDER{$\pm$X,X}
+    & \PLACEHOLDER{X,XX} \\
+$\cos\varphi$
+    & \PLACEHOLDER{X,XX}
+    & \PLACEHOLDER{X,XX}
+    & \PLACEHOLDER{$\pm$X,XX}
+    & \PLACEHOLDER{X,XX} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent El error relativo en potencia activa $P$ se calcula como:
+
+\begin{equation}
+    e_r = \frac{P_{\text{prototipo}} - P_{\text{referencia}}}
+               {P_{\text{referencia}}} \times 100\%
+        = \PLACEHOLDER{X{,}XX}\%
+    \label{eq:error_relativo}
+\end{equation}
+
+La especificación de exactitud del módulo PZEM-004T~v3.0 en
+potencia activa es de $\pm$0{,}5\%.
+El error relativo obtenido de \PLACEHOLDER{X{,}XX}\%
+\PLACEHOLDER{es / no es} consistente con dicha especificación,
+\PLACEHOLDER{lo que confirma / lo que sugiere una posible causa
+de error en: descripción del problema observado}.
+
+\subsubsection{Cumplimiento del criterio normativo}
+
+La norma IEC~60335-1 (cláusula~10.2) establece que la potencia
+consumida por el DUT no debe diferir de la potencia declarada
+por el fabricante en más de $\pm$10\%.
+La evaluación de este criterio se resume en la
+Tabla~\ref{tab:criterio_normativo}.
+
+\begin{table}[H]
+\centering
+\caption{Evaluación del criterio normativo de consumo — IEC~60335-1, cláusula~10.2}
+\label{tab:criterio_normativo}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{} l r @{}}
+\toprule
+\textbf{Parámetro} & \textbf{Valor} \\
+\midrule
+Potencia declarada por el fabricante ($P_{\text{dec}}$)
+    & \PLACEHOLDER{XXXX} W \\
+Límite inferior admisible ($P_{\text{dec}} \times 0{,}90$)
+    & \PLACEHOLDER{XXXX} W \\
+Límite superior admisible ($P_{\text{dec}} \times 1{,}10$)
+    & \PLACEHOLDER{XXXX} W \\
+Potencia media medida por el prototipo ($\bar{P}$)
+    & \PLACEHOLDER{XXXX,X} W \\
+Desviación respecto al valor declarado
+    & \PLACEHOLDER{$+$X{,}X / $-$X{,}X}\% \\
+\midrule
+\textbf{Resultado del ensayo}
+    & \PLACEHOLDER{\textcolor{green!60!black}{\textbf{APROBADO}} /
+                   \textcolor{red}{\textbf{REPROBADO}}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ------------------------------------------------------------
+\subsection{Análisis de incertidumbre de medición}
+\label{subsec:incertidumbre}
+% ------------------------------------------------------------
+
+El análisis de incertidumbre se realiza siguiendo el marco de la
+Guía para la Expresión de la Incertidumbre de Medición
+(GUM, JCGM~100:2008), considerando las fuentes de incertidumbre
+relevantes para la medición de potencia activa.
+
+\subsubsection{Fuentes de incertidumbre identificadas}
+
+\begin{itemize}
+    \item \textbf{Tipo~A — dispersión estadística de las mediciones:}
+          incertidumbre debida a la variabilidad aleatoria del proceso
+          de medición, cuantificada por la desviación estándar de la
+          media $u_{\bar{P}}$ (ecuación~\ref{eq:incertidumbre_estadistica}).
+
+    \item \textbf{Tipo~B — exactitud del sensor PZEM-004T:}
+          la hoja de datos del módulo especifica una exactitud de
+          $\pm$0{,}5\% en potencia activa.
+          Asumiendo distribución rectangular, la incertidumbre
+          estándar asociada es:
+          \begin{equation}
+              u_B = \frac{0{,}005 \times \bar{P}}{\sqrt{3}}
+                  = \PLACEHOLDER{X{,}X}~\text{W}
+              \label{eq:incertidumbre_B}
+          \end{equation}
+
+    \item \textbf{Tipo~B — variación de la tensión de red:}
+          fluctuaciones de la tensión de alimentación durante el
+          ensayo se propagan a la medición de potencia.
+          Con una variación observada de $\Delta V = \PLACEHOLDER{X{,}X}$~V
+          y el coeficiente de sensibilidad
+          $c_V = \partial P / \partial V \approx I_{\text{rms}}$:
+          \begin{equation}
+              u_{V} = c_V \cdot \frac{\Delta V}{\sqrt{3}}
+                    = \PLACEHOLDER{X{,}X}~\text{W}
+              \label{eq:incertidumbre_V}
+          \end{equation}
+
+    \item \textbf{Tipo~B — resolución del sensor:}
+          la resolución en potencia del PZEM-004T es 0{,}1~W.
+          Asumiendo distribución rectangular:
+          \begin{equation}
+              u_{\text{res}} = \frac{0{,}1}{2\sqrt{3}}
+                             \approx 0{,}029~\text{W}
+              \label{eq:incertidumbre_res}
+          \end{equation}
+\end{itemize}
+
+\subsubsection{Incertidumbre combinada y expandida}
+
+Considerando las fuentes anteriores como independientes entre sí,
+la incertidumbre estándar combinada es:
+
+\begin{equation}
+    u_c = \sqrt{u_{\bar{P}}^2 + u_B^2 + u_V^2 + u_{\text{res}}^2}
+        = \PLACEHOLDER{X{,}X}~\text{W}
+    \label{eq:incertidumbre_combinada}
+\end{equation}
+
+La incertidumbre expandida, con factor de cobertura $k=2$
+(nivel de confianza $\approx$95\%, distribución normal), es:
+
+\begin{equation}
+    U = k \cdot u_c = 2 \times \PLACEHOLDER{X{,}X}
+      = \PLACEHOLDER{X{,}X}~\text{W}
+    \label{eq:incertidumbre_expandida}
+\end{equation}
+
+El resultado final de la medición de potencia se expresa como:
+
+\begin{equation}
+    P = (\PLACEHOLDER{XXXX{,}X} \pm \PLACEHOLDER{X{,}X})~\text{W}
+        \quad (k=2,\; p \approx 95\%)
+    \label{eq:resultado_final}
+\end{equation}
+
+\subsubsection{Relación entre incertidumbre y límite normativo}
+
+La incertidumbre expandida del sistema ($U = \PLACEHOLDER{X{,}X}$~W)
+representa el \PLACEHOLDER{X{,}X}\% del límite normativo
+($\pm$10\% de $P_{\text{dec}} = \PLACEHOLDER{XXXX}$~W).
+Este valor es \PLACEHOLDER{aceptable para los propósitos del
+prototipo / recomendable reducir mediante calibración del sensor},
+dado que el criterio general de metrología establece que la
+incertidumbre del instrumento de medición debe ser al menos
+cuatro veces menor que la tolerancia que se desea verificar.
+
+% ------------------------------------------------------------
+\subsection{Evaluación de la repetibilidad del sistema}
+\label{subsec:repetibilidad}
+% ------------------------------------------------------------
+
+La repetibilidad del sistema se evalúa como la capacidad de
+obtener resultados consistentes bajo las mismas condiciones
+experimentales en mediciones sucesivas.
+
+\begin{table}[H]
+\centering
+\caption{Indicadores de repetibilidad del ensayo de potencia}
+\label{tab:repetibilidad}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l r l @{}}
+\toprule
+\textbf{Indicador} & \textbf{Valor} & \textbf{Interpretación} \\
+\midrule
+Media $\bar{P}$                 & \PLACEHOLDER{XXXX,X} W  & Valor central de la distribución \\
+Desviación estándar $s_P$       & \PLACEHOLDER{X,X} W     & Dispersión de las mediciones \\
+Coeficiente de variación CV     & \PLACEHOLDER{X,X}\%     & Repetibilidad relativa \\
+Rango ($P_{\max} - P_{\min}$)   & \PLACEHOLDER{X,X} W     & Amplitud total de dispersión \\
+Incertidumbre estándar $u_{\bar{P}}$ & \PLACEHOLDER{X,X} W & Incertidumbre tipo~A \\
+\midrule
+\textbf{Criterio de repetibilidad} & CV $<$ 2\%
+    & \PLACEHOLDER{\textcolor{green!60!black}{\textbf{CUMPLE}} /
+                   \textcolor{red}{\textbf{NO CUMPLE}}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ------------------------------------------------------------
+\subsection{Discusión de resultados}
+\label{subsec:discusion}
+% ------------------------------------------------------------
+
+Los resultados obtenidos permiten extraer las siguientes
+conclusiones sobre el desempeño del prototipo:
+
+\paragraph{Exactitud en la medición de potencia.}
+El error relativo promedio frente al instrumento de referencia
+fue de \PLACEHOLDER{X{,}XX}\%, valor que
+\PLACEHOLDER{se encuentra dentro / supera levemente}
+la especificación del fabricante del módulo PZEM-004T (±0{,}5\%).
+\PLACEHOLDER{Describir aquí la causa probable del error observado
+si supera la especificación, p.ej.: caída de tensión en el cableado,
+temperatura de operación del módulo, saturación del TC, etc.}
+
+\paragraph{Repetibilidad.}
+El coeficiente de variación obtenido de \PLACEHOLDER{X{,}X}\%
+\PLACEHOLDER{confirma / no confirma} una repetibilidad adecuada
+del sistema para el propósito del ensayo.
+\PLACEHOLDER{Si CV > 2\%: identificar causa de la variabilidad
+(fluctuaciones de red, termostato del DUT activo durante la medición,
+interferencias en el bus UART, etc.) y proponer acción correctiva.}
+
+\paragraph{Cumplimiento normativo.}
+El DUT ensayado \PLACEHOLDER{aprobó / reprobó} el criterio de
+consumo de la norma IEC~60335-1 (cláusula~10.2), con una desviación
+de \PLACEHOLDER{X{,}X}\% respecto al valor declarado,
+dentro del límite admisible de $\pm$10\%.
+Este resultado \PLACEHOLDER{es / no es} consistente con lo esperado
+para un electrodoméstico \PLACEHOLDER{en buenas condiciones / con
+el defecto identificado: descripción}.
+
+\paragraph{Limitaciones identificadas.}
+Durante la campaña de ensayos se identificaron las siguientes
+limitaciones del prototipo en su estado actual:
+
+\begin{itemize}
+    \item \PLACEHOLDER{Limitación 1: p.ej., el módulo PZEM-004T
+          presenta lecturas inestables durante los primeros 30~s
+          de conexión, por lo que se implementó un retardo de
+          estabilización en el software.}
+    \item \PLACEHOLDER{Limitación 2: p.ej., la precisión de la
+          medición de factor de potencia se degrada para cargas
+          muy resistivas ($\cos\varphi > 0{,}98$) debido a la
+          resolución de 0{,}01 del módulo.}
+    \item \PLACEHOLDER{Limitación 3: agregar según observaciones
+          reales del ensayo.}
+\end{itemize}
+
+Estas limitaciones no comprometen la validez del ensayo de consumo
+como función principal del prototipo, pero deben ser consideradas
+al momento de ampliar el sistema hacia los ensayos de fuga y
+rigidez dieléctrica contemplados en la arquitectura del equipo.
+
+% ------------------------------------------------------------
+\subsection{Comparación con el criterio de éxito del proyecto}
+\label{subsec:criterio_exito}
+% ------------------------------------------------------------
+
+La Tabla~\ref{tab:criterios_exito} evalúa los resultados obtenidos
+frente a los criterios de éxito definidos en la
+Sección~\ref{sec:criterios_evaluacion} del presente informe.
+
+\begin{table}[H]
+\centering
+\caption{Evaluación de criterios de éxito del prototipo}
+\label{tab:criterios_exito}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{} p{5cm} p{3cm} p{3cm} p{1.8cm} @{}}
+\toprule
+\textbf{Criterio} & \textbf{Meta definida} & \textbf{Resultado obtenido} & \textbf{Estado} \\
+\midrule
+Reducción del tiempo de prueba vs.\ método manual
+    & $\geq 30\%$
+    & \PLACEHOLDER{XX\%}
+    & \PLACEHOLDER{\textcolor{green!60!black}{\checkmark} /
+                   \textcolor{red}{$\times$}} \\
+\addlinespace
+Reducción de intervención del operario
+    & $\geq 80\%$
+    & \PLACEHOLDER{XX\%}
+    & \PLACEHOLDER{\textcolor{green!60!black}{\checkmark} /
+                   \textcolor{red}{$\times$}} \\
+\addlinespace
+Error relativo en potencia frente a patrón
+    & Según especif.\ PZEM ($\pm$0{,}5\%)
+    & \PLACEHOLDER{$\pm$X{,}XX\%}
+    & \PLACEHOLDER{\textcolor{green!60!black}{\checkmark} /
+                   \textcolor{red}{$\times$}} \\
+\addlinespace
+Cumplimiento normativo (criterio IEC~10.2)
+    & Detección correcta APROBADO / REPROBADO
+    & \PLACEHOLDER{Correcto / Incorrecto}
+    & \PLACEHOLDER{\textcolor{green!60!black}{\checkmark} /
+                   \textcolor{red}{$\times$}} \\
+\addlinespace
+Repetibilidad (CV)
+    & CV $< 2\%$
+    & \PLACEHOLDER{X{,}X\%}
+    & \PLACEHOLDER{\textcolor{green!60!black}{\checkmark} /
+                   \textcolor{red}{$\times$}} \\
+\addlinespace
+Ajuste al presupuesto
+    & $\leq$ USD~1030
+    & USD~\PLACEHOLDER{XXX}
+    & \PLACEHOLDER{\textcolor{green!60!black}{\checkmark} /
+                   \textcolor{red}{$\times$}} \\
+\bottomrule
+\end{tabular}
+\end{table}
