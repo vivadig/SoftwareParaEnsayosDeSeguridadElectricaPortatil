@@ -77,6 +77,8 @@ class ScaleFactors:
 class RelayConfig:
     """Configuración completa de relés USB."""
 
+    # "hidapi" (Windows y Linux) o "usbrelay" (solo Linux, imagen Docker)
+    backend: str = _get_str("RELAY_BACKEND", "hidapi")
     board_serial: str = _get_str("RELAY_BOARD_SERIAL", "auto")
     settle_delay: float = _get_float("RELAY_SETTLE_DELAY", 0.05)
     mapping: RelayMapping = field(default_factory=RelayMapping)
