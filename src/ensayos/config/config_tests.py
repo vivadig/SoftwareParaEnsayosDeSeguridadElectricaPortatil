@@ -30,7 +30,9 @@ class LeakageThresholds:
     """Umbrales de aprobación para ensayos de fuga (μA)."""
 
     active_max_ua: float = _get_float("ACTIVE_LEAKAGE_MAX_UA", 750.0)
-    passive_max_ua: float = _get_float("PASSIVE_LEAKAGE_MAX_UA", 1500.0)
+    # IEC 60335-1, 16.2 (Clase I portátil). Se duplica solo si el producto cumple
+    # alguna de las condiciones de la norma (ver Product.fuga_pasiva_duplicada).
+    passive_max_ua: float = _get_float("PASSIVE_LEAKAGE_MAX_UA", 750.0)
 
 
 @dataclass(frozen=True)

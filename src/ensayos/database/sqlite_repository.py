@@ -21,8 +21,9 @@ class SQLiteProductRepository:
             with get_connection(self.db_path) as conn:
                 conn.execute(
                     """INSERT INTO productos
-                       (marca, modelo, descripcion, potencia, tension, corriente, frecuencia, clase)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (marca, modelo, descripcion, potencia, tension, corriente, frecuencia,
+                        clase, fuga_pasiva_duplicada)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                     (
                         product.marca,
                         product.modelo,
@@ -32,6 +33,7 @@ class SQLiteProductRepository:
                         product.corriente,
                         product.frecuencia,
                         product.clase.value,
+                        int(product.fuga_pasiva_duplicada),
                     ),
                 )
             return True
@@ -70,7 +72,8 @@ class SQLiteProductRepository:
             with get_connection(self.db_path) as conn:
                 conn.execute(
                     """UPDATE productos SET marca=?, modelo=?, descripcion=?,
-                       potencia=?, tension=?, corriente=?, frecuencia=?, clase=?
+                       potencia=?, tension=?, corriente=?, frecuencia=?, clase=?,
+                       fuga_pasiva_duplicada=?
                        WHERE id=?""",
                     (
                         product.marca,
@@ -81,6 +84,7 @@ class SQLiteProductRepository:
                         product.corriente,
                         product.frecuencia,
                         product.clase.value,
+                        int(product.fuga_pasiva_duplicada),
                         product.id,
                     ),
                 )
@@ -110,6 +114,7 @@ class SQLiteProductRepository:
             corriente=row["corriente"],
             frecuencia=row["frecuencia"],
             clase=DeviceClass(row["clase"]),
+            fuga_pasiva_duplicada=bool(row["fuga_pasiva_duplicada"]),
         )
 
 

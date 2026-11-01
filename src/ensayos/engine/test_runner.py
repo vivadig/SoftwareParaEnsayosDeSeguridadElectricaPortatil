@@ -107,6 +107,11 @@ class TestRunner:
                 **common_kwargs,
                 device_class=product.clase,
             )
+        elif test_type == TestType.PASSIVE_LEAKAGE:
+            return PassiveLeakageTest(
+                **common_kwargs,
+                doubled_limit=product.fuga_pasiva_duplicada,
+            )
         else:
             test_class = TEST_CLASS_MAP[test_type]
             return test_class(**common_kwargs)

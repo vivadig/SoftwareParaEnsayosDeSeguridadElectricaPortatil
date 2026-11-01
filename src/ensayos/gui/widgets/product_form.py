@@ -4,6 +4,7 @@ import logging
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import (
+    QCheckBox,
     QComboBox,
     QDoubleSpinBox,
     QHBoxLayout,
@@ -110,6 +111,16 @@ class ProductForm(QWidget):
         row_extra.addWidget(QLabel("Clase"))
         row_extra.addWidget(self.combo_clase)
 
+        self.check_fuga_duplicada = QCheckBox("Límite de fuga pasiva duplicado")
+        self.check_fuga_duplicada.setToolTip(
+            "IEC 60335-1, 16.2: marcar solo si el aparato cumple alguna condición:\n"
+            "- todos los controles tienen posición de apagado en todos los polos;\n"
+            "- no tiene más control que un protector térmico;\n"
+            "- ningún termostato, limitador o regulador tiene posición de apagado;\n"
+            "- tiene filtros de interferencia de radio."
+        )
+        row_extra.addWidget(self.check_fuga_duplicada)
+
         form.addLayout(row_extra)
         layout.addLayout(form)
 
@@ -158,6 +169,7 @@ class ProductForm(QWidget):
             self.input_corriente.setValue(p.corriente)
             self.input_frecuencia.setValue(int(p.frecuencia))
             self.combo_clase.setCurrentIndex(0 if p.clase == DeviceClass.CLASS_1 else 1)
+            self.check_fuga_duplicada.setChecked(p.fuga_pasiva_duplicada)
             self.boton_editar.setEnabled(True)
             self.boton_eliminar.setEnabled(True)
         else:
@@ -176,6 +188,7 @@ class ProductForm(QWidget):
             corriente=self.input_corriente.value(),
             frecuencia=float(self.input_frecuencia.value()),
             clase=clase,
+            fuga_pasiva_duplicada=self.check_fuga_duplicada.isChecked(),
         )
 
     def _agregar(self) -> None:

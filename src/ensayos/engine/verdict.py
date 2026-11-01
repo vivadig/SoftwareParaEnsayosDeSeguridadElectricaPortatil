@@ -102,18 +102,23 @@ def evaluate_active_leakage(
 
 def evaluate_passive_leakage(
     leakage_ua: float,
+    doubled_limit: bool = False,
     max_ua: float | None = None,
 ) -> Verdict:
-    """Evalúa fuga pasiva.
+    """Evalúa fuga pasiva (IEC 60335-1, 16.2).
 
     Args:
         leakage_ua: Corriente de fuga medida (μA).
-        max_ua: Umbral máximo aceptable (default: config).
+        doubled_limit: True si el producto cumple una condición de la norma que
+            duplica el límite (p. ej. controles con apagado en todos los polos).
+        max_ua: Umbral base aceptable (default: config).
 
     Returns:
         Verdict.OK si < umbral, Verdict.FAIL si >= umbral.
     """
     max_ua = max_ua if max_ua is not None else tests_config.leakage.passive_max_ua
+    if doubled_limit:
+        max_ua *= 2
     return Verdict.OK if leakage_ua < max_ua else Verdict.FAIL
 
 

@@ -19,6 +19,10 @@ class PassiveLeakageTest(AbstractTest):
     Lectura: PZEM2 (fuga) × multiplicador → μA
     """
 
+    def __init__(self, *args, doubled_limit: bool = False, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.doubled_limit = doubled_limit
+
     @property
     def test_type(self) -> TestType:
         return TestType.PASSIVE_LEAKAGE
@@ -45,4 +49,4 @@ class PassiveLeakageTest(AbstractTest):
         self.hardware.deactivate_relay(relay_map.fuga_pasiva)
 
     def evaluate(self, measurement: LeakageMeasurement) -> Verdict:
-        return evaluate_passive_leakage(measurement.leakage_ua)
+        return evaluate_passive_leakage(measurement.leakage_ua, self.doubled_limit)
