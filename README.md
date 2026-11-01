@@ -261,8 +261,8 @@ docker compose -f docker/docker-compose-testing.yaml run app shell
 
 El proyecto incluye un pipeline de CI/CD con GitHub Actions que se ejecuta en:
 
-- **Push** a las ramas `main` y `develop`
-- **Pull Requests** a `main` y `develop`
+- **Push** a las ramas `main` y `dev`
+- **Pull Requests** a `main` y `dev`
 - **Tags** que comienzan con `v*`
 
 ### Jobs del Pipeline
@@ -343,11 +343,11 @@ uv sync
 
 ## Contribuir
 
-1. Crear una rama desde `develop`
+1. Crear una rama desde `dev`
 2. Realizar cambios
 3. Ejecutar tests y linting localmente
 4. Hacer commit (los pre-commit hooks se ejecutarán)
-5. Crear Pull Request hacia `develop`
+5. Crear Pull Request hacia `dev`
 6. Esperar aprobación del CI/CD
 
 ## Licencia
