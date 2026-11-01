@@ -72,9 +72,15 @@ class LeakageMeasurement:
 
 @dataclass(frozen=True)
 class GroundingMeasurement:
-    """Medición de resistencia de puesta a tierra en mΩ."""
+    """Medición de puesta a tierra.
+
+    Attributes:
+        resistance_mohm: Resistencia calculada (mΩ).
+        current_a: Corriente de ensayo inyectada (A).
+    """
 
     resistance_mohm: float
+    current_a: float = 0.0
 
     @classmethod
     def from_pzem(
@@ -85,18 +91,25 @@ class GroundingMeasurement:
         correction: float = 0.0,
     ) -> "GroundingMeasurement":
         if reading.current == 0:
-            return cls(resistance_mohm=float("inf"))
+            return cls(resistance_mohm=float("inf"), current_a=0.0)
         resistance = (reading.voltage * voltage_multiplier) / reading.current
         return cls(
             resistance_mohm=(resistance * resistance_multiplier) + correction,
+            current_a=reading.current,
         )
 
 
 @dataclass(frozen=True)
 class DielectricMeasurement:
-    """Medición de rigidez dieléctrica en V."""
+    """Medición de rigidez dieléctrica.
+
+    Attributes:
+        voltage: Tensión de ensayo aplicada (V).
+        current_ma: Corriente en el circuito de alta tensión (mA).
+    """
 
     voltage: float
+    current_ma: float = 0.0
 
     @classmethod
     def from_pzem(
@@ -104,7 +117,17 @@ class DielectricMeasurement:
         reading: PzemReading,
         multiplier: float = 10.0,
         correction: float = 0.0,
+        current_multiplier: float = 1000.0,
     ) -> "DielectricMeasurement":
+        """Convierte una lectura cruda del PZEM a tensión (V) y corriente (mA).
+
+        Args:
+            reading: Lectura cruda del PZEM2.
+            multiplier: Factor de escala de tensión.
+            correction: Corrección de calibración de tensión (V).
+            current_multiplier: Factor de escala de corriente (A del PZEM → mA en AT).
+        """
         return cls(
             voltage=(reading.voltage * multiplier) + correction,
+            current_ma=reading.current * current_multiplier,
         )

@@ -192,6 +192,7 @@ class HardwareManager:
         return DielectricMeasurement.from_pzem(
             reading,
             multiplier=self._cfg.scale.dielectric_voltage_multiplier,
+            current_multiplier=self._cfg.scale.dielectric_current_multiplier,
         )
 
     # ---- Cleanup ----

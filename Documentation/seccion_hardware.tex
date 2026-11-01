@@ -1,0 +1,396 @@
+% ============================================================
+%  SECCIÓN 6 y 7 — HARDWARE: DISEÑO DEL DISPOSITIVO
+%  Tesis: Equipo de Ensayos de Seguridad Eléctrica Portátil
+%  Autor: Valentina Ferrini
+% ============================================================
+%
+% INSTRUCCIONES DE USO EN OVERLEAF
+% ---------------------------------
+% 1. Asegurate de tener en el preámbulo de tu documento principal:
+%      \usepackage{booktabs}      % tablas de calidad
+%      \usepackage{multirow}      % celdas combinadas en tablas
+%      \usepackage{longtable}     % tablas que ocupan más de una página
+%      \usepackage{array}         % control de columnas
+%      \usepackage{graphicx}      % figuras
+%      \usepackage{hyperref}      % hipervínculos
+%      \usepackage{float}         % control de posición de figuras [H]
+%      \usepackage[table]{xcolor} % colores en tablas
+%      \usepackage{geometry}      % márgenes (ya probablemente lo tenés)
+%      \usepackage[spanish]{babel}
+%
+% 2. Copiá el contenido de este archivo y pegalo en la sección
+%    correspondiente de tu documento principal, o bien usá:
+%      \input{seccion_hardware}
+%
+% ============================================================
+
+% ------------------------------------------------------------
+\section{Requisitos del Sistema a Desarrollar — Hardware}
+\label{sec:requisitos_hw}
+% ------------------------------------------------------------
+
+El subsistema de hardware constituye el núcleo físico del equipo de ensayos.
+Su función es ejecutar, de forma controlada y repetible, los procedimientos
+de medición definidos por la norma IEC~60335, garantizando la seguridad
+del operario y la trazabilidad de los resultados.
+
+El dispositivo debe cubrir los siguientes ensayos:
+
+\begin{itemize}
+    \item Medición de consumo de potencia (tensión, corriente, potencia activa y factor de potencia).
+    \item Medición de corriente de fuga pasiva.
+    \item Medición de corriente de fuga activa.
+    \item Medición de resistencia de puesta a tierra.
+    \item Ensayo de rigidez dieléctrica (tensión resistida).
+\end{itemize}
+
+En el marco del presente proyecto se desarrolla el prototipo funcional
+centrado en el \textbf{ensayo de consumo de potencia}, siendo los ensayos
+restantes contemplados en la arquitectura del sistema para su incorporación
+en etapas futuras.
+
+Las medidas de seguridad implementadas en el hardware incluyen:
+aislamiento galvánico entre etapas de alta y baja tensión,
+desconexión automática ante valores fuera de rango,
+indicadores visuales de estado y protocolos de paro de emergencia.
+
+% ------------------------------------------------------------
+\section{Metodología y Desarrollo del Hardware}
+\label{sec:metodologia_hw}
+% ------------------------------------------------------------
+
+\subsection{Diseño del dispositivo}
+\label{subsec:diseno_dispositivo}
+
+\subsubsection{Criterios de selección de componentes}
+\label{subsubsec:criterios_seleccion}
+
+La selección de los componentes del equipo se realizó mediante un
+\textbf{análisis de mercado} en el que se evaluaron los siguientes criterios:
+
+\begin{enumerate}
+    \item \textbf{Relación calidad-precio:} se priorizaron componentes que
+          ofrecen prestaciones adecuadas para los rangos de medición exigidos
+          por la norma IEC~60335, sin incurrir en costos de equipamiento
+          industrial de alta gama.
+
+    \item \textbf{Soporte de la comunidad y documentación:} se seleccionaron
+          plataformas y módulos con amplia documentación técnica, bibliotecas
+          de software activas y comunidades de desarrollo consolidadas, lo que
+          reduce el riesgo de obsolescencia y facilita la resolución de
+          problemas durante el desarrollo.
+
+    \item \textbf{Disponibilidad en el mercado local e importación:}
+          se verificó la disponibilidad de cada componente tanto en
+          distribuidores nacionales como en plataformas de importación
+          (Mercado Libre, AliExpress, DigiKey), asegurando la reposición
+          del stock ante fallas o escalado del proyecto.
+\end{enumerate}
+
+\subsubsection{Descripción de componentes seleccionados}
+\label{subsubsec:componentes}
+
+A continuación se describen los componentes principales del dispositivo,
+agrupados por función.
+
+% - - - - - - - - - - - - - - - - - - - - -
+\paragraph{Unidad de procesamiento — ESP32}
+
+El microcontrolador seleccionado es el \textbf{ESP32} (Espressif Systems),
+en su versión de módulo de desarrollo de 38 pines.
+Se trata de un sistema en chip (SoC) de doble núcleo Xtensa LX6
+a 240~MHz, con 520~KB de SRAM, conectividad Wi-Fi 802.11~b/g/n
+y Bluetooth 4.2/BLE, y soporte nativo para los protocolos
+UART, SPI, I\textsuperscript{2}C y PWM.
+
+Su elección se justifica por la amplia disponibilidad en el mercado
+argentino, el extenso ecosistema de bibliotecas compatibles con
+Arduino y MicroPython, y por su capacidad de comunicarse simultáneamente
+con múltiples módulos periféricos a través de UART, requisito
+indispensable para la integración con los módulos PZEM-004T.
+Adicionalmente, la conectividad inalámbrica incorporada abre la posibilidad
+de comunicación remota en versiones futuras del equipo, sin requerir
+hardware adicional.
+
+% - - - - - - - - - - - - - - - - - - - - -
+\paragraph{Módulos de medición de potencia — PZEM-004T v3.0}
+
+Para la adquisición de parámetros eléctricos se utilizan tres módulos
+\textbf{PZEM-004T v3.0} (Peacefair).
+Cada módulo mide en tiempo real:
+
+\begin{itemize}
+    \item Tensión de línea: rango 80--260~V\textsubscript{AC},
+          resolución 0{,}1~V, precisión $\pm$0{,}5\%.
+    \item Corriente: rango 0--100~A (con transformador de corriente externo
+          de pinza incluido), resolución 0{,}001~A, precisión $\pm$0{,}5\%.
+    \item Potencia activa: rango 0--23~kW, resolución 0{,}1~W.
+    \item Energía acumulada: rango 0--9999~kWh, resolución 1~Wh.
+    \item Frecuencia: rango 45--65~Hz, resolución 0{,}1~Hz.
+    \item Factor de potencia: rango 0{,}00--1{,}00, resolución 0{,}01.
+\end{itemize}
+
+La comunicación con el ESP32 se realiza mediante el protocolo
+\textbf{UART/Modbus RTU} a 9600~baudios.
+Cada módulo posee una dirección Modbus configurable (0x01--0xF7),
+lo que permite conectar los tres módulos en un bus RS-485 compartido
+y direccionarlos de forma individual desde el microcontrolador.
+
+La elección de tres unidades responde a la arquitectura de conmutación
+del equipo: uno para el ensayo de consumo nominal,
+uno para la medición de fuga pasiva
+y uno para la medición de fuga activa,
+permitiendo la transición entre ensayos sin necesidad de reconexión manual.
+
+% - - - - - - - - - - - - - - - - - - - - -
+\paragraph{Sistema de conmutación — Contactores y módulo de relés}
+
+La conmutación entre ensayos se realiza mediante dos tipos de actuadores:
+
+\textbf{Contactores monofásicos 12~A (×4):}
+se emplean contactores de 12~A con bobina de 220~V~AC,
+configuración de contactos 2~NA + 2~NC.
+Su función es la conmutación de la tensión de red (220~V~AC)
+hacia las distintas etapas del equipo (alimentación del DUT,
+circuito de rigidez dieléctrica, circuito de fuga).
+La acción mecánica de apertura garantiza el aislamiento galvánico
+efectivo entre etapas, lo que es un requisito de seguridad
+fundamental cuando se trabaja con tensiones de ensayo elevadas
+(hasta 2500~V en el ensayo de rigidez dieléctrica).
+
+\textbf{Módulo de relés USB de 8 canales (×1):}
+se utiliza un módulo de relés de 8 canales controlado por USB,
+con relés de 5~V~DC y capacidad de conmutación de hasta 10~A~AC.
+Este módulo gestiona señales de control de baja potencia:
+activación de indicadores, habilitación de etapas auxiliares
+y señalización de estado al software.
+La comunicación por USB permite el control directo desde la PC
+sin necesidad de pasar por el ESP32, simplificando la arquitectura
+de control para funciones no críticas en tiempo.
+
+% - - - - - - - - - - - - - - - - - - - - -
+\paragraph{Transformadores de ensayo}
+
+El equipo incorpora dos transformadores de propósito específico:
+
+\textbf{Transformador de rigidez dieléctrica — 220~V / 1000--2500~V:}
+transformador elevador con salida seleccionable entre 1000~V
+(ensayo Clase~I) y 2500~V (ensayo Clase~II),
+con corriente de cortocircuito limitada a 30~mA.
+Esta limitación es un requisito de seguridad estipulado en la
+norma IEC~60335: la corriente máxima admisible durante el ensayo
+de tensión resistida es de 50~mA, y la restricción a 30~mA en
+la fuente asegura que una falla del aislamiento no derive en
+una corriente destructiva para el DUT ni peligrosa para el operario.
+
+\textbf{Transformador de puesta a tierra — 220~V / 2{,}2~V / 75~VA:}
+transformador reductor de 75~VA utilizado en el ensayo de
+continuidad de tierra.
+Entrega una tensión de 2{,}2~V~AC con capacidad de corriente
+de ensayo de hasta 15~A~AC (equivalente a $75~\text{VA} / 5~\text{V} \approx 15~\text{A}$),
+cumpliendo el requisito de la norma de inyectar al menos 25~A
+o el 200\% de la corriente nominal del fusible de protección,
+según el método aplicado.
+La baja tensión de salida garantiza la seguridad del operario
+durante el ensayo.
+
+% - - - - - - - - - - - - - - - - - - - - -
+\paragraph{Carcasa y estructura — Anvil Flight Case}
+
+El equipo se aloja en un \textbf{Anvil Flight Case} de aluminio y
+madera contrachapada con herrajes de acero.
+Este tipo de contenedor, habitualmente utilizado en equipamiento
+de audio y escenografía profesional, presenta las siguientes ventajas
+para la aplicación:
+
+\begin{itemize}
+    \item Rigidez estructural adecuada para soportar transformadores
+          y contactores sin deformaciones.
+    \item Cierre con pestillos de seguridad que evitan apertura accidental.
+    \item Carácter portátil con manija y esquinas reforzadas,
+          compatible con el concepto de equipo de laboratorio portátil.
+    \item Posibilidad de montaje de paneles frontales y rieles DIN
+          en el interior para organizar los componentes.
+\end{itemize}
+
+% - - - - - - - - - - - - - - - - - - - - -
+\paragraph{Placas de interfaz y conexionado}
+
+\noindent\textbf{Nota para revisión:} \textit{Se incorporarán dos placas de
+circuito impreso (PCB) de diseño propio cuyas especificaciones
+se encuentran en proceso de definición (a confirmar con Nico).
+Se completará esta sección con: función de cada placa,
+dimensiones, descripción del circuito y justificación de diseño.}
+
+% ------------------------------------------------------------
+\subsection{Arquitectura del dispositivo}
+\label{subsec:arquitectura_hw}
+% ------------------------------------------------------------
+
+La arquitectura del dispositivo se organiza en cinco bloques funcionales
+interconectados a través de un bus de comunicación principal
+gestionado por el ESP32:
+
+\begin{enumerate}
+    \item \textbf{Bloque de potencia:} transformadores, contactores y
+          protecciones. Maneja las tensiones de red y de ensayo.
+    \item \textbf{Bloque de adquisición:} módulos PZEM-004T. Realizan
+          la medición de los parámetros eléctricos del DUT.
+    \item \textbf{Bloque de control:} ESP32 y módulo de relés USB.
+          Orchestran la secuencia de ensayos y la comunicación.
+    \item \textbf{Bloque de comunicación:} interfaz USB/UART hacia la PC.
+          Transmite datos crudos y recibe comandos de la interfaz gráfica.
+    \item \textbf{Bloque de seguridad:} fusibles, protecciones térmicas
+          e indicadores. Actúan de forma independiente ante condiciones
+          de falla.
+\end{enumerate}
+
+% (Figura del diagrama de bloques — reemplazar con tu figura real)
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.85\textwidth]{figuras/diagrama_bloques_hw.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{2cm}
+    \textit{[Insertar aquí el diagrama de bloques del hardware]}
+    \vspace{2cm}}}
+    \caption{Diagrama de bloques del dispositivo de ensayos.}
+    \label{fig:diagrama_bloques_hw}
+\end{figure}
+
+% ------------------------------------------------------------
+\subsection{Protocolo de comunicación}
+\label{subsec:protocolo_comunicacion}
+% ------------------------------------------------------------
+
+La comunicación entre componentes del equipo sigue el esquema
+descrito a continuación:
+
+\begin{itemize}
+    \item \textbf{ESP32 $\leftrightarrow$ módulos PZEM-004T:}
+          protocolo Modbus~RTU sobre UART a 9600~baudios, 8N1
+          (8 bits de datos, sin paridad, 1 bit de parada).
+          Los tres módulos comparten el bus serie;
+          cada uno responde únicamente a su dirección Modbus asignada
+          (0x01, 0x02 y 0x03 respectivamente).
+
+    \item \textbf{ESP32 $\leftrightarrow$ PC:}
+          puerto UART expuesto como dispositivo CDC-ACM (serial virtual)
+          a través del chip USB-to-UART integrado en el módulo de desarrollo
+          (CH340 o CP2102 según la revisión del módulo).
+          La velocidad de comunicación es de 115200~baudios.
+          El protocolo de capa de aplicación es un formato JSON
+          delimitado por salto de línea (\texttt{newline-delimited JSON}),
+          elegido por su legibilidad, facilidad de parseo en Python
+          y extensibilidad para agregar nuevos tipos de medición.
+
+    \item \textbf{PC $\leftrightarrow$ módulo de relés USB:}
+          protocolo propietario del módulo sobre USB HID / CDC,
+          controlado directamente desde el software en Python
+          mediante la biblioteca \texttt{pyserial} o el driver
+          correspondiente al chip del módulo.
+\end{itemize}
+
+% ------------------------------------------------------------
+\section{Evaluación de costos}
+\label{sec:costos}
+% ------------------------------------------------------------
+
+La siguiente tabla presenta el desglose de costos del prototipo
+desarrollado. Los precios expresados en dólares estadounidenses (USD)
+corresponden a valores de referencia de mercado obtenidos en
+distribuidores nacionales y plataformas de importación
+(Mercado Libre Argentina, AliExpress, DigiKey),
+relevados durante el segundo semestre de 2025.
+Los valores deben considerarse estimativos;
+variaciones de tipo de cambio o disponibilidad de stock
+pueden afectar el costo final.
+
+\begin{table}[H]
+\centering
+\caption{Desglose de costos del prototipo — valores de referencia en USD}
+\label{tab:costos_detalle}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{} l l r r r @{}}
+\toprule
+\textbf{Categoría} & \textbf{Componente} & \textbf{Cant.} & \textbf{P. Unit. (USD)} & \textbf{Subtotal (USD)} \\
+\midrule
+\multirow{2}{*}{Procesamiento}
+  & ESP32 módulo de desarrollo (38 pines) & 1 & 8{,}00  & 8{,}00  \\
+  & Módulo de relés USB 8 canales 5V DC   & 1 & 12{,}00 & 12{,}00 \\
+\midrule
+\multirow{3}{*}{Medición}
+  & PZEM-004T v3.0 (con TC de pinza)      & 3 & 12{,}00 & 36{,}00 \\
+  & \textit{Placas PCB de interfaz (×2)}  & 2 & —       & \textit{a confirmar} \\
+  & Cables de medición y puntas           & — & 10{,}00 & 10{,}00 \\
+\midrule
+\multirow{2}{*}{Potencia}
+  & Contactor 12A / 220V AC (2NA+2NC)     & 4 & 9{,}00  & 36{,}00 \\
+  & Transformador 220V / 1000--2500V 30mA & 1 & 80{,}00 & 80{,}00 \\
+  & Transformador 220V / 2{,}2V / 75VA    & 1 & 35{,}00 & 35{,}00 \\
+\midrule
+\multirow{3}{*}{Seguridad}
+  & Fusible cerámico 10A + portafusible    & 4 & 2{,}00  & 8{,}00  \\
+  & Piloto indicador LED 220V (rojo/verde) & 4 & 1{,}50  & 6{,}00  \\
+  & Pulsador de paro de emergencia (hongo) & 1 & 8{,}00  & 8{,}00  \\
+\midrule
+\multirow{2}{*}{Conexionado}
+  & Cable H07V-K 1,5~mm² (carrete 10~m)   & 2 & 6{,}00  & 12{,}00 \\
+  & Borneras, terminales y bridas          & — & 8{,}00  & 8{,}00  \\
+  & Toma corriente industrial + fichas     & 2 & 5{,}00  & 10{,}00 \\
+\midrule
+Estructura
+  & Anvil Flight Case (aluminio)           & 1 & 60{,}00 & 60{,}00 \\
+  & Riel DIN + panel frontal aluminio      & 1 & 15{,}00 & 15{,}00 \\
+\midrule
+\multicolumn{4}{r}{\textbf{Total estimado}} & \textbf{344{,}00} \\
+\multicolumn{4}{r}{Margen de contingencia (15\%)} & 51{,}60 \\
+\multicolumn{4}{r}{\textbf{Total con contingencia}} & \textbf{395{,}60} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textit{Nota: el costo de horas de ingeniería y desarrollo de
+software no se incluye en el presupuesto del prototipo, dado que
+corresponde al esfuerzo académico del proyecto de grado.}
+
+% ------------------------------------------------------------
+\subsection{Comparación con soluciones comerciales}
+\label{subsec:comparacion_comercial}
+% ------------------------------------------------------------
+
+A modo de referencia, la siguiente tabla compara el equipo desarrollado
+con equipos comerciales equivalentes disponibles en el mercado nacional,
+en particular los modelos de la línea SYGlab (SYG~Group, Rosario, Argentina),
+que realizan ensayos similares bajo norma IEC~60335.
+
+\begin{table}[H]
+\centering
+\caption{Comparación entre el prototipo desarrollado y equipos comerciales equivalentes}
+\label{tab:comparacion_comercial}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{} l c c c @{}}
+\toprule
+\textbf{Característica}       & \textbf{Prototipo (este trabajo)} & \textbf{SYGlab CL12-S0} & \textbf{SYGlab MG5} \\
+\midrule
+Ensayo de consumo / potencia  & \checkmark & \checkmark & \checkmark \\
+Corriente de fuga pasiva      & Arq. prevista & \checkmark & \checkmark \\
+Corriente de fuga activa      & Arq. prevista & \checkmark & \checkmark \\
+Puesta a tierra               & Arq. prevista & \checkmark & \checkmark \\
+Rigidez dieléctrica           & Arq. prevista & \checkmark & \checkmark \\
+Clase I y II                  & \checkmark & \checkmark & \checkmark \\
+Canales simultáneos           & 1          & 1          & 5          \\
+Pantalla / GUI                & PC (PyQt)  & Pantalla HD integrada & Pantalla HD integrada \\
+Exportación de datos          & CSV / JSON & Etiqueta QR + base de datos & Etiqueta QR + base de datos \\
+Norma declarada               & IEC~60335  & IEC / IRAM & IEC / IRAM \\
+Costo estimado                & $\sim$\$400 USD & Consultar  & Consultar  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+La comparación pone en evidencia que el prototipo desarrollado cubre
+el mismo conjunto de ensayos que los equipos comerciales de referencia,
+con la diferencia de que en este trabajo se implementa íntegramente
+solo el ensayo de consumo, reservando los restantes para etapas
+posteriores del proyecto.
+La ventaja diferencial del prototipo radica en su bajo costo de
+construcción, la apertura total del código fuente y la posibilidad
+de adaptación a distintas normativas sin restricciones de licencia.

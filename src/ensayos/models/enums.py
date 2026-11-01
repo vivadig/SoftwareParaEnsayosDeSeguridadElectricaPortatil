@@ -10,6 +10,17 @@ class DeviceClass(Enum):
     CLASS_2 = 2
 
 
+class ApplianceType(Enum):
+    """Tipo de aparato para las tolerancias de consumo (IEC 60335-1, Tablas 1 y 2).
+
+    Los aparatos combinados se tratan como de calefacción, salvo que los motores
+    consuman más del 50 % de la potencia (o corriente) nominal.
+    """
+
+    HEATING = "calefaccion"
+    MOTOR = "motor"
+
+
 class TestType(Enum):
     """Tipos de ensayo de seguridad eléctrica."""
 

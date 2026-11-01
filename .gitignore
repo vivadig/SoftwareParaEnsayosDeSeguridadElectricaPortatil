@@ -123,3 +123,22 @@ Thumbs.db
 
 # Ruff
 .ruff_cache/
+
+# Documentación LaTeX
+# Norma IEC con derechos de autor: no redistribuir en el repositorio
+Documentation/IEC-*.pdf
+# Folletos de terceros (catálogos de fabricantes): no redistribuir
+Documentation/Folleto_*.pdf
+# Archivos auxiliares de compilación
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.run.xml
+*.synctex.gz
+*.toc
+*.out

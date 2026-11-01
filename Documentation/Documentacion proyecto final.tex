@@ -1,0 +1,624 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage[table]{xcolor}
+\usepackage{hyperref}
+\usepackage[spanish]{babel}
+\usepackage{siunitx}
+\usepackage{amssymb}
+
+% Para que paragraph sea un subtítulo con salto de línea
+\titleformat{\paragraph}[block]{\normalfont\normalsize\bfseries}{}{0em}{}
+\titlespacing*{\paragraph}{0pt}{1ex plus .2ex}{0.5ex}
+
+% Para que subparagraph también sea en bloque y no en línea
+\titleformat{\subparagraph}[block]{\normalfont\normalsize\itshape}{}{0em}{}
+\titlespacing*{\subparagraph}{0pt}{0.5ex}{0.3ex}
+
+
+\title{Equipo Ensayos de Seguridad Eléctrica Portátil}
+\author{Valentina Ferrini}
+\date{Agosto 2025}
+
+\begin{document}
+
+% Página de portada
+\maketitle
+\newpage
+
+% Página de Resumen
+\begin{center}
+    \textbf{\huge Resumen}
+\end{center}
+\vspace{1cm}
+En la actualidad, la seguridad eléctrica de los equipos de uso doméstico y comercial constituye un requisito fundamental para su comercialización. Sin embargo, los métodos tradicionales de ensayo, basados en la intervención manual del operario, pueden generar variaciones en los resultados, extender los tiempos de prueba y aumentar los riesgos para el personal y los dispositivos bajo evaluación. Este proyecto propone el desarrollo de un sistema integral, conformado por un dispositivo de ensayos y una interfaz de software, destinado a verificar el cumplimiento de normativas internacionales como la IEC 60335. La solución busca optimizar la precisión de las mediciones, reducir los tiempos de prueba, mejorar la eficiencia operativa y garantizar la trazabilidad de los resultados, contribuyendo a elevar la seguridad y confiabilidad en la comercialización de productos eléctricos.
+
+\newpage
+
+% Tabla de contenidos en una página separada
+\tableofcontents
+\newpage
+
+\section{Introducción}
+En la actualidad, la seguridad eléctrica de los equipos de uso doméstico y comercial es un
+requisito imprescindible para su comercialización. Sin embargo, los métodos tradicionales
+de ensayo, que dependen en gran medida de la intervención manual del operario, pueden
+dar lugar a variaciones en los resultados, prolongar los tiempos de prueba y aumentar los
+riesgos tanto para el personal como para los dispositivos bajo evaluación.
+En la industria de la fabricación de dispositivos eléctricos, la seguridad eléctrica es un aspecto crítico para garantizar la protección de los usuarios. La norma IEC 60335 establece pruebas de seguridad que deben realizarse antes de la comercialización de cualquier dispositivo eléctrico. Sin embargo, los métodos tradicionales de prueba son ineficientes, propensos a errores humanos y peligrosos para los operarios.
+
+
+\section{Objeto}
+La seguridad eléctrica se ha convertido en un pilar indispensable para la confiabilidad y comercialización de los equipos de uso doméstico e industrial. En este contexto, surge la necesidad de innovar en los procesos de verificación, superando las limitaciones de los métodos tradicionales que dependen en gran medida de la intervención humana. Este proyecto propone el diseño y construcción de un dispositivo semiautomatizado capaz de ejecutar, con precisión y repetibilidad, las principales pruebas de seguridad definidas en la norma internacional IEC 60335 ---rigidez dieléctrica, continuidad de tierra y medición de corrientes de fuga---, garantizando así un control de calidad más eficiente y seguro.
+
+\vspace{0.3cm}\noindent El desarrollo se complementa con una interfaz de software avanzada, concebida para integrar los distintos subsistemas, procesar los datos obtenidos y facilitar la interacción con el operario. De este modo, se busca no solo reducir los tiempos de prueba y minimizar los riesgos, sino también aportar una herramienta innovadora que eleve los estándares de confiabilidad y trace un camino hacia la automatización inteligente en el control de calidad de productos eléctricos.
+
+\section{Estado del Arte y Normativas Aplicables}
+\subsection{Panorama de los ensayos de seguridad eléctrica en la industria}
+La seguridad eléctrica es un aspecto fundamental en la fabricación de productos eléctricos y electrónicos, ya que garantiza tanto la integridad de los equipos como la protección de los usuarios. Los ensayos de seguridad, que incluyen pruebas de rigidez dieléctrica, continuidad de tierra y fuga de corriente, son requisitos obligatorios para la certificación de productos en diversos mercados. Tradicionalmente, estos ensayos se han realizado de manera manual, lo que puede dar lugar a variabilidad en los resultados, prolongar los tiempos de prueba y generar riesgos tanto para el personal como para los productos. Por esta razón, ha surgido un creciente interés en la automatización de estos procesos, con el objetivo de mejorar la precisión, la reproducibilidad y la eficiencia operativa, además de garantizar la trazabilidad y un historial completo de las pruebas realizadas. La automatización de la adquisición de datos y el monitoreo de los ensayos, junto con la creación de informes automáticos, representa un avance significativo en la optimización del proceso, reduciendo la intervención humana y aumentando la fiabilidad de los resultados.
+
+\subsection{Los ensayos de seguridad eléctrica más comunes}
+\begin{itemize}
+    \item \textbf{Ensayo de rigidez dieléctrica:} Se aplica un voltaje elevado para verificar el aislamiento.
+    \item \textbf{Prueba de continuidad de tierra:} Verifica que la resistencia a tierra sea baja.
+    \item \textbf{Medición de corriente de fuga:} Asegura que las corrientes indeseadas estén dentro de los límites permitidos.
+\end{itemize}
+
+\subsection{Métodos tradicionales y su grado de automatización en la
+actualidad}
+El proceso de prueba tradicional requiere intervención manual del operario y la disposición
+del instrumental junto con personal capacitado, lo cual puede producir variaciones en los
+resultados, demoras en las pruebas y posibles riesgos para el personal, instrumentos y
+productos.
+\subsection{Normativa aplicable (IEC)}
+La norma IEC 60335 establece requisitos de seguridad para aparatos eléctricos de uso
+doméstico y aplicaciones comerciales de baja tensión.
+IEC 60335-1 contiene los requisitos generales aplicables a todos los aparatos comprendidos
+en la norma
+
+En cuanto a las normativas, las más relevantes incluyen:
+\begin{itemize}
+    \item \textbf{IEC 60335:} Seguridad de aparatos eléctricos domésticos.
+
+    \item \textbf{IEC 61010:} Seguridad en equipos de medida y control.
+
+    \item \textbf{IEC 60950 / 62368:} Seguridad en equipos tecnológicos.
+
+    \item \textbf{UL 60950 / 62368:} Normas de seguridad para productos en EE.UU.
+
+    \item \textbf{IRAM 2435:} Normativa argentina para aparatos eléctricos.
+
+    \item \textbf{ISO 17025:} Estándar para la competencia de laboratorios de ensayo y calibración.
+
+\end{itemize}
+
+\noindent Cada una de estas normativas establece los valores límite y procedimientos que deben cumplirse en cada ensayo de seguridad eléctrica. Para facilitar el cumplimiento, los fabricantes suelen certificar sus productos a través de laboratorios acreditados que validan las pruebas de acuerdo con estos estándares.
+
+\vspace{0.3cm} \noindent Para el alcance de este proyecto no se aplican todas las normas, sólo son aplicadas la IEC 60335 y anexos, ya que para el OAA es suficiente para cumplir los requisitos requeridos.
+
+
+\section{Motivación y Planteo del Problema}
+\subsection{La necesidad de un sistema automatizado}
+Los ensayos de seguridad eléctrica son esenciales para certificar y comercializar productos
+eléctricos.
+El desarrollo de un sistema automatizado de principio a fin para realizar estos ensayos tiene como objetivo mejorar la precisión, reducir la intervención humana y optimizar el tiempo de evaluación.  Los métodos manuales presentan limitaciones como variabilidad de resultados,
+mayores tiempos de prueba, riesgos operativos y errores en la toma de datos.
+
+\subsection{Beneficios esperados}
+\begin{itemize}
+    \item \textbf{Mayor precisión y repetitividad en los resultados.}
+    \item \textbf{Reducción de tiempos mediante la automatización de la secuencialidad de los ensayos.}
+    \item \textbf{Almacenamiento digital de datos para facilitar el análisis y la trazabilidad.}
+    \item \textbf{Mayor cumplimiento normativo al garantizar que las pruebas se realicen según los estándares.}
+\end{itemize}
+
+\section{Alcance del Proyecto}
+
+El presente proyecto contempla el diseño y construcción de un sistema integral de ensayos de seguridad eléctrica, compuesto por un dispositivo físico y una interfaz de software, destinado a verificar el cumplimiento de la norma IEC 60335. El alcance abarca tanto los aspectos funcionales como no funcionales, además de las restricciones, supuestos y riesgos asociados al desarrollo.
+
+\subsection{Requerimientos funcionales y no funcionales}
+
+\subsubsection{Requerimientos funcionales}
+\begin{itemize}
+    \item Ejecución de los ensayos de rigidez dieléctrica, continuidad de tierra y corrientes de fuga (activa y pasiva).
+    \item Automatización de la configuración, conmutación, adquisición y procesamiento de datos.
+    \item Generación de reportes digitales trazables y exportables.
+    \item Interfaz gráfica intuitiva para la configuración y supervisión de ensayos.
+\end{itemize}
+
+\subsubsection{Requerimientos no funcionales}
+\begin{itemize}
+    \item Confiabilidad: el sistema debe garantizar resultados reproducibles con un margen de error acotado según la norma IEC 60335.
+    \item Seguridad: implementación de protecciones contra sobrecargas, aislamiento adecuado y alarmas de seguridad.
+    \item Usabilidad: la interacción del operario debe reducirse a la mínima intervención necesaria, con una curva de aprendizaje baja.
+    \item Escalabilidad: posibilidad de incorporar nuevos tipos de ensayos o adaptarse a futuras modificaciones normativas.
+    \item Mantenibilidad: arquitectura modular de hardware y software que facilite la reparación, actualización y extensión del sistema.
+\end{itemize}
+
+\subsection{Restricciones}
+\begin{itemize}
+    \item Presupuesto limitado para la construcción del prototipo y la adquisición de componentes.
+    \item Disponibilidad restringida de equipamiento especializado para calibración y validación.
+    \item Tiempo máximo de ejecución establecido en el cronograma del proyecto.
+    \item Cumplimiento estricto de las normativas IEC aplicables.
+\end{itemize}
+
+\subsection{Supuestos}
+\begin{itemize}
+    \item Se contará con un laboratorio equipado para la ejecución de ensayos de validación.
+    \item Los componentes electrónicos necesarios estarán disponibles en el mercado local o mediante proveedores confiables.
+    \item El personal encargado de utilizar el sistema tendrá capacitación básica en seguridad eléctrica y operación de equipos de ensayo.
+\end{itemize}
+
+\subsection{Riesgos y mitigación}
+\begin{itemize}
+    \item \textbf{Retrasos en la adquisición de componentes:} pueden comprometer el cronograma. Se mitigará mediante la identificación temprana de proveedores alternativos.
+    \item \textbf{Fallas en la calibración o en la validación del sistema:} podrían impedir la aceptación del proyecto. Se mitigará planificando pruebas piloto e intercomparaciones con equipos certificados.
+    \item \textbf{Limitaciones presupuestarias:} aumentos de costos en componentes podrían superar lo estimado. Se mitigará contemplando un margen de contingencia en la planificación económica.
+    \item \textbf{Problemas de integración entre hardware y software:} se mitigará mediante una estrategia de desarrollo incremental y pruebas de integración tempranas.
+\end{itemize}
+
+\subsection{Aspectos fuera del alcance}
+
+El presente proyecto se centra exclusivamente en el diseño, construcción y validación de un sistema semiautomatizado de ensayos eléctricos orientados a la norma IEC 60335. En consecuencia, se aclara que no forman parte del alcance:
+
+\begin{itemize}
+    \item La certificación oficial del equipo ante organismos nacionales o internacionales (OAA, IEC, UL, entre otros), aunque el diseño se orienta a cumplir con dichas normativas.
+    \item El desarrollo de ensayos adicionales no contemplados en la IEC 60335, tales como medición de armónicos, pruebas de sobrecarga o compatibilidad electromagnética.
+    \item La fabricación industrial en serie del dispositivo, limitándose el trabajo a la construcción de un prototipo funcional.
+    \item El mantenimiento y soporte a largo plazo del sistema, que se consideran tareas posteriores a la finalización del proyecto.
+    \item La integración con sistemas de gestión empresarial o industriales externos (ERP, MES, etc.), más allá del almacenamiento local y exportación de datos.
+\end{itemize}
+
+
+\section{Requisitos del Sistema a Desarrollar}
+\subsection{Hardware}
+El dispositivo debe cubrir:
+\begin{itemize}
+    \item Ensayos de rigidez dieléctrica, puesta a tierra y corrientes de fuga
+    \item Automatización de configuración, conmutación, adquisición y procesamiento de
+datos
+    \item Medidas de seguridad: aislamiento, desconexión automática, indicadores, protocolos de seguridad y alarmas
+\end{itemize}
+
+\subsection{Software}
+La interfaz de usuario debe abarcar:
+
+\begin{itemize}
+    \item Ejecución de ensayos de rigidez dieléctrica, continuidad de tierra y medición de corriente de fuga, adaptándose a los parámetros de los dispositivos bajo análisis.
+    \item Configuración automática de pruebas, conmutación electrónica entre ensayos, adquisición y procesamiento automático de datos, test reporter, alarmas indicadoras para valores anormales, y una interfaz gráfica intuitiva.
+\end{itemize}
+
+\noindent Este enfoque permitirá mejorar la seguridad, precisión y eficiencia en la ejecución de los ensayos de seguridad eléctrica, alineándose con las normativas internacionales y garantizando un entorno de trabajo seguro.
+
+\section{Metodología y Desarrollo}
+
+\subsection{Metodología y Desarrollo del Hardware}
+
+\subsubsection{Diseño del dispositivo}
+
+\paragraph{Componentes del dispositivo} (FALTA ESPECIFICAR)
+\begin{itemize}
+    \item computadora
+    \item microcontrolador
+    \item sensores
+    \item fuentes de alimentación
+    \item protección
+    \item sistema de desconexión
+\end{itemize}
+
+\paragraph{Arquitectura de la dispositivo}
+\begin{minipage}{\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{arquitectura_dispositivo.png}
+    \captionof{figure}{Diagrama general del dispositivo}
+    \label{fig:dispositivo}
+\end{minipage}
+
+
+\subsubsection{Procedimiento de Pruebas}
+\begin{itemize}
+    \item \textbf{Pruebas Unitarias:} Evaluación de comportamiento y funcionalidad de cada módulo
+por separado.
+    \item \textbf{Pruebas de Integración:} Evaluación de un sistema integral que incluye varios módulos
+individuales interconectados entre sí.
+    \item \textbf{Pruebas con Dispositivos Reales:} Evaluación del sistema integral actuando sobre
+dispositivos a ensayar.
+\end{itemize}
+
+\subsection{Metodología y Desarrollo del Software}
+
+\subsubsection{Diseño de la interfaz de usuario}
+
+\paragraph{Módulo de procesamiento y almacenamiento:}
+Este módulo procesa los datos obtenidos durante las pruebas, los comparará con los límites normativos y generará los reportes correspondientes. El software será responsable de la creación de los algoritmos para la detección de fallos, la conversión de los datos a un formato legible por el operario y la generación de informes digitales.
+
+\paragraph{Módulo de interfaz de usuario:}
+El software debe proporcionar una interfaz gráfica de usuario (GUI) para la configuración de las pruebas, la visualización de los resultados en tiempo real y el monitoreo del estado del sistema. La interacción del operario será mínima: solo necesitará seleccionar el tipo de prueba y cargar el dispositivo bajo prueba.
+
+La interfaz de usuario cuenta con las siguientes características:
+\begin{itemize}
+    \item \textbf{Software en PC:} Para visualizar parámetros de prueba y resultados en tiempo real.
+    \item \textbf{Configuración automatizada:} Ajuste de los valores de prueba según la normativa aplicable y el tipo de DUT.
+    \item \textbf{Registro de resultados:} Generación de reportes en formato digital, exportables a bases de datos o almacenamiento en la nube.
+    \item \textbf{Alertas de seguridad:} Notificaciones visuales ante fallos o condiciones peligrosas en las pruebas.
+    \item \textbf{Escalabilidad para distintos DUT:} El sistema debe ser capaz de adaptarse a diferentes tipos de dispositivos bajo prueba.
+    \item \textbf{Escalabilidad para nuevas normativas o cambios en ellas:} El sistema debe ser flexible para incorporar nuevas normativas o modificaciones sin grandes ajustes.
+\end{itemize}
+
+\paragraph{Componentes del Sistema}
+La arquitectura del software será modular, con distintos componentes diseñados para gestionar cada aspecto del proceso de medición de manera eficiente y segura. Estos módulos se comunicarán entre sí a través de protocolos de comunicación estándar (como UART e I2C), lo que asegurará la correcta integración del sistema.
+El software del sistema está diseñado para gestionar la automatización de las pruebas y la adquisición de datos, empleando las siguientes herramientas.
+
+\vspace{0.3cm}
+\subparagraph{Lenguaje de programación:}
+El lenguaje principal para el desarrollo del software será Python, debido a su flexibilidad y amplio soporte en bibliotecas para la automatización, comunicación con dispositivos a través de protocolos y procesamiento de datos. Para el control de hardware, se utilizarán bibliotecas específicas que permiten la comunicación con el DUT.
+
+\vspace{0.3cm}
+\subparagraph{Protocolos de comunicación:}
+\begin{itemize}
+    \item UART/I2C/SPI para la comunicación con sensores y actuadores.
+    \item Modbus para integración con sistemas industriales.
+\end{itemize}
+
+\vspace{0.3cm}
+\subparagraph{Interfaz de usuario:} Desarrollo en PyQt para la supervisión y configuración de ensayos.
+
+\vspace{0.3cm}
+\subparagraph{Pantalla de Configuración:} Donde el operario selecciona el tipo de ensayo a realizar y ajusta cualquier parámetro necesario.
+
+\vspace{0.3cm}
+\subparagraph{Pantalla de Monitoreo:} Visualización en tiempo real de los resultados de las pruebas a medida que se ejecutan.
+
+\vspace{0.3cm}
+\subparagraph{Alertas de Seguridad:} Notificaciones visuales y sonoras si ocurre algún error durante las pruebas, como un valor fuera de rango o un mal funcionamiento del equipo.
+
+\vspace{0.3cm}
+\subparagraph{Procesamiento de datos:}
+\begin{itemize}
+    \item El procesamiento de los datos se realizará en tiempo real, utilizando los resultados de las mediciones obtenidas para la creación de informes.
+    \item Aplicación de algoritmos para la detección de fallos en los ensayos.
+    \item Exportación de datos CSV, JSON o bases de datos SQL para facilitar el análisis histórico de las mediciones.
+    \item Generación de reportes en TXT y su almacenamiento para asegurar la trazabilidad de los resultados.
+\end{itemize}
+
+\paragraph{Arquitectura de la interfaz}
+\begin{minipage}{\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{arquitectura_interfaz.png}
+    \captionof{figure}{Diagrama general de la interfaz}
+    \label{fig:arquitectura}
+\end{minipage}
+
+\subsubsection{Procedimiento de Pruebas}
+
+La validación del software se llevará a cabo a través de diversas fases de prueba para garantizar su correcto funcionamiento:
+\begin{itemize}
+    \item \textbf{Pruebas Unitarias:} Se validará cada componente de software de manera independiente para asegurarse de que el código funcione correctamente. Esto incluye el control de hardware, la lectura de sensores y la generación de informes.
+    \item \textbf{Pruebas de Integración:} Se evaluará cómo interactúan todos los módulos del sistema, desde la adquisición de datos hasta el almacenamiento y la visualización en la interfaz de usuario.
+    \item \textbf{Pruebas con Dispositivos Reales:} Finalmente, se realizarán pruebas con el dispositivo para validar que el sistema automatizado genera resultados correctos y confiables, comparados con los obtenidos con equipos manuales.
+\end{itemize}
+
+\section{Ensayos aplicados}
+Con el dispositivo y la interfaz se podrán realizar las siguientes pruebas:
+\begin{itemize}
+    \item Ensayo y análisis de rigidez dieléctrica
+    \item Medición y análisis de resistencia de puesta a tierra
+    \item Medición y análisis de Prueba de fuga pasiva
+    \item Medición y análisis de corriente de fuga activa
+\end{itemize}
+
+Estas pruebas permiten detectar fallas críticas y asegurar la seguridad eléctrica durante la etapa de producción.
+
+\section{Evaluación de costos}
+
+Se estiman los siguientes costos:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Concepto} & \textbf{Costo (USD)} \\ \hline
+Medición de Corriente de fuga activa & 30 \\ \hline
+Medición de Corriente de fuga pasiva & 30 \\ \hline
+Medición de Resistencia de Puesta a Tierra & 30 \\ \hline
+Medición de Rigidez dieléctrica & 30 \\ \hline
+Elementos de conexión & 70 \\ \hline
+Elementos de medición & 150 \\ \hline
+Elementos de seguridad & 60 \\ \hline
+Elementos de potencia & 180 \\ \hline
+Elementos de control & 50 \\ \hline
+Elementos de procesamiento & 400 \\ \hline
+Horas de trabajo & -- \\ \hline
+\textbf{Total estimado} & \textbf{1030} \\ \hline
+\end{tabular}
+\caption{Estimación de costos del proyecto}
+\label{tab:costos}
+\end{table}
+
+
+\section{Criterios de Evaluación y Éxito}
+El sistema será considerado exitoso si cumple con los siguientes criterios:
+\begin{itemize}
+    \item \textbf{Tiempo de prueba:} El sistema debe permitir una reducción significativa en los tiempos de prueba en comparación con los métodos tradicionales manuales. Se espera una mejora de al menos un 30\% en la velocidad de ejecución de los ensayos gracias a la automatización de la secuencialidad de las pruebas y la eliminación de ajustes manuales.
+    \item \textbf{Automatización:} Reducción de la intervención del operario en al menos un 80\%, permitiendo que el sistema realice la mayoría de las tareas automáticamente, incluyendo la configuración de las pruebas, la conmutación entre ensayos y la adquisición de datos.
+    \item \textbf{Seguridad:} Implementación de medidas de protección tales como alarmas para identificar pruebas que no fueron aprobadas o a la exposición a voltajes peligrosos.
+    \item \textbf{Escalabilidad:} El sistema debe ser capaz de adaptarse a nuevos tipos de dispositivos y cambios en las normativas sin requerir una reestructuración completa del sistema.
+    \item \textbf{Cumplimiento normativo:} El software debe garantizar que todos los ensayos se realicen conforme a las normativas internacionales aplicables (IEC 60335 y sus anexos, entre otras), y asegurar que las mediciones estén dentro de los rangos establecidos por estas normativas.
+    \item \textbf{Cumplimiento del cronograma:} El desarrollo debe respetar las fases y plazos establecidos en el cronograma de trabajo, con una tolerancia máxima de 10 días adicionales respecto al total planificado.
+
+    \item \textbf{Ajuste al presupuesto económico:} El costo total de desarrollo debe mantenerse dentro de la estimación de USD 1030, admitiendo un margen de variación razonable únicamente en casos de contingencia justificada.
+\end{itemize}
+
+\section{Cronograma de Trabajo}
+\subsection{Hardware}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Fase} & \textbf{Tareas} & \textbf{Duración Estimada} \\
+\hline
+\textbf{Fase 1} & \textbf{Diseño inicial del sistema y disposición de elementos} & \textbf{7 días} \\
+\hline
+& Relevamiento y ubicación de componentes & 3 días \\
+& Definición de layout mecánico y eléctrico & 3 días \\
+& Revisión de seguridad y mantenibilidad & 1 día \\
+\hline
+\textbf{Fase 2} & \textbf{Adquisición de datos por tipo de ensayo} & \textbf{52 días} \\
+\hline
+& Corriente de fuga activa & 15 días \\
+& Corriente de fuga pasiva & 7 días \\
+& Resistencia de puesta a tierra & 15 días \\
+& Rigidez dieléctrica & 15 días \\
+\hline
+\textbf{Fase 3} & \textbf{Arquitectura de comunicación} & \textbf{21 días} \\
+\hline
+& Definición de buses y protocolos (UART/I\textsuperscript{2}C/SPI) & 8 días \\
+& Diseño de capas de comunicación y direccionamiento & 8 días \\
+& Pruebas de integridad/EMI y robustez & 5 días \\
+\hline
+\textbf{Fase 4} & \textbf{Integración con módulos de medición} & \textbf{5 días} \\
+\hline
+& Integración eléctrica y lógica con sensores/módulos & 3 días \\
+& Verificación funcional básica & 2 días \\
+\hline
+\textbf{Fase 5} & \textbf{Diseño e implementación del conexionado interno} & \textbf{30 días} \\
+\hline
+& Diseño del conexionado (esquemáticos, calibres, protecciones) & 15 días \\
+& Implementación y ordenado de mazos/cableado & 15 días \\
+\hline
+\textbf{Fase 6} & \textbf{Desarrollo de módulos de control y procesamiento} & \textbf{30 días} \\
+\hline
+& Diseño lógico de control/procesamiento & 15 días \\
+& Implementación y validación de control/procesamiento & 15 días \\
+\hline
+\multicolumn{2}{|r|}{\textbf{Total estimado (suma de fases)}} & \textbf{145 días} \\
+\hline
+\multicolumn{2}{|r|}{\textbf{Margen de tolerancia}} & \textbf{hasta 10 días} \\
+\hline
+\multicolumn{2}{|r|}{\textbf{Total con margen}} & \textbf{155 días (620 horas)} \\
+\hline
+\end{tabular}
+}
+
+\subsubsection{Diagrama de Gantt}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{gantt_hardware.png}
+    \caption{Sprint de 10 días laborales}
+    \label{fig:gantt-hardware}
+\end{figure}
+
+\subsection{Software}
+
+\resizebox{\textwidth}{!}{
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Fase} & \textbf{Tareas} & \textbf{Duración Estimada} \\
+\hline
+\textbf{Fase 1} & \textbf{Planificación y Análisis Requerimientos} & \textbf{5 días} \\
+\hline
+& Definición del alcance del proyecto & 1 día \\
+& Revisión de normativas y estándares aplicables & 1 día \\
+& Identificación de dispositivos de prueba y protocolos de comunicación & 2 días \\
+& Análisis de riesgos y planificación de seguridad & 1 día \\
+\hline
+\textbf{Fase 2} & \textbf{Diseño del Sistema y Arquitectura} & \textbf{14 días} \\
+\hline
+& Diseño de la arquitectura del software (modular, con adaptadores) & 7 días \\
+& Selección de lenguajes, herramientas y tecnologías (Python, PyQt, etc.) & 1 día \\
+& Diseño de la interfaz de usuario (GUI) & 2 días \\
+& Definición de la estructura de la base de datos & 4 días \\
+\hline
+\textbf{Fase 3} & \textbf{Desarrollo del Módulo de Procesamiento y Almacenamiento} & \textbf{8 días} \\
+\hline
+& Implementación de algoritmos de medición (rigidez dieléctrica, corriente de fuga, etc.) & 3 días \\
+& Desarrollo de la integración con sensores y dispositivos (UART, I2C, SPI) & 2 días \\
+& Programación de la lógica para la generación de informes y almacenamiento & 3 días \\
+\hline
+\textbf{Fase 4} & \textbf{Desarrollo de la Interfaz de Usuario} & \textbf{20 días} \\
+\hline
+& Diseño y desarrollo de la pantalla de configuración & 5 días \\
+& Diseño y desarrollo de la pantalla de monitoreo en tiempo real & 6 días \\
+& Implementación de alertas de seguridad y notificaciones & 5 días \\
+& Conexión de la interfaz con el módulo de procesamiento & 4 días \\
+\hline
+\textbf{Fase 5} & \textbf{Pruebas y Validación} & \textbf{15 días} \\
+\hline
+& Pruebas unitarias (validación de componentes) & 7 días \\
+& Pruebas de integración (validación de módulos completos) & 4 días \\
+& Pruebas con dispositivos reales (validación del sistema automatizado) & 4 días \\
+\hline
+\textbf{Fase 6} & \textbf{Documentación y Entrenamiento} & \textbf{8 días} \\
+\hline
+& Documentación del código y funcionalidades & 3 días \\
+& Creación de manual de usuario e instrucciones de operación & 3 días \\
+& Entrenamiento al operario y revisión de seguridad de la interfaz & 2 días \\
+\hline
+\textbf{Fase 7} & \textbf{Entrega Final y Soporte Post-Implementación} & \textbf{5 días} \\
+\hline
+& Entrega de la interfaz finalizada y en producción & 2 días \\
+& Soporte y ajustes post-implementación (ajustes menores) & 3 días \\
+\hline
+\end{tabular}
+}
+
+\subsubsection{Diagrama de Gantt}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{gantt_software.png}
+    \caption{Sprint de 10 días laborales}
+    \label{fig:gantt-software}
+\end{figure}
+
+\section{Plan de Validación}
+
+La validación del proyecto constituye un aspecto esencial para garantizar que los resultados obtenidos sean confiables, reproducibles y conformes a los requerimientos normativos. El proceso de validación se plantea en tres niveles complementarios: hardware, software y sistema integrado.
+
+\subsection{Validación del hardware}
+\begin{itemize}
+    \item \textbf{Verificación funcional:} cada módulo del dispositivo (alimentación, protección, sensores y sistema de desconexión) será evaluado de manera independiente para corroborar que cumple con las especificaciones de diseño.
+    \item \textbf{Pruebas de seguridad:} se comprobará el correcto aislamiento eléctrico, el funcionamiento de las protecciones y la activación de alarmas ante condiciones de falla.
+    \item \textbf{Calibración:} las mediciones se contrastarán con instrumentos patrón certificados, asegurando que la incertidumbre del patrón sea al menos diez veces menor que la del dispositivo bajo prueba.
+\end{itemize}
+
+\subsection{Validación del software}
+\begin{itemize}
+    \item \textbf{Pruebas unitarias:} cada módulo del software (procesamiento, almacenamiento e interfaz de usuario) se validará de forma independiente.
+    \item \textbf{Pruebas de integración:} se evaluará la comunicación entre módulos de software y con el hardware, verificando la correcta transferencia y procesamiento de datos.
+    \item \textbf{Usabilidad y seguridad:} se validará que la interfaz gráfica permita configurar y ejecutar ensayos de forma intuitiva, minimizando la intervención del operario y garantizando mensajes claros de error o advertencia.
+\end{itemize}
+
+\subsection{Validación del sistema frente a la norma IEC 60335}
+\begin{itemize}
+    \item \textbf{Ensayos comparativos:} se realizarán mediciones con el prototipo y con un instrumento calibrado comercial, a fin de verificar la concordancia de resultados dentro del margen normativo.
+    \item \textbf{Inter-comparación:} cuando sea posible, se contrastarán los resultados obtenidos en el sistema con los emitidos por un laboratorio acreditado.
+    \item \textbf{Criterios de aceptación:} el sistema será considerado válido si los resultados de los ensayos de rigidez dieléctrica, continuidad de tierra y corriente de fuga se mantienen dentro de los límites establecidos por la IEC 60335 y presentan trazabilidad demostrable.
+\end{itemize}
+
+\subsubsection{Cotas y valores de referencia según IEC 60335}
+
+Para la validación frente a la norma IEC 60335 se establecen las siguientes cotas de ensayo y parámetros de medición:
+
+\paragraph{Cotas de ensayo}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Ensayo} & \textbf{Cota de referencia} \\ \hline
+Consumo & $\pm$ 10\% del valor declarado en el producto \\ \hline
+Fuga activa & 750 $\mu$A \\ \hline
+Fuga pasiva & 750 $\mu$A / 1500 $\mu$A (según estado ON/OFF) \\ \hline
+Puesta a tierra & 125 m$\Omega$ \\ \hline
+Tensión resistida & 50 mA con 1000 V / 2500 V \\ \hline
+\end{tabular}
+\caption{Cotas de referencia para los ensayos definidos por la IEC 60335}
+\end{table}
+
+\paragraph{Parámetros a medir en cada ensayo}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|p{9cm}|}
+\hline
+\textbf{Ensayo} & \textbf{Parámetros registrados} \\ \hline
+Consumo (prolongado en el tiempo) & Tensión, corriente, potencia, factor de potencia y tiempo de ensayo (configurable). \\ \hline
+Fuga activa / Fuga pasiva & Corriente de fuga que circula por el conductor de tierra. \\ \hline
+Puesta a tierra & Tensión entregada por el transformador ($\approx$2.2 V) y corriente de ensayo ($\approx$15 A). \\ \hline
+Tensión resistida & Tensión entregada por el transformador (1000 V / 2500 V) y corriente de ensayo ($\approx$50 mA). \\ \hline
+\end{tabular}
+\caption{Parámetros medidos en los ensayos de validación}
+\end{table}
+
+
+\section{Desafíos y Posibles Problemas}
+
+A lo largo del desarrollo del equipo de ensayos de seguridad eléctrica portátil se identificaron varios desafíos y posibles problemas que podrían afectar su desempeño y la implementación exitosa del sistema. Estos aspectos deben ser considerados durante el diseño, la integración y la validación. A continuación se presentan los principales puntos a tener en cuenta:
+
+\subsection{Hardware}
+\begin{itemize}
+    \item \textbf{Disponibilidad de componentes:} algunos sensores, transformadores o elementos de protección pueden presentar demoras en la adquisición o dificultades para conseguir versiones certificadas.
+    \item \textbf{Calibración de instrumentos:} asegurar la trazabilidad de las mediciones puede requerir equipamiento patrón certificado, lo cual implica costos y tiempos adicionales.
+    \item \textbf{Gestión térmica y de potencia:} las pruebas de rigidez dieléctrica y de puesta a tierra involucran corrientes y tensiones elevadas que pueden generar sobrecalentamiento o desgaste prematuro en los componentes.
+    \item \textbf{Limitaciones físicas y de seguridad:} el diseño del conexionado interno debe evitar riesgos de descarga eléctrica y garantizar un aislamiento confiable, lo cual puede complejizar el diseño mecánico.
+\end{itemize}
+
+\subsection{Software}
+\begin{itemize}
+    \item \textbf{Compatibilidad con dispositivos diversos:} el sistema deberá ser capaz de adaptarse a diferentes DUT, lo que implica que el software debe permitir la configuración automática de parámetros, aunque ciertas variaciones podrían requerir ajustes manuales.
+    \item \textbf{Almacenamiento y visualización de datos:} el uso inicial de formatos simples (CSV o JSON) limita el análisis histórico; podría requerirse una base de datos más robusta para seguimiento y tendencias.
+    \item \textbf{Expansión a pruebas adicionales:} la interfaz podría necesitar adaptaciones para soportar ensayos como armónicos o sobrecarga, ampliando el alcance del sistema.
+    \item \textbf{Integración con normativas adicionales:} adaptar el sistema a normativas específicas de distintos mercados puede requerir cambios relevantes en los parámetros de prueba.
+    \item \textbf{Interacción del operario con la interfaz:} si bien el objetivo es minimizar la intervención humana, la curva de aprendizaje y posibles errores en la configuración deben ser considerados.
+\end{itemize}
+
+\subsection{Sistema (integración hardware--software)}
+\begin{itemize}
+    \item \textbf{Sincronización de módulos:} la correcta coordinación entre el hardware (conmutación de ensayos, adquisición de señales) y el software (procesamiento, alarmas, reportes) puede presentar dificultades en las primeras fases de integración.
+    \item \textbf{Gestión de errores y fallas:} deben contemplarse mecanismos de recuperación ante fallos de comunicación, pérdida de datos o errores de medición, evitando que comprometan la validez de los ensayos.
+    \item \textbf{Validación normativa integral:} la aceptación final del sistema depende de que la combinación hardware--software cumpla con los valores de referencia definidos por la IEC 60335, lo que exige pruebas conjuntas con equipamiento patrón y posibles iteraciones de ajuste.
+    \item \textbf{Limitaciones de recursos:} el cumplimiento simultáneo de tiempos, presupuesto y funcionalidades puede requerir priorización de ciertos desarrollos sobre otros.
+\end{itemize}
+
+\noindent Estos desafíos deberán ser abordados en futuras iteraciones del proyecto, con el objetivo de asegurar la funcionalidad, la confiabilidad y la adaptabilidad del sistema en distintos contextos industriales.
+
+
+\section{Estado Actual y Metas a Corto Plazo}
+
+\subsection{Estado actual}
+
+En relación con el \textbf{hardware}, se cuenta con un prototipo funcional del equipo de ensayos que permite realizar pruebas básicas. A través del microcontrolador ya es posible leer los valores de las mediciones y, mediante el accionamiento de contactores, conmutar entre los distintos ensayos. El proyecto se encuentra en una fase intermedia-avanzada de desarrollo, restando únicamente la integración plena con la interfaz de software para alcanzar un funcionamiento completo.
+\vspace{0.3cm}
+\noindent  Respecto al \textbf{software}, se ha implementado el esqueleto de la interfaz de usuario y la arquitectura general del sistema. Sin embargo, aún no se han desarrollado los módulos específicos para la adquisición de datos, procesamiento, generación de reportes ni gestión de la comunicación con el hardware. Por lo tanto, el software se encuentra en una fase inicial de implementación.
+
+\subsection{Metas a corto plazo}
+
+Durante los próximos meses, las metas previstas son:
+
+\begin{itemize}
+    \item Finalizar la integración del hardware con la interfaz de software, estableciendo la comunicación bidireccional para la ejecución de ensayos.
+    \item Desarrollar los módulos de software para la adquisición de datos, almacenamiento, procesamiento y generación de reportes.
+    \item Realizar pruebas de integración entre hardware y software en condiciones de laboratorio, ajustando los parámetros de operación y seguridad.
+    \item Ejecutar los ensayos de validación frente a los valores de referencia establecidos en la norma IEC 60335.
+    \item Documentar el sistema, elaborando manuales de uso y reportes técnicos que acompañen la entrega final del proyecto.
+\end{itemize}
+
+
+\section{Material de referencia}
+ \begin{itemize}
+    \item \href{http://u.dianyuan.com/bbs/u/35/1131687973.pdf}{Enlace a la norma IEC 60335}.
+\item \href{https://cdn.standards.iteh.ai/samples/22220/a6c5cee6104548a68e3719a79066c2c4/IEC-61010-1-2010-AMD1-2016.pdf}{Enlace a la norma IEC 61010}.
+
+    \item \href{http://u.dianyuan.com/bbs/u/35/1131687973.pdf}{Enlace a la norma IEC 60950}.
+
+    \item \href{http://u.dianyuan.com/bbs/u/28/1113472747.pdf}{Enlace a la norma UL 60950}.
+
+   \item  \href{https://es.scribd.com/document/709573959/Norma-IRAM-2435-199411}{Enlace a la norma IRAM 2435}.
+    \item \href{https://www.argentina.gob.ar/sites/default/files/doc22.pdf}{Enlace a la norma ISO 17025}.
+
+    \item \href{https://www.seguridadelectrica.com/EFE-Plus-equipo-para-ensayos-de-seguridad-electrica.php}{Enlace a EFE Plus}.
+
+    \item \href{https://www.insatecsl.com/hal104.htm}{Enlace a insatec}.
+    \item \href{https://www.laboratorioconsultar.com/}{Laboratorio consultar}.
+
+\end{itemize}
+
+\section{Glosario}
+\textbf{OAA}: \href{https://oaa.org.ar/}{Organismo Argentino de Acreditación}
+
+\noindent \textbf{IEC}:  \href{https://www.iec.ch/understanding-standards}{Comisión Electrotécnica Internacional}. Es una organización internacional que desarrolla y publica normas para tecnologías eléctricas, electrónicas y relacionadas. Estas normas son ampliamente reconocidas y utilizadas a nivel mundial.
+
+\noindent \textbf{Dispositivo}: hace referencia al equipo físico (hardware).
+
+\noindent \textbf{Interfaz}: hace referencia al componente lógico (software).
+
+\noindent \textbf{Sistema}: hace referencia al conjunto integrado de hardware e interfaz de software funcionando en conjunto.
+
+\end{document}

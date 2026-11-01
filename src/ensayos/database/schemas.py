@@ -9,7 +9,7 @@ from ensayos.config.config_database import database_config
 
 logger = logging.getLogger(__name__)
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 4
 
 TABLES = {
     "schema_version": """
@@ -27,7 +27,10 @@ TABLES = {
             tension REAL NOT NULL,
             corriente REAL NOT NULL,
             frecuencia REAL DEFAULT 50.0,
-            clase INTEGER DEFAULT 1
+            clase INTEGER DEFAULT 1,
+            fuga_pasiva_duplicada INTEGER DEFAULT 0,
+            con_cable_alimentacion INTEGER DEFAULT 1,
+            tipo_aparato TEXT DEFAULT 'calefaccion'
         );
     """,
     "historial_fdl": """
@@ -159,6 +162,23 @@ def get_connection(db_path: str | None = None):
         conn.close()
 
 
+def _migrate(cursor: sqlite3.Cursor) -> None:
+    """Aplica migraciones a bases creadas con versiones anteriores del esquema."""
+    # v2: condición de duplicación del límite de fuga pasiva (IEC 60335-1, 16.2)
+    columns = {row[1] for row in cursor.execute("PRAGMA table_info(productos)")}
+    if "fuga_pasiva_duplicada" not in columns:
+        cursor.execute("ALTER TABLE productos ADD COLUMN fuga_pasiva_duplicada INTEGER DEFAULT 0")
+        logger.info("Migración v2: columna 'fuga_pasiva_duplicada' agregada a productos.")
+    # v3: aparato con cable de alimentación fijo (IEC 60335-1, A.1)
+    if "con_cable_alimentacion" not in columns:
+        cursor.execute("ALTER TABLE productos ADD COLUMN con_cable_alimentacion INTEGER DEFAULT 1")
+        logger.info("Migración v3: columna 'con_cable_alimentacion' agregada a productos.")
+    # v4: tipo de aparato para tolerancias de consumo (IEC 60335-1, Tablas 1 y 2)
+    if "tipo_aparato" not in columns:
+        cursor.execute("ALTER TABLE productos ADD COLUMN tipo_aparato TEXT DEFAULT 'calefaccion'")
+        logger.info("Migración v4: columna 'tipo_aparato' agregada a productos.")
+
+
 def initialize_database(db_path: str | None = None) -> None:
     """Crea todas las tablas e inserta datos por defecto si no existen."""
     with get_connection(db_path) as conn:
@@ -168,10 +188,14 @@ def initialize_database(db_path: str | None = None) -> None:
             cursor.execute(ddl)
             logger.info("Tabla '%s' verificada/creada.", table_name)
 
+        _migrate(cursor)
+
         # Insertar versión del esquema si no existe
         cursor.execute("SELECT COUNT(*) FROM schema_version")
         if cursor.fetchone()[0] == 0:
             cursor.execute("INSERT INTO schema_version (version) VALUES (?)", (SCHEMA_VERSION,))
+        else:
+            cursor.execute("UPDATE schema_version SET version = ?", (SCHEMA_VERSION,))
 
         # Insertar admin por defecto si no existe
         cursor.execute("SELECT COUNT(*) FROM admin")

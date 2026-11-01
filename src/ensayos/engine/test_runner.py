@@ -101,11 +101,22 @@ class TestRunner:
                 rated_current=product.corriente,
                 rated_power=product.potencia,
                 include_leakage=include_leakage,
+                appliance_type=product.tipo_aparato,
             )
         elif test_type == TestType.DIELECTRIC:
             return DielectricTest(
                 **common_kwargs,
                 device_class=product.clase,
+            )
+        elif test_type == TestType.PASSIVE_LEAKAGE:
+            return PassiveLeakageTest(
+                **common_kwargs,
+                doubled_limit=product.fuga_pasiva_duplicada,
+            )
+        elif test_type == TestType.GROUNDING:
+            return GroundingTest(
+                **common_kwargs,
+                with_cord=product.con_cable_alimentacion,
             )
         else:
             test_class = TEST_CLASS_MAP[test_type]
