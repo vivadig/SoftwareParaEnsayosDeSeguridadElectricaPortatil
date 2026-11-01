@@ -110,13 +110,22 @@ class AbstractTest(ABC):
                 measurement=self.last_measurement,
             )
 
+        final = self.final_measurement()
         verdict = Verdict.NOT_RUN
-        if self.last_measurement is not None:
-            verdict = self.evaluate(self.last_measurement)
+        if final is not None:
+            verdict = self.evaluate(final)
 
         logger.info("Ensayo %s finalizado: %s", self.test_type.value, verdict.value)
         return TestResult(
             test_type=self.test_type,
             verdict=verdict,
-            measurement=self.last_measurement,
+            measurement=final,
         )
+
+    def final_measurement(self) -> object | None:
+        """Medición sobre la que se evalúa y reporta el ensayo.
+
+        Por defecto es la última lectura. Los ensayos que deben considerar
+        todo el intervalo (p. ej. el peor caso) sobrescriben este método.
+        """
+        return self.last_measurement

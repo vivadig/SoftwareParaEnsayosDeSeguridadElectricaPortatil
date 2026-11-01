@@ -42,10 +42,19 @@ class GroundingThresholds:
 
 @dataclass(frozen=True)
 class DielectricThresholds:
-    """Umbrales de aprobación para ensayo de rigidez dieléctrica (V)."""
+    """Parámetros de aprobación para ensayo de rigidez dieléctrica.
 
-    class1_min_v: float = _get_float("DIELECTRIC_CLASS1_MIN_V", 800.0)
-    class2_min_v: float = _get_float("DIELECTRIC_CLASS2_MIN_V", 2000.0)
+    Según IEC 60335-1, Anexo A.2 (ensayo de rutina), para tensión nominal > 150 V:
+    1000 V con aislamiento básico (Clase I) y 2500 V con aislamiento doble o
+    reforzado (Clase II). Hay ruptura si la corriente supera 5 mA (hasta 30 mA
+    admitidos para aparatos con alta corriente de fuga).
+    """
+
+    class1_test_v: float = _get_float("DIELECTRIC_CLASS1_TEST_V", 1000.0)
+    class2_test_v: float = _get_float("DIELECTRIC_CLASS2_TEST_V", 2500.0)
+    # Tolerancia admitida por debajo de la tensión de ensayo (%)
+    voltage_tolerance_pct: float = _get_float("DIELECTRIC_VOLTAGE_TOLERANCE_PCT", 3.0)
+    max_current_ma: float = _get_float("DIELECTRIC_MAX_CURRENT_MA", 5.0)
 
 
 @dataclass(frozen=True)

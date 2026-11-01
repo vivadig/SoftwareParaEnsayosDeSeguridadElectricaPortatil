@@ -373,7 +373,7 @@ class TestPanel(QWidget):
             elif isinstance(measurement, GroundingMeasurement):
                 text = f"{measurement.resistance_mohm:.1f} mΩ"
             elif isinstance(measurement, DielectricMeasurement):
-                text = f"{measurement.voltage_v:.0f} V"
+                text = f"{measurement.voltage:.0f} V / {measurement.current_ma:.2f} mA"
             else:
                 text = str(measurement)
             self.signals.measurement_updated.emit(result.test_type.value, text)
@@ -473,7 +473,7 @@ class TestPanel(QWidget):
                 if m is not None:
                     from ensayos.models.measurement import DielectricMeasurement
                     if isinstance(m, DielectricMeasurement):
-                        record.rigidez_medida = m.voltage_v
+                        record.rigidez_medida = m.current_ma
                 record.veredicto_rigidez = r.verdict
 
         self._fdl_repo.save(record)

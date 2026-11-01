@@ -68,6 +68,9 @@ class ScaleFactors:
     grounding_voltage_multiplier: float = _get_float("GROUNDING_VOLTAGE_MULTIPLIER", 10.0)
     grounding_resistance_multiplier: float = _get_float("GROUNDING_RESISTANCE_MULTIPLIER", 1000.0)
     dielectric_voltage_multiplier: float = _get_float("DIELECTRIC_VOLTAGE_MULTIPLIER", 10.0)
+    # Convierte la corriente del PZEM2 (A) a corriente en el circuito de AT (mA).
+    # Debe calibrarse según dónde esté ubicado el PZEM (primario o secundario).
+    dielectric_current_multiplier: float = _get_float("DIELECTRIC_CURRENT_MULTIPLIER", 1000.0)
 
 
 @dataclass(frozen=True)

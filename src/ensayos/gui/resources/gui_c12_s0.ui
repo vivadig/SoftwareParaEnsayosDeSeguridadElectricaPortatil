@@ -5873,7 +5873,7 @@ background-color: argb(255, 255, 255, 0);</string>
           </rect>
          </property>
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tensión de la rigidez dieléctrica.&lt;/p&gt;&lt;p&gt;Valor mínimo Clase I: 800V&lt;/p&gt;&lt;p&gt;Valor mínimo Clase II: 2000V&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rigidez dieléctrica (IEC 60335-1, Anexo A.2).&lt;/p&gt;&lt;p&gt;Tensión de ensayo Clase I: 1000V / Clase II: 2500V&lt;/p&gt;&lt;p&gt;Falla si la corriente supera 5 mA&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="accessibleDescription">
           <string/>

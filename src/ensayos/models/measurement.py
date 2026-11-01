@@ -94,9 +94,15 @@ class GroundingMeasurement:
 
 @dataclass(frozen=True)
 class DielectricMeasurement:
-    """Medición de rigidez dieléctrica en V."""
+    """Medición de rigidez dieléctrica.
+
+    Attributes:
+        voltage: Tensión de ensayo aplicada (V).
+        current_ma: Corriente en el circuito de alta tensión (mA).
+    """
 
     voltage: float
+    current_ma: float = 0.0
 
     @classmethod
     def from_pzem(
@@ -104,7 +110,17 @@ class DielectricMeasurement:
         reading: PzemReading,
         multiplier: float = 10.0,
         correction: float = 0.0,
+        current_multiplier: float = 1000.0,
     ) -> "DielectricMeasurement":
+        """Convierte una lectura cruda del PZEM a tensión (V) y corriente (mA).
+
+        Args:
+            reading: Lectura cruda del PZEM2.
+            multiplier: Factor de escala de tensión.
+            correction: Corrección de calibración de tensión (V).
+            current_multiplier: Factor de escala de corriente (A del PZEM → mA en AT).
+        """
         return cls(
             voltage=(reading.voltage * multiplier) + correction,
+            current_ma=reading.current * current_multiplier,
         )

@@ -137,26 +137,44 @@ def evaluate_grounding(
 
 
 def evaluate_dielectric(
-    voltage: float,
+    min_voltage: float,
+    peak_current_ma: float,
     device_class: DeviceClass,
-    class1_min_v: float | None = None,
-    class2_min_v: float | None = None,
+    test_voltage: float | None = None,
+    voltage_tolerance_pct: float | None = None,
+    max_current_ma: float | None = None,
 ) -> Verdict:
-    """Evalúa rigidez dieléctrica.
+    """Evalúa rigidez dieléctrica (IEC 60335-1, Anexo A.2).
+
+    El ensayo aprueba solo si la tensión de ensayo se mantuvo aplicada durante
+    todo el ensayo y no hubo ruptura (corriente por encima del límite). Si la
+    tensión no alcanzó el valor de ensayo, el aislamiento no fue verificado y
+    el resultado es FAIL (criterio conservador: nunca un falso aprobado).
 
     Args:
-        voltage: Tensión resistida medida (V).
+        min_voltage: Tensión mínima registrada durante el ensayo (V).
+        peak_current_ma: Corriente máxima registrada durante el ensayo (mA).
         device_class: Clase del dispositivo (1 o 2).
-        class1_min_v: Umbral mínimo para Clase 1 (default: config).
-        class2_min_v: Umbral mínimo para Clase 2 (default: config).
+        test_voltage: Tensión de ensayo nominal (default: config según clase).
+        voltage_tolerance_pct: Tolerancia por debajo de la tensión de ensayo (%).
+        max_current_ma: Corriente máxima admisible (mA) (default: config).
 
     Returns:
-        Verdict.OK si > umbral para la clase, Verdict.FAIL si <= umbral.
+        Verdict.OK si la tensión se alcanzó y la corriente no superó el límite,
+        Verdict.FAIL en caso contrario.
     """
     cfg = tests_config.dielectric
-    if device_class == DeviceClass.CLASS_1:
-        threshold = class1_min_v if class1_min_v is not None else cfg.class1_min_v
-    else:
-        threshold = class2_min_v if class2_min_v is not None else cfg.class2_min_v
+    if test_voltage is None:
+        if device_class == DeviceClass.CLASS_1:
+            test_voltage = cfg.class1_test_v
+        else:
+            test_voltage = cfg.class2_test_v
+    if voltage_tolerance_pct is None:
+        voltage_tolerance_pct = cfg.voltage_tolerance_pct
+    if max_current_ma is None:
+        max_current_ma = cfg.max_current_ma
 
-    return Verdict.OK if voltage > threshold else Verdict.FAIL
+    min_required_v = test_voltage * (1 - voltage_tolerance_pct / 100.0)
+    if min_voltage < min_required_v:
+        return Verdict.FAIL
+    return Verdict.OK if peak_current_ma <= max_current_ma else Verdict.FAIL
