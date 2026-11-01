@@ -112,6 +112,11 @@ class TestRunner:
                 **common_kwargs,
                 doubled_limit=product.fuga_pasiva_duplicada,
             )
+        elif test_type == TestType.GROUNDING:
+            return GroundingTest(
+                **common_kwargs,
+                with_cord=product.con_cable_alimentacion,
+            )
         else:
             test_class = TEST_CLASS_MAP[test_type]
             return test_class(**common_kwargs)

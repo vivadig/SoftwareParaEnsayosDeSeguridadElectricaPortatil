@@ -22,8 +22,8 @@ class SQLiteProductRepository:
                 conn.execute(
                     """INSERT INTO productos
                        (marca, modelo, descripcion, potencia, tension, corriente, frecuencia,
-                        clase, fuga_pasiva_duplicada)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                        clase, fuga_pasiva_duplicada, con_cable_alimentacion)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                     (
                         product.marca,
                         product.modelo,
@@ -34,6 +34,7 @@ class SQLiteProductRepository:
                         product.frecuencia,
                         product.clase.value,
                         int(product.fuga_pasiva_duplicada),
+                        int(product.con_cable_alimentacion),
                     ),
                 )
             return True
@@ -73,7 +74,7 @@ class SQLiteProductRepository:
                 conn.execute(
                     """UPDATE productos SET marca=?, modelo=?, descripcion=?,
                        potencia=?, tension=?, corriente=?, frecuencia=?, clase=?,
-                       fuga_pasiva_duplicada=?
+                       fuga_pasiva_duplicada=?, con_cable_alimentacion=?
                        WHERE id=?""",
                     (
                         product.marca,
@@ -85,6 +86,7 @@ class SQLiteProductRepository:
                         product.frecuencia,
                         product.clase.value,
                         int(product.fuga_pasiva_duplicada),
+                        int(product.con_cable_alimentacion),
                         product.id,
                     ),
                 )
@@ -115,6 +117,7 @@ class SQLiteProductRepository:
             frecuencia=row["frecuencia"],
             clase=DeviceClass(row["clase"]),
             fuga_pasiva_duplicada=bool(row["fuga_pasiva_duplicada"]),
+            con_cable_alimentacion=bool(row["con_cable_alimentacion"]),
         )
 
 

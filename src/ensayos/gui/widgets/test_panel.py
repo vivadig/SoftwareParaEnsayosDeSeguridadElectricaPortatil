@@ -371,7 +371,7 @@ class TestPanel(QWidget):
             elif isinstance(measurement, LeakageMeasurement):
                 text = f"{measurement.leakage_ua:.1f} μA"
             elif isinstance(measurement, GroundingMeasurement):
-                text = f"{measurement.resistance_mohm:.1f} mΩ"
+                text = f"{measurement.resistance_mohm:.1f} mΩ / {measurement.current_a:.1f} A"
             elif isinstance(measurement, DielectricMeasurement):
                 text = f"{measurement.voltage:.0f} V / {measurement.current_ma:.2f} mA"
             else:

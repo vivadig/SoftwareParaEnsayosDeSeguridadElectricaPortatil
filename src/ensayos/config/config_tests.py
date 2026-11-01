@@ -37,9 +37,16 @@ class LeakageThresholds:
 
 @dataclass(frozen=True)
 class GroundingThresholds:
-    """Umbrales de aprobación para ensayo de puesta a tierra (mΩ)."""
+    """Umbrales de aprobación para ensayo de puesta a tierra.
+
+    Según IEC 60335-1, Anexo A.1 (ensayo de rutina): corriente de al menos 10 A
+    desde una fuente de no más de 12 V; resistencia máxima de 0,2 Ω para aparatos
+    con cable de alimentación (medida desde la ficha) y 0,1 Ω para los demás.
+    """
 
     max_mohm: float = _get_float("GROUNDING_MAX_MOHM", 100.0)
+    max_mohm_with_cord: float = _get_float("GROUNDING_MAX_MOHM_WITH_CORD", 200.0)
+    min_current_a: float = _get_float("GROUNDING_MIN_CURRENT_A", 10.0)
 
 
 @dataclass(frozen=True)

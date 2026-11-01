@@ -124,21 +124,37 @@ def evaluate_passive_leakage(
 
 def evaluate_grounding(
     resistance_mohm: float,
+    current_a: float,
+    with_cord: bool = True,
     max_mohm: float | None = None,
+    min_current_a: float | None = None,
 ) -> Verdict:
-    """Evalúa puesta a tierra (PAT).
+    """Evalúa puesta a tierra (IEC 60335-1, Anexo A.1).
+
+    Si la corriente de ensayo no alcanzó el mínimo, la continuidad no fue
+    verificada en condiciones de norma y el resultado es FAIL.
 
     Args:
         resistance_mohm: Resistencia medida (mΩ). float('inf') indica sobre-rango.
-        max_mohm: Umbral máximo aceptable (default: config).
+        current_a: Corriente de ensayo medida (A).
+        with_cord: True si el aparato tiene cable de alimentación fijo (la
+            medición desde la ficha lo incluye).
+        max_mohm: Umbral máximo aceptable (default: config según with_cord).
+        min_current_a: Corriente mínima de ensayo (default: config).
 
     Returns:
-        Verdict.OK si < umbral, Verdict.FAIL si >= umbral o sobre-rango.
+        Verdict.OK si la corriente alcanzó el mínimo y la resistencia no supera
+        el umbral, Verdict.FAIL en caso contrario o sobre-rango.
     """
-    max_mohm = max_mohm if max_mohm is not None else tests_config.grounding.max_mohm
-    if resistance_mohm == float("inf"):
+    cfg = tests_config.grounding
+    if max_mohm is None:
+        max_mohm = cfg.max_mohm_with_cord if with_cord else cfg.max_mohm
+    if min_current_a is None:
+        min_current_a = cfg.min_current_a
+
+    if resistance_mohm == float("inf") or current_a < min_current_a:
         return Verdict.FAIL
-    return Verdict.OK if resistance_mohm < max_mohm else Verdict.FAIL
+    return Verdict.OK if resistance_mohm <= max_mohm else Verdict.FAIL
 
 
 def evaluate_dielectric(

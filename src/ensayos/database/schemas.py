@@ -9,7 +9,7 @@ from ensayos.config.config_database import database_config
 
 logger = logging.getLogger(__name__)
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 TABLES = {
     "schema_version": """
@@ -28,7 +28,8 @@ TABLES = {
             corriente REAL NOT NULL,
             frecuencia REAL DEFAULT 50.0,
             clase INTEGER DEFAULT 1,
-            fuga_pasiva_duplicada INTEGER DEFAULT 0
+            fuga_pasiva_duplicada INTEGER DEFAULT 0,
+            con_cable_alimentacion INTEGER DEFAULT 1
         );
     """,
     "historial_fdl": """
@@ -167,6 +168,10 @@ def _migrate(cursor: sqlite3.Cursor) -> None:
     if "fuga_pasiva_duplicada" not in columns:
         cursor.execute("ALTER TABLE productos ADD COLUMN fuga_pasiva_duplicada INTEGER DEFAULT 0")
         logger.info("Migración v2: columna 'fuga_pasiva_duplicada' agregada a productos.")
+    # v3: aparato con cable de alimentación fijo (IEC 60335-1, A.1)
+    if "con_cable_alimentacion" not in columns:
+        cursor.execute("ALTER TABLE productos ADD COLUMN con_cable_alimentacion INTEGER DEFAULT 1")
+        logger.info("Migración v3: columna 'con_cable_alimentacion' agregada a productos.")
 
 
 def initialize_database(db_path: str | None = None) -> None:

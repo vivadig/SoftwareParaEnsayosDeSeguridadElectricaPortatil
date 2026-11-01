@@ -5457,7 +5457,7 @@ background-color: argb(255, 255, 255, 0);</string>
           </rect>
          </property>
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Resistencia de la puesta a tierra.&lt;/p&gt;&lt;p&gt;Valor máximo: 100 mΩ&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Resistencia de la puesta a tierra (IEC 60335-1, Anexo A.1).&lt;/p&gt;&lt;p&gt;Valor máximo: 200 mΩ con cable fijo / 100 mΩ sin cable&lt;/p&gt;&lt;p&gt;Corriente mínima de ensayo: 10 A&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="accessibleDescription">
           <string/>

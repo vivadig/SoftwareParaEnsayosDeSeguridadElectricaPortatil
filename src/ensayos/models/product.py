@@ -23,6 +23,9 @@ class Product:
     # que un protector térmico, si ningún termostato/limitador/regulador tiene posición
     # de apagado, o si tiene filtros de interferencia.
     fuga_pasiva_duplicada: bool = False
+    # IEC 60335-1, A.1: con cable de alimentación fijo la medición desde la ficha
+    # incluye el cable y el límite es 0,2 Ω; sin él (borne o ficha de aparato), 0,1 Ω.
+    con_cable_alimentacion: bool = True
 
     @property
     def power_w(self) -> float:

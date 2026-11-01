@@ -72,9 +72,15 @@ class LeakageMeasurement:
 
 @dataclass(frozen=True)
 class GroundingMeasurement:
-    """Medición de resistencia de puesta a tierra en mΩ."""
+    """Medición de puesta a tierra.
+
+    Attributes:
+        resistance_mohm: Resistencia calculada (mΩ).
+        current_a: Corriente de ensayo inyectada (A).
+    """
 
     resistance_mohm: float
+    current_a: float = 0.0
 
     @classmethod
     def from_pzem(
@@ -85,10 +91,11 @@ class GroundingMeasurement:
         correction: float = 0.0,
     ) -> "GroundingMeasurement":
         if reading.current == 0:
-            return cls(resistance_mohm=float("inf"))
+            return cls(resistance_mohm=float("inf"), current_a=0.0)
         resistance = (reading.voltage * voltage_multiplier) / reading.current
         return cls(
             resistance_mohm=(resistance * resistance_multiplier) + correction,
+            current_a=reading.current,
         )
 
 

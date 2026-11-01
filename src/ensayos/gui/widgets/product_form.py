@@ -121,6 +121,14 @@ class ProductForm(QWidget):
         )
         row_extra.addWidget(self.check_fuga_duplicada)
 
+        self.check_cable = QCheckBox("Cable de alimentación fijo")
+        self.check_cable.setChecked(True)
+        self.check_cable.setToolTip(
+            "IEC 60335-1, A.1: con cable fijo la PAT se mide desde la ficha (límite 200 mΩ).\n"
+            "Sin cable fijo (borne o ficha de aparato), el límite es 100 mΩ."
+        )
+        row_extra.addWidget(self.check_cable)
+
         form.addLayout(row_extra)
         layout.addLayout(form)
 
@@ -170,6 +178,7 @@ class ProductForm(QWidget):
             self.input_frecuencia.setValue(int(p.frecuencia))
             self.combo_clase.setCurrentIndex(0 if p.clase == DeviceClass.CLASS_1 else 1)
             self.check_fuga_duplicada.setChecked(p.fuga_pasiva_duplicada)
+            self.check_cable.setChecked(p.con_cable_alimentacion)
             self.boton_editar.setEnabled(True)
             self.boton_eliminar.setEnabled(True)
         else:
@@ -189,6 +198,7 @@ class ProductForm(QWidget):
             frecuencia=float(self.input_frecuencia.value()),
             clase=clase,
             fuga_pasiva_duplicada=self.check_fuga_duplicada.isChecked(),
+            con_cable_alimentacion=self.check_cable.isChecked(),
         )
 
     def _agregar(self) -> None:
