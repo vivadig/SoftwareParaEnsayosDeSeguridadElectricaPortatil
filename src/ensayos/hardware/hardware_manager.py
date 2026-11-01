@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class HardwareManager:
-    """Facade que unifica el acceso a relés USB (HW-554) y ESP32/PZEM.
+    """Facade que unifica el acceso a relés USB (dcttech/HW-554) y ESP32/PZEM.
 
     Provee métodos de alto nivel para:
     - Activar/desactivar relés por nombre semántico
@@ -200,12 +200,11 @@ class HardwareManager:
     def shutdown(self) -> None:
         """Apaga todos los relés y cierra conexiones."""
         if self._relay_serial and self._relay:
-            for i in range(1, RelayController.RELAY_COUNT + 1):
-                try:
-                    self.relay.turn_off(self._relay_serial, i)
-                except Exception:
-                    pass
-            logger.info("Todos los relés apagados.")
+            try:
+                self.relay.turn_off_all(self._relay_serial)
+                logger.info("Todos los relés apagados.")
+            except Exception:
+                logger.exception("No se pudieron apagar todos los relés.")
 
         if self._esp32:
             self._esp32.disconnect()
