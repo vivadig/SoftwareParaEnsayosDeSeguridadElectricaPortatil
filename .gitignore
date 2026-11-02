@@ -142,3 +142,6 @@ Documentation/Folleto_*.pdf
 *.synctex.gz
 *.toc
 *.out
+
+# PlatformIO (firmware)
+.pio/

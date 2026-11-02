@@ -99,6 +99,10 @@ def leer_pzem(pzem_id: int) -> bool:
     try:
         respuesta = client.send_command(f"PZEM{pzem_id}")
         print(f"\nComando PZEM{pzem_id} -> respuesta cruda: {respuesta!r}")
+        if respuesta == f"PZEM{pzem_id}:ERROR":
+            print("El firmware responde, pero el PZEM no contestó.")
+            print("  Revisar: cableado TX/RX/5V/GND, 220 V en el PZEM y su dirección (SETADDR).")
+            return False
         lectura = client.read_pzem(pzem_id)
         if lectura is None:
             print("Lectura inválida: el firmware no responde con el formato esperado")
