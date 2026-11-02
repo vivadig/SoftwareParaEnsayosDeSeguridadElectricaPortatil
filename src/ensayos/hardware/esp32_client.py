@@ -183,6 +183,10 @@ class ESP32Client:
         if not response or not response.startswith(f"PZEM{pzem_id}:"):
             logger.error("Respuesta inválida del PZEM%d", pzem_id)
             return None
+        if response == f"PZEM{pzem_id}:ERROR":
+            # El firmware responde, pero el módulo no (desconectado, sin red o mal direccionado)
+            logger.error("El PZEM%d no respondió al ESP32.", pzem_id)
+            return None
 
         try:
             data_parts = response.split(":")[1].split(",")
