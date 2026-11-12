@@ -68,7 +68,9 @@ def probar(controller: RelayController, serial: str, segundos: float) -> bool:
                 ok = False
     finally:
         # Ante cualquier error, dejar todo apagado
-        controller.turn_off_all(serial)
+        if not controller.turn_off_all(serial):
+            print("  ¡ATENCIÓN! No se pudo confirmar que los relés quedaron apagados.")
+            ok = False
     return ok
 
 
