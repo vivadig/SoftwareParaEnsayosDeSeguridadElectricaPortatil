@@ -1,14 +1,16 @@
 """Ventana principal de la aplicación de ensayos de seguridad eléctrica.
 
 Carga el interfaz desde el archivo .ui de FDL y conecta la lógica de negocio.
+Las pestañas "Ensayos" y "Productos" del .ui se reemplazan por los paneles
+TestPanel y ProductForm, que tienen la lógica (y los campos de producto que
+eligen los límites de IEC 60335-1).
 """
 
 import logging
 from pathlib import Path
 
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow, QMessageBox, QTableWidgetItem, QListWidgetItem
-from PyQt5.QtCore import QCoreApplication, Qt
+from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QWidget
 
 from ensayos.config.config_database import database_config
 from ensayos.config.config_gui import gui_config
@@ -21,6 +23,8 @@ from ensayos.database.sqlite_repository import (
     SQLiteVerificationHistoryRepository,
 )
 from ensayos.gui.widgets.live_plot_widget import LivePlotWidget
+from ensayos.gui.widgets.product_form import ProductForm
+from ensayos.gui.widgets.test_panel import TestPanel
 from ensayos.hardware.hardware_manager import HardwareManager
 
 logger = logging.getLogger(__name__)
@@ -52,6 +56,9 @@ class MainWindow(QMainWindow):
         self._hardware = HardwareManager()
         self._hardware.initialize()
 
+        # Paneles con la lógica de ensayos y de productos
+        self._integrate_panels()
+
         # Conectar signals
         self._connect_signals()
 
@@ -62,14 +69,11 @@ class MainWindow(QMainWindow):
         # Cargar datos en tablas
         self._load_tables()
 
-        # Cargar productos
-        self._load_products()
-
-        # Conectar búsqueda de productos
-        if hasattr(self, 'boton_buscar_muestras'):
-            self.boton_buscar_muestras.clicked.connect(self._search_products)
-        if hasattr(self, 'boton_buscar_productos'):
-            self.boton_buscar_productos.clicked.connect(self._search_products)
+        # Productos nuevos o editados aparecen en el panel de ensayos
+        self.product_form.products_changed.connect(self.test_panel.refresh_products)
+        # Al terminar un ensayo, TestPanel guarda el historial (se conectó primero)
+        # y después se recargan las tablas
+        self.test_panel.signals.all_completed.connect(lambda _results: self._load_tables())
 
         # Conexiones básicas de menú
         try:
@@ -79,6 +83,29 @@ class MainWindow(QMainWindow):
                     action.triggered.connect(self.close)
         except Exception as e:
             logger.debug(f"No se pudo conectar acción Salir: {e}")
+
+    def _integrate_panels(self) -> None:
+        """Reemplaza las pestañas "Ensayos" y "Productos" del .ui por los paneles con lógica."""
+        self.test_panel = TestPanel(
+            self._hardware, self._product_repo, self._fdl_repo, self._config_repo
+        )
+        self.product_form = ProductForm(self._product_repo)
+        self._replace_tab(self.tab, self.test_panel)
+        self._replace_tab(self.tab_3, self.product_form)
+        self.tabWidget.setCurrentWidget(self.test_panel)
+
+    def _replace_tab(self, old: QWidget, new: QWidget) -> None:
+        """Reemplaza una pestaña del .ui por otro widget, en la misma posición y título.
+
+        Args:
+            old: Página de la pestaña original.
+            new: Widget que la reemplaza.
+        """
+        index = self.tabWidget.indexOf(old)
+        title = self.tabWidget.tabText(index)
+        self.tabWidget.removeTab(index)
+        self.tabWidget.insertTab(index, new, title)
+        old.deleteLater()
 
     def _load_tables(self) -> None:
         """Carga los datos de las tablas desde la BD."""
@@ -133,59 +160,6 @@ class MainWindow(QMainWindow):
                 table_widget.setItem(row_idx, col_idx, item)
 
         table_widget.resizeColumnsToContents()
-
-    def _load_products(self) -> None:
-        """Carga la lista de productos en la interfaz."""
-        try:
-            products = self._product_repo.list_all()
-            logger.info(f"Cargando {len(products)} productos")
-
-            # Cargar en ambas listas (tab Ensayos y tab Productos)
-            for list_widget_name in ['lista_productos_fdl', 'lista_productos']:
-                if hasattr(self, list_widget_name):
-                    list_widget = getattr(self, list_widget_name)
-                    list_widget.clear()
-                    for product in products:
-                        display_text = f"{product.marca} - {product.modelo} ({product.potencia}W)"
-                        item = QListWidgetItem(display_text)
-                        item.setData(Qt.UserRole, product)
-                        list_widget.addItem(item)
-                    logger.info(f"✓ Productos cargados en {list_widget_name}")
-                else:
-                    logger.warning(f"{list_widget_name} no encontrada en el UI")
-        except Exception as e:
-            logger.exception(f"Error cargando productos: {e}")
-
-    def _search_products(self) -> None:
-        """Busca productos por texto."""
-        try:
-            # Buscar en lista_productos_fdl (tab Ensayos) usando input_buscar_muestras
-            if hasattr(self, 'input_buscar_muestras') and hasattr(self, 'lista_productos_fdl'):
-                search_text = self.input_buscar_muestras.text().lower()
-                all_products = self._product_repo.list_all()
-                self.lista_productos_fdl.clear()
-
-                for product in all_products:
-                    display_text = f"{product.marca} - {product.modelo} ({product.potencia}W)"
-                    if search_text in display_text.lower():
-                        item = QListWidgetItem(display_text)
-                        item.setData(Qt.UserRole, product)
-                        self.lista_productos_fdl.addItem(item)
-
-            # Buscar en lista_productos (tab Productos) usando input_buscar_productos
-            if hasattr(self, 'input_buscar_productos') and hasattr(self, 'lista_productos'):
-                search_text = self.input_buscar_productos.text().lower()
-                all_products = self._product_repo.list_all()
-                self.lista_productos.clear()
-
-                for product in all_products:
-                    display_text = f"{product.marca} - {product.modelo} ({product.potencia}W)"
-                    if search_text in display_text.lower():
-                        item = QListWidgetItem(display_text)
-                        item.setData(Qt.UserRole, product)
-                        self.lista_productos.addItem(item)
-        except Exception as e:
-            logger.debug(f"Error buscando productos: {e}")
 
     def closeEvent(self, event) -> None:
         """Maneja el cierre de la ventana."""
