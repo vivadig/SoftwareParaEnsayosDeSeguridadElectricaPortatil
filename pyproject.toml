@@ -17,7 +17,14 @@ dev = [
     "ruff>=0.11,<1",
     "pre-commit>=4.2,<5",
 ]
-gui = ["PyQt5>=5.15", "pyqtgraph>=0.13", "pglive>=0.7"]
+gui = [
+    "PyQt5>=5.15",
+    # PyQt5-Qt5 > 5.15.2 no publica instaladores para Windows
+    "PyQt5-Qt5==5.15.2; sys_platform == 'win32'",
+    "PyQt5-Qt5>=5.15.18; sys_platform != 'win32'",
+    "pyqtgraph>=0.13",
+    "pglive>=0.7",
+]
 api = ["fastapi>=0.115", "uvicorn[standard]>=0.30"]
 export = ["openpyxl>=3.1"]
 auth = ["bcrypt>=4.0"]
