@@ -5,7 +5,7 @@ import time
 from collections.abc import Callable
 from threading import Event
 
-from ensayos.config.config_tests import tests_config
+from ensayos.config.config_tests import TestsConfig, tests_config
 from ensayos.engine.tests.active_leakage import ActiveLeakageTest
 from ensayos.engine.tests.consumption import ConsumptionTest
 from ensayos.engine.tests.dielectric import DielectricTest
@@ -46,8 +46,10 @@ class TestRunner:
         on_measurement: Callable | None = None,
         on_all_completed: Callable[[list[TestResult]], None] | None = None,
         on_cycle_completed: Callable[[int, int], None] | None = None,
+        config: TestsConfig | None = None,
     ):
         self.hardware = hardware
+        self.config = config or tests_config
         self.cancel_token = cancel_token or Event()
         self.on_test_started = on_test_started
         self.on_test_completed = on_test_completed
@@ -93,6 +95,7 @@ class TestRunner:
             "cancel_token": self.cancel_token,
             "on_progress": self.on_progress,
             "on_measurement": self.on_measurement,
+            "config": self.config,
         }
 
         if test_type == TestType.CONSUMPTION:
@@ -184,7 +187,7 @@ class TestRunner:
                 self.on_test_completed(result)
 
             # Pausa entre ensayos
-            time.sleep(tests_config.durations.inter_test_delay)
+            time.sleep(self.config.durations.inter_test_delay)
 
         if self.on_all_completed:
             self.on_all_completed(results)

@@ -24,6 +24,9 @@ from ensayos.database.sqlite_repository import (
 )
 from ensayos.gui.consumption_tab import ConsumptionTab
 from ensayos.gui.export_tab import ExportTab
+from ensayos.gui.login_dialog import LoginDialog
+from ensayos.gui.settings_tab import SettingsTab
+from ensayos.gui.verification_tab import VerificationTab
 from ensayos.gui.widgets.product_form import ProductForm
 from ensayos.gui.widgets.test_panel import TestPanel
 from ensayos.hardware.hardware_manager import HardwareManager
@@ -87,6 +90,13 @@ class MainWindow(QMainWindow):
         )
         self.export_tab = ExportTab(self, db)
 
+        # Pestañas Configuraciones y Verificación
+        self.settings_tab = SettingsTab(self, self._config_repo, on_saved=self._apply_settings)
+        self.verification_tab = VerificationTab(
+            self, self._hardware, self._config_repo, self._verif_repo, on_saved=self._load_tables
+        )
+        self._login_window = None
+
         # Conectar signals
         self._connect_signals()
 
@@ -104,14 +114,29 @@ class MainWindow(QMainWindow):
         # y después se recargan las tablas
         self.test_panel.signals.all_completed.connect(lambda _results: self._load_tables())
 
-        # Conexiones básicas de menú
-        try:
-            # Buscar la acción Salir en el menú
-            for action in self.findChildren(type(self.menuBar().addAction(""))):
-                if action.text() == "Salir":
-                    action.triggered.connect(self.close)
-        except Exception as e:
-            logger.debug(f"No se pudo conectar acción Salir: {e}")
+        # Menú Archivo: Administración (patrones de verificación y contraseña) y Salir
+        self.menuArchivo.clear()
+        self.action_administracion = self.menuArchivo.addAction("Administración…")
+        self.action_administracion.triggered.connect(self.open_admin)
+        self.menuArchivo.addSeparator()
+        self.menuArchivo.addAction("Salir").triggered.connect(self.close)
+
+    def open_admin(self) -> None:
+        """Abre el login de administración (y, con la clave correcta, el panel)."""
+        self._login_window = LoginDialog(self._config_repo)
+        self._login_window.show()
+
+    def _apply_settings(self, mode: str, repetitions: int, wait_seconds: float) -> None:
+        """Aplica lo guardado en Configuraciones al panel de ensayos.
+
+        Args:
+            mode: "fdl", "ciclico" o "consumo".
+            repetitions: Repeticiones del modo cíclico.
+            wait_seconds: Espera entre ciclos (s).
+        """
+        self.test_panel.apply_mode(mode == "ciclico", repetitions, wait_seconds)
+        if mode == "consumo":
+            self.tabWidget.setCurrentWidget(self.tab_7)
 
     def _integrate_panels(self) -> None:
         """Reemplaza las pestañas "Ensayos" y "Productos" del .ui por los paneles con lógica."""
@@ -286,7 +311,7 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event) -> None:
         """Maneja el cierre de la ventana: detiene el ensayo en curso y apaga el hardware."""
-        for panel in (self.test_panel, self.consumption_tab):
+        for panel in (self.test_panel, self.consumption_tab, self.verification_tab):
             try:
                 panel.stop_and_wait()
             except Exception:

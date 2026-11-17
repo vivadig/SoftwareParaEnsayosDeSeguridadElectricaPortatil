@@ -27,6 +27,25 @@ class AdminDialog(QtWidgets.QMainWindow):
         self.boton_aplicar.clicked.connect(self._guardar)
         self.boton_cancelar.clicked.connect(self.close)
 
+        # Las correcciones de calibración se aplican desde .env (CORRECTION_*): los campos
+        # de la base quedan deshabilitados para no dar a entender que tienen efecto
+        for name in (
+            "input_correccion_tension",
+            "input_correccion_corriente",
+            "input_correccion_fuga_activa",
+            "input_correccion_fuga_pasiva",
+            "input_correccion_puesta_a_tierra",
+            "input_correccion_rigidez_dielectrica",
+        ):
+            widget = getattr(self, name)
+            widget.setEnabled(False)
+            widget.setToolTip(
+                "Las correcciones de calibración se configuran en .env (CORRECTION_*)."
+            )
+        # La rigidez dieléctrica se verifica por corriente (mA), no por tensión
+        for name in ("label_27", "label_32"):
+            getattr(self, name).setText("mA")
+
         self._cargar_datos()
 
     def _cargar_datos(self) -> None:
@@ -54,15 +73,6 @@ class AdminDialog(QtWidgets.QMainWindow):
 
     def _guardar(self) -> None:
         try:
-            self._config_repo.save_corrections(
-                tension=self.input_correccion_tension.value(),
-                corriente=self.input_correccion_corriente.value(),
-                fuga=self.input_correccion_fuga_activa.value(),
-                corte_neutro=self.input_correccion_fuga_pasiva.value(),
-                puesta_a_tierra=self.input_correccion_puesta_a_tierra.value(),
-                tension_resistida=self.input_correccion_rigidez_dielectrica.value(),
-            )
-
             self._config_repo.save_verification_patterns(
                 fuga_pasa=self.input_cota_verificacion_fuga_pasa.value(),
                 pat_pasa=self.input_cota_verificacion_pat_pasa.value(),
