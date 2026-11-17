@@ -19,6 +19,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+from ensayos.config.timings import config_with_timings
 from ensayos.database.sqlite_repository import (
     SQLiteConfigRepository,
     SQLiteFdlHistoryRepository,
@@ -323,6 +324,8 @@ class TestPanel(QWidget):
             on_measurement=self._cb_measurement,
             on_all_completed=self._cb_all_completed,
             on_cycle_completed=self._cb_cycle_completed,
+            # Duraciones editadas en la pestaña Configuraciones
+            config=config_with_timings(self._config_repo.get_timings()),
         )
 
         is_cyclic = self.combo_modo.currentIndex() == 1
@@ -367,6 +370,19 @@ class TestPanel(QWidget):
         """Detiene el ensayo en curso y espera a que el hilo termine (al cerrar la ventana)."""
         self._detener_ensayo()
         self._executor.shutdown(wait=True, cancel_futures=True)
+
+    def apply_mode(self, cyclic: bool, repetitions: int, wait_seconds: float) -> None:
+        """Fija el modo y los parámetros del cíclico (desde la pestaña Configuraciones).
+
+        Args:
+            cyclic: True para el modo cíclico.
+            repetitions: Cantidad de ciclos.
+            wait_seconds: Espera entre ciclos (s).
+        """
+        self.combo_modo.setCurrentIndex(1 if cyclic else 0)
+        self.spin_repeticiones.setValue(max(1, int(repetitions)))
+        self.combo_unidad_espera.setCurrentText(TimeUnit.SECONDS.value)
+        self.spin_espera.setValue(int(wait_seconds))
 
     def _detener_ensayo(self) -> None:
         if self._runner:

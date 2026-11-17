@@ -98,6 +98,14 @@ class CalibrationCorrections:
 
 
 @dataclass(frozen=True)
+class VerificationConfig:
+    """Verificación del equipo con patrones (uno que debe pasar y otro que debe fallar)."""
+
+    # Diferencia admitida entre la medición y el valor del patrón (%)
+    tolerance_pct: float = _get_float("VERIFICATION_TOLERANCE_PCT", 10.0)
+
+
+@dataclass(frozen=True)
 class TestsConfig:
     """Configuración completa de ensayos."""
 
@@ -107,6 +115,7 @@ class TestsConfig:
     dielectric: DielectricThresholds = DielectricThresholds()
     durations: TestDurations = TestDurations()
     corrections: CalibrationCorrections = CalibrationCorrections()
+    verification: VerificationConfig = VerificationConfig()
 
 
 tests_config = TestsConfig()
