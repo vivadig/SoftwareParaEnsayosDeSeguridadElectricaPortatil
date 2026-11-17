@@ -13,6 +13,8 @@ class ActiveLeakageTest(AbstractTest):
     Lectura: PZEM2 (fuga) × multiplicador (default 10) → μA
     """
 
+    fail_on_missing_reading = True
+
     @property
     def test_type(self) -> TestType:
         return TestType.ACTIVE_LEAKAGE

@@ -7,6 +7,7 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMessageBox
 
 from ensayos.config.config_gui import gui_config
+from ensayos.database.credentials import verify_password
 from ensayos.database.sqlite_repository import SQLiteConfigRepository
 
 logger = logging.getLogger(__name__)
@@ -76,7 +77,7 @@ class AdminDialog(QtWidgets.QMainWindow):
             pwd_nueva = self.input_password_nueva.text()
             if pwd_actual or pwd_nueva:
                 credentials = self._config_repo.get_admin_credentials()
-                if credentials and pwd_actual == credentials[1]:
+                if credentials and verify_password(pwd_actual, credentials[1]):
                     self._config_repo.set_admin_password(pwd_nueva)
                 else:
                     QMessageBox.warning(

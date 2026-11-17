@@ -111,11 +111,12 @@ class FakeHardware:
         return next(self._readings)
 
 
-def _run(readings: list[ConsumptionMeasurement | None], **kwargs):
+def _run(readings: list[ConsumptionMeasurement | None], settle: int = 0, **kwargs):
     test = ConsumptionTest(FakeHardware(readings), **kwargs)
     with (
         patch("ensayos.engine.tests.base.time.sleep"),
         patch.object(ConsumptionTest, "duration_seconds", len(readings)),
+        patch.object(ConsumptionTest, "settle_seconds", settle),
     ):
         return test.run()
 
@@ -136,6 +137,26 @@ class TestConsumptionTestRun:
         )
         assert result.verdict == Verdict.OK
         assert result.measurement.power == pytest.approx(2050.0)
+
+    def test_descarta_las_lecturas_de_estabilizacion(self) -> None:
+        # Secuencia real del banco: 0 W y 26,5 W mientras el contactor cierra
+        lecturas = [
+            ConsumptionMeasurement(230.0, 0.0, 0.0, 0.0),
+            ConsumptionMeasurement(230.0, 0.12, 26.5, 0.93),
+            ConsumptionMeasurement(230.0, 0.16, 37.7, 1.0),
+            ConsumptionMeasurement(230.0, 0.16, 37.7, 1.0),
+            ConsumptionMeasurement(230.0, 0.16, 37.5, 1.0),
+        ]
+        sin = _run(lecturas, settle=0, rated_power=40.0, appliance_type=HEATING)
+        con = _run(lecturas, settle=2, rated_power=40.0, appliance_type=HEATING)
+        assert sin.verdict == Verdict.FAIL  # 27,9 W: subestimado
+        assert con.verdict == Verdict.OK
+        assert con.measurement.power == pytest.approx(37.633, abs=0.01)
+
+    def test_sin_lecturas_despues_de_estabilizar_no_se_ejecuta(self) -> None:
+        lecturas = [ConsumptionMeasurement(230.0, 0.16, 37.7, 1.0)] * 2
+        result = _run(lecturas, settle=2, rated_power=40.0, appliance_type=HEATING)
+        assert result.verdict == Verdict.NOT_RUN
 
     def test_usa_potencia_activa_y_no_aparente(self) -> None:
         # V × I = 1100 VA, pero la potencia activa es 700 W (cos φ = 0,64)

@@ -229,6 +229,16 @@ class HardwareManager:
             current_multiplier=self._cfg.scale.dielectric_current_multiplier,
         )
 
+    def deactivate_all_relays(self) -> bool:
+        """Apaga todos los relés y confirma el estado.
+
+        Returns:
+            True si se confirmó el apagado (o no hay placa de relés).
+        """
+        if not (self._relay_serial and self._relay):
+            return True
+        return self.relay.turn_off_all(self._relay_serial)
+
     # ---- Cleanup ----
 
     def shutdown(self) -> None:

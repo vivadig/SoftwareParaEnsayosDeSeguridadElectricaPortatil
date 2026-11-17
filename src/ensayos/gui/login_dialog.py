@@ -7,6 +7,7 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMessageBox
 
 from ensayos.config.config_gui import gui_config
+from ensayos.database.credentials import check_credentials
 from ensayos.database.sqlite_repository import SQLiteConfigRepository
 from ensayos.gui.styles import INPUT_ERROR
 
@@ -39,7 +40,7 @@ class LoginDialog(QtWidgets.QMainWindow):
 
         admin_user, admin_pass = credentials
 
-        if usuario == admin_user and contrasena == admin_pass:
+        if check_credentials(usuario, contrasena, admin_user, admin_pass):
             self.input_user.clear()
             self.input_password.clear()
             self.input_user.setStyleSheet("")

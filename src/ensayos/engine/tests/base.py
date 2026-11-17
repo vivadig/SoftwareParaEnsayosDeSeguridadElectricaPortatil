@@ -15,6 +15,10 @@ logger = logging.getLogger(__name__)
 
 
 class AbstractTest(ABC):
+    # Ensayos de seguridad: si el medidor no responde en alguna lectura, no se puede
+    # afirmar que el aparato cumple, así que el veredicto es FALLA (no "no ejecutado").
+    fail_on_missing_reading: bool = False
+
     """Clase base para todos los ensayos de seguridad eléctrica.
 
     Implementa el patrón Template Method:
@@ -42,6 +46,7 @@ class AbstractTest(ABC):
         self.on_progress = on_progress
         self.on_measurement = on_measurement
         self.last_measurement = None
+        self.missed_readings = 0
 
     @property
     @abstractmethod
@@ -95,6 +100,8 @@ class AbstractTest(ABC):
                     self.last_measurement = measurement
                     if self.on_measurement:
                         self.on_measurement(measurement)
+                else:
+                    self.missed_readings += 1
 
                 if self.on_progress:
                     self.on_progress(elapsed, total)
@@ -112,7 +119,14 @@ class AbstractTest(ABC):
 
         final = self.final_measurement()
         verdict = Verdict.NOT_RUN
-        if final is not None:
+        if self.fail_on_missing_reading and self.missed_readings > 0:
+            logger.warning(
+                "Ensayo %s: %d lecturas fallidas del medidor; veredicto FALLA.",
+                self.test_type.value,
+                self.missed_readings,
+            )
+            verdict = Verdict.FAIL
+        elif final is not None:
             verdict = self.evaluate(final)
 
         logger.info("Ensayo %s finalizado: %s", self.test_type.value, verdict.value)

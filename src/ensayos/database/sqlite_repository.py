@@ -2,12 +2,20 @@
 
 import logging
 
+from ensayos.database.credentials import hash_password
 from ensayos.database.schemas import get_connection
 from ensayos.models.enums import ApplianceType, DeviceClass
 from ensayos.models.product import Product
 from ensayos.models.test_result import ConsumptionSample, FdlTestRecord
 
 logger = logging.getLogger(__name__)
+
+
+def _fmt(value: float | None, decimals: int) -> str:
+    """Formatea una medición con la resolución del PZEM (V 0,1; A 0,001; FP 0,01; W 0,1)."""
+    if value is None:
+        return ""
+    return f"{value:.{decimals}f}"
 
 
 class SQLiteProductRepository:
@@ -143,16 +151,16 @@ class SQLiteFdlHistoryRepository:
                         record.serial,
                         record.fecha,
                         record.hora,
-                        str(record.tension),
-                        str(record.corriente),
-                        str(record.factor_potencia),
-                        str(record.potencia),
+                        _fmt(record.tension, 1),
+                        _fmt(record.corriente, 3),
+                        _fmt(record.factor_potencia, 2),
+                        _fmt(record.potencia, 1),
                         record.veredicto_consumo.value,
-                        str(record.fuga_activa_medida),
+                        _fmt(record.fuga_activa_medida, 1),
                         record.veredicto_fuga_activa.value,
-                        str(record.fuga_pasiva_medida),
+                        _fmt(record.fuga_pasiva_medida, 1),
                         record.veredicto_fuga_pasiva.value,
-                        str(record.pat_medida),
+                        _fmt(record.pat_medida, 1),
                         record.veredicto_pat.value,
                         record.veredicto_rigidez.value,
                     ),
@@ -408,13 +416,27 @@ class SQLiteConfigRepository:
         return (row["usuario"], row["contrasena"])
 
     def set_admin_password(self, new_password: str) -> bool:
+        """Guarda la nueva contraseña de administrador (con hash)."""
         try:
             with get_connection(self.db_path) as conn:
                 conn.execute(
                     "UPDATE admin SET contrasena = ? WHERE id = 1",
-                    (new_password,),
+                    (hash_password(new_password),),
                 )
             return True
         except Exception as e:
             logger.error("Error al cambiar contraseña: %s", e)
+            return False
+
+    def set_admin_credentials(self, usuario: str, new_password: str) -> bool:
+        """Guarda usuario y contraseña de administrador (la contraseña, con hash)."""
+        try:
+            with get_connection(self.db_path) as conn:
+                conn.execute(
+                    "UPDATE admin SET usuario = ?, contrasena = ? WHERE id = 1",
+                    (usuario.strip(), hash_password(new_password)),
+                )
+            return True
+        except Exception as e:
+            logger.error("Error al cambiar credenciales: %s", e)
             return False
