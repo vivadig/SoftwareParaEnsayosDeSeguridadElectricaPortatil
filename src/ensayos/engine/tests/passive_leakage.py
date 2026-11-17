@@ -19,6 +19,8 @@ class PassiveLeakageTest(AbstractTest):
     Lectura: PZEM2 (fuga) × multiplicador → μA
     """
 
+    fail_on_missing_reading = True
+
     def __init__(self, *args, doubled_limit: bool = False, **kwargs):
         super().__init__(*args, **kwargs)
         self.doubled_limit = doubled_limit

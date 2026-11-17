@@ -74,6 +74,8 @@ class TestDurations:
     """Duraciones de cada ensayo (en segundos)."""
 
     consumption: int = _get_int("TEST_CONSUMPTION_DURATION", 5)
+    # Lecturas iniciales del consumo que se descartan (contactor cerrando, PZEM integrando)
+    consumption_settle: int = _get_int("TEST_CONSUMPTION_SETTLE", 2)
     active_leakage: int = _get_int("TEST_ACTIVE_LEAKAGE_DURATION", 5)
     passive_leakage: int = _get_int("TEST_PASSIVE_LEAKAGE_DURATION", 5)
     grounding: int = _get_int("TEST_GROUNDING_DURATION", 5)

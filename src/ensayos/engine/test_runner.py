@@ -126,17 +126,21 @@ class TestRunner:
         self,
         selected_tests: list[TestType],
         product: Product,
+        reset_cancel: bool = True,
     ) -> list[TestResult]:
         """Ejecuta un ciclo End-of-Line con los ensayos seleccionados.
 
         Args:
             selected_tests: Lista de tipos de ensayo a ejecutar.
             product: Producto bajo ensayo.
+            reset_cancel: Limpiar una cancelación previa. El modo cíclico pasa False
+                para que una PARADA entre ciclos no se pierda.
 
         Returns:
             Lista de TestResult con los resultados.
         """
-        self.cancel_token.clear()
+        if reset_cancel:
+            self.cancel_token.clear()
         results: list[TestResult] = []
 
         include_leakage = (
@@ -213,7 +217,7 @@ class TestRunner:
                 break
 
             logger.info("Ciclo %d/%d", cycle + 1, repeat_count)
-            results = self.run_end_of_line(selected_tests, product)
+            results = self.run_end_of_line(selected_tests, product, reset_cancel=False)
             all_cycles.append(results)
 
             if self.on_cycle_completed:

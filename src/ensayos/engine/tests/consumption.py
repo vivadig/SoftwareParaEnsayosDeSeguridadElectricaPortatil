@@ -1,9 +1,13 @@
 """Ensayo de consumo eléctrico."""
 
+import logging
+
 from ensayos.engine.tests.base import AbstractTest
 from ensayos.engine.verdict import evaluate_consumption
 from ensayos.models.enums import ApplianceType, TestType, Verdict
 from ensayos.models.measurement import ConsumptionMeasurement, LeakageMeasurement
+
+logger = logging.getLogger(__name__)
 
 
 class ConsumptionTest(AbstractTest):
@@ -16,7 +20,9 @@ class ConsumptionTest(AbstractTest):
     están seleccionados (optimización de FDL).
 
     Se evalúa el promedio del intervalo (IEC 60335-1, 10.1: si el consumo varía,
-    se toma el valor medio durante un período representativo).
+    se toma el valor medio durante un período representativo). Las primeras
+    ``settle_seconds`` lecturas no se promedian: el contactor todavía está
+    cerrando y el PZEM integra un período parcial, lo que subestima el consumo.
     """
 
     def __init__(
@@ -35,6 +41,7 @@ class ConsumptionTest(AbstractTest):
         self.appliance_type = appliance_type
         self.last_leakage: LeakageMeasurement | None = None
         self._samples: list[ConsumptionMeasurement] = []
+        self._readings_taken = 0
 
     @property
     def test_type(self) -> TestType:
@@ -43,6 +50,11 @@ class ConsumptionTest(AbstractTest):
     @property
     def duration_seconds(self) -> int:
         return self.config.durations.consumption
+
+    @property
+    def settle_seconds(self) -> int:
+        """Lecturas iniciales (una por segundo) que no se promedian."""
+        return self.config.durations.consumption_settle
 
     def setup(self) -> None:
         relay_map = self.hardware._cfg.relay.mapping
@@ -55,7 +67,8 @@ class ConsumptionTest(AbstractTest):
                 self.last_leakage = leakage
         else:
             consumption = self.hardware.read_consumption()
-        if consumption is not None:
+        self._readings_taken += 1
+        if consumption is not None and self._readings_taken > self.settle_seconds:
             self._samples.append(consumption)
         return consumption
 
@@ -64,8 +77,15 @@ class ConsumptionTest(AbstractTest):
         self.hardware.deactivate_relay(relay_map.fuga_activa)
 
     def final_measurement(self) -> ConsumptionMeasurement | None:
-        """Promedio de las lecturas del intervalo."""
+        """Promedio de las lecturas del intervalo, sin las de estabilización."""
         if not self._samples:
+            if self._readings_taken and self._readings_taken <= self.settle_seconds:
+                logger.warning(
+                    "Consumo: la duración (%d s) no supera la estabilización (%d s); "
+                    "no quedan lecturas para promediar.",
+                    self.duration_seconds,
+                    self.settle_seconds,
+                )
             return None
         n = len(self._samples)
         return ConsumptionMeasurement(

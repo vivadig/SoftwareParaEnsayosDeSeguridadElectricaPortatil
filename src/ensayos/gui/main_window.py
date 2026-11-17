@@ -29,6 +29,23 @@ from ensayos.hardware.hardware_manager import HardwareManager
 logger = logging.getLogger(__name__)
 
 
+def _format_cell(value: object) -> str:
+    """Texto de una celda del historial: números con más de 3 decimales se redondean.
+
+    Los registros viejos guardaron floats sin redondear (por ejemplo 227.95999999999998).
+    """
+    if value is None:
+        return ""
+    text = str(value)
+    try:
+        number = float(text)
+    except ValueError:
+        return text
+    if "." in text and len(text.split(".")[1]) > 3:
+        return f"{number:.3f}"
+    return text
+
+
 class MainWindow(QMainWindow):
     """Ventana principal que carga el UI desde archivo .ui de FDL."""
 
@@ -123,9 +140,9 @@ class MainWindow(QMainWindow):
                             "fecha",
                             "hora",
                             "tension",
-                            "A_medida",
+                            "a_medida",
                             "fp",
-                            "W_medida",
+                            "w_medida",
                             "consumo",
                             "fuga_medida",
                             "fuga",
@@ -259,13 +276,17 @@ class MainWindow(QMainWindow):
 
         for row_idx, row_data in enumerate(data):
             for col_idx, value in enumerate(row_data):
-                item = QTableWidgetItem(str(value) if value is not None else "")
+                item = QTableWidgetItem(_format_cell(value))
                 table_widget.setItem(row_idx, col_idx, item)
 
         table_widget.resizeColumnsToContents()
 
     def closeEvent(self, event) -> None:
-        """Maneja el cierre de la ventana."""
+        """Maneja el cierre de la ventana: detiene el ensayo en curso y apaga el hardware."""
+        try:
+            self.test_panel.stop_and_wait()
+        except Exception:
+            logger.exception("Error al detener el ensayo en curso")
         try:
             self._hardware.shutdown()
         except Exception:

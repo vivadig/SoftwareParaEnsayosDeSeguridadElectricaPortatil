@@ -115,6 +115,7 @@ class TestDielectricTestRun:
         result = _run([DielectricMeasurement(1000.0, 0.5)] * 3)
         assert result.verdict == Verdict.OK
 
-    def test_sin_lecturas_no_se_ejecuta(self) -> None:
+    def test_sin_lecturas_da_falla(self) -> None:
+        # Medidor ausente: no se puede descartar una ruptura
         result = _run([None, None])
-        assert result.verdict == Verdict.NOT_RUN
+        assert result.verdict == Verdict.FAIL

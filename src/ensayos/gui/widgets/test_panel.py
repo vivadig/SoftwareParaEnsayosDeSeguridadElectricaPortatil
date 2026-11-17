@@ -47,8 +47,9 @@ class TestSignals(QObject):
     progress_updated = pyqtSignal(str, int)  # (test_type, porcentaje)
     measurement_updated = pyqtSignal(str, object)  # (test_type, measurement)
     verdict_updated = pyqtSignal(str, str)  # (test_type, verdict)
-    all_completed = pyqtSignal(list)  # lista de TestResult
+    all_completed = pyqtSignal(list)  # lista de TestResult (una por ciclo)
     error = pyqtSignal(str)
+    finished = pyqtSignal()  # el hilo de ensayo terminó (con o sin error)
 
 
 class TestPanel(QWidget):
@@ -225,6 +226,7 @@ class TestPanel(QWidget):
         self.signals.verdict_updated.connect(self._on_verdict)
         self.signals.all_completed.connect(self._on_all_completed)
         self.signals.error.connect(self._on_error)
+        self.signals.finished.connect(lambda: self._set_ui_running(False))
 
     # ── Productos ─────────────────────────────────────────────────────
 
@@ -321,7 +323,7 @@ class TestPanel(QWidget):
         if is_cyclic:
             unit = TimeUnit(self.combo_unidad_espera.currentText())
             wait_secs = unit.to_seconds(self.spin_espera.value())
-            self._executor.submit(
+            future = self._executor.submit(
                 self._runner.run_cyclic,
                 selected,
                 product,
@@ -329,7 +331,33 @@ class TestPanel(QWidget):
                 wait_secs,
             )
         else:
-            self._executor.submit(self._runner.run_end_of_line, selected, product)
+            future = self._executor.submit(self._runner.run_end_of_line, selected, product)
+        future.add_done_callback(self._on_future_done)
+
+    def _on_future_done(self, future) -> None:
+        """Se ejecuta en el hilo de ensayo cuando termina, con error o sin él.
+
+        La UI se libera recién acá (y no al terminar un ciclo), y si el ensayo
+        lanzó una excepción se apagan los relés y se muestra el error.
+        """
+        exc = future.exception() if not future.cancelled() else None
+        if exc is not None:
+            logger.error("El ensayo terminó con error: %s", exc, exc_info=exc)
+            try:
+                relays_off = self._hardware.deactivate_all_relays()
+            except Exception:
+                logger.exception("No se pudieron apagar los relés tras el error.")
+                relays_off = False
+            msg = f"{type(exc).__name__}: {exc}"
+            if not relays_off:
+                msg += "\n\n¡No se pudo confirmar el apagado de los relés: cortar la red!"
+            self.signals.error.emit(msg)
+        self.signals.finished.emit()
+
+    def stop_and_wait(self) -> None:
+        """Detiene el ensayo en curso y espera a que el hilo termine (al cerrar la ventana)."""
+        self._detener_ensayo()
+        self._executor.shutdown(wait=True, cancel_futures=True)
 
     def _detener_ensayo(self) -> None:
         if self._runner:
@@ -423,7 +451,7 @@ class TestPanel(QWidget):
                 self.labels_veredicto[key].setStyleSheet("color: red; font-weight: bold;")
 
     def _on_all_completed(self, results: list[TestResult]) -> None:
-        self._set_ui_running(False)
+        # La UI se libera con signals.finished: en modo cíclico esto llega en cada ciclo
         self._guardar_historial(results)
 
         # Actualizar contador
