@@ -213,7 +213,7 @@
 <rect x="696" y="448" width="28" height="124" rx="3" fill="#f5f5f5" stroke="#aaa"/>
 <rect x="704" y="454" width="12" height="12" fill="#222"/>
 <circle cx="710" cy="460" r="3" fill="#d4af37"/>
-<text x="732" y="464" font-size="11" font-weight="700" fill="#e9f1ff" text-anchor="start" >5V</text>
+<text x="732" y="464" font-size="11" font-weight="700" fill="#e9f1ff" text-anchor="start" >VCC</text>
 <rect x="704" y="484" width="12" height="12" fill="#222"/>
 <circle cx="710" cy="490" r="3" fill="#d4af37"/>
 <text x="732" y="494" font-size="11" font-weight="700" fill="#e9f1ff" text-anchor="start" >RX</text>
@@ -462,8 +462,8 @@
 <text x="880" y="852" font-size="11" font-weight="700" fill="#23303d" text-anchor="start" >NO1 → A1 (fase conmutada)</text>
 <rect x="1426" y="597" width="51.2" height="18" rx="4" fill="#fff" fill-opacity=".92" stroke="#3d9be0" stroke-width="1.4"/>
 <text x="1430" y="610" font-size="11" font-weight="700" fill="#23303d" text-anchor="start" >N → A2</text>
-<rect x="566" y="431" width="22.4" height="18" rx="4" fill="#fff" fill-opacity=".92" stroke="#e53935" stroke-width="1.4"/>
-<text x="570" y="444" font-size="11" font-weight="700" fill="#23303d" text-anchor="start" >5V</text>
+<rect x="566" y="431" width="29.6" height="18" rx="4" fill="#fff" fill-opacity=".92" stroke="#e53935" stroke-width="1.4"/>
+<text x="570" y="444" font-size="11" font-weight="700" fill="#23303d" text-anchor="start" >3V3</text>
 <rect x="566" y="557" width="29.6" height="18" rx="4" fill="#fff" fill-opacity=".92" stroke="#212121" stroke-width="1.4"/>
 <text x="570" y="570" font-size="11" font-weight="700" fill="#23303d" text-anchor="start" >GND</text>
 <rect x="606" y="469" width="58.4" height="18" rx="4" fill="#fff" fill-opacity=".92" stroke="#fdd835" stroke-width="1.4"/>
