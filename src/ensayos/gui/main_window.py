@@ -13,7 +13,6 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QWidget
 
 from ensayos.config.config_database import database_config
-from ensayos.config.config_gui import gui_config
 from ensayos.database.schemas import initialize_database
 from ensayos.database.sqlite_repository import (
     SQLiteConfigRepository,
@@ -111,39 +110,143 @@ class MainWindow(QMainWindow):
         """Carga los datos de las tablas desde la BD."""
         try:
             # Tabla historial FDL
-            if hasattr(self, 'tabla_historial_fdl'):
+            if hasattr(self, "tabla_historial_fdl"):
                 fdl_data = self._fdl_repo.list_all()
-                rows = [[d.get(k) for k in ['id', 'marca', 'producto', 'serial', 'fecha', 'hora', 'tension', 'A_medida', 'fp', 'W_medida', 'consumo', 'fuga_medida', 'fuga', 'cn_medido', 'cn', 'pat_medida', 'pat', 'resistida']] for d in fdl_data]
+                rows = [
+                    [
+                        d.get(k)
+                        for k in [
+                            "id",
+                            "marca",
+                            "producto",
+                            "serial",
+                            "fecha",
+                            "hora",
+                            "tension",
+                            "A_medida",
+                            "fp",
+                            "W_medida",
+                            "consumo",
+                            "fuga_medida",
+                            "fuga",
+                            "cn_medido",
+                            "cn",
+                            "pat_medida",
+                            "pat",
+                            "resistida",
+                        ]
+                    ]
+                    for d in fdl_data
+                ]
                 self._populate_table(
                     self.tabla_historial_fdl,
                     rows,
-                    ["ID", "Marca", "Producto", "Serial", "Fecha", "Hora", "Tensión", "A Medida", "FP", "W Medida", "Consumo", "Fuga Medida", "Fuga", "CN Medido", "CN", "PAT Medida", "PAT", "Resistida"]
+                    [
+                        "ID",
+                        "Marca",
+                        "Producto",
+                        "Serial",
+                        "Fecha",
+                        "Hora",
+                        "Tensión",
+                        "A Medida",
+                        "FP",
+                        "W Medida",
+                        "Consumo",
+                        "Fuga Medida",
+                        "Fuga",
+                        "CN Medido",
+                        "CN",
+                        "PAT Medida",
+                        "PAT",
+                        "Resistida",
+                    ],
                 )
         except Exception as e:
             logger.debug(f"Error cargando tabla historial FDL: {e}")
 
         try:
             # Tabla historial verificación
-            if hasattr(self, 'tabla_historial_verificacion'):
+            if hasattr(self, "tabla_historial_verificacion"):
                 verif_data = self._verif_repo.list_all()
-                rows = [[d.get(k) for k in ['id', 'fecha', 'hora', 'fuga_pasa', 'pat_pasa', 'rd_pasa', 'fuga_falla', 'pat_falla', 'rd_falla']] for d in verif_data]
+                rows = [
+                    [
+                        d.get(k)
+                        for k in [
+                            "id",
+                            "fecha",
+                            "hora",
+                            "fuga_pasa",
+                            "pat_pasa",
+                            "rd_pasa",
+                            "fuga_falla",
+                            "pat_falla",
+                            "rd_falla",
+                        ]
+                    ]
+                    for d in verif_data
+                ]
                 self._populate_table(
                     self.tabla_historial_verificacion,
                     rows,
-                    ["ID", "Fecha", "Hora", "Fuga Pasa", "PAT Pasa", "RD Pasa", "Fuga Falla", "PAT Falla", "RD Falla"]
+                    [
+                        "ID",
+                        "Fecha",
+                        "Hora",
+                        "Fuga Pasa",
+                        "PAT Pasa",
+                        "RD Pasa",
+                        "Fuga Falla",
+                        "PAT Falla",
+                        "RD Falla",
+                    ],
                 )
         except Exception as e:
             logger.debug(f"Error cargando tabla verificación: {e}")
 
         try:
             # Tabla historial consumo
-            if hasattr(self, 'tabla_historial_consumo'):
+            if hasattr(self, "tabla_historial_consumo"):
                 consumo_data = self._consumo_repo.list_all()
-                rows = [[d.get(k) for k in ['id', 'n_ensayo', 'n_muestra', 'marca', 'modelo', 'nro_serial', 'fecha', 'hora', 'tension', 'corriente', 'fp', 'potencia_ac', 'cdf']] for d in consumo_data]
+                rows = [
+                    [
+                        d.get(k)
+                        for k in [
+                            "id",
+                            "n_ensayo",
+                            "n_muestra",
+                            "marca",
+                            "modelo",
+                            "nro_serial",
+                            "fecha",
+                            "hora",
+                            "tension",
+                            "corriente",
+                            "fp",
+                            "potencia_ac",
+                            "cdf",
+                        ]
+                    ]
+                    for d in consumo_data
+                ]
                 self._populate_table(
                     self.tabla_historial_consumo,
                     rows,
-                    ["ID", "N Ensayo", "N Muestra", "Marca", "Modelo", "Serial", "Fecha", "Hora", "Tensión", "Corriente", "FP", "Potencia AC", "CDF"]
+                    [
+                        "ID",
+                        "N Ensayo",
+                        "N Muestra",
+                        "Marca",
+                        "Modelo",
+                        "Serial",
+                        "Fecha",
+                        "Hora",
+                        "Tensión",
+                        "Corriente",
+                        "FP",
+                        "Potencia AC",
+                        "CDF",
+                    ],
                 )
         except Exception as e:
             logger.debug(f"Error cargando tabla consumo: {e}")

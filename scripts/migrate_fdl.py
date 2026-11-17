@@ -39,8 +39,10 @@ def migrate(fdl_dir: str, output_path: str) -> None:
 
     # Inicializar la nueva DB con el esquema
     import sys
+
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
     from ensayos.database.schemas import initialize_database
+
     initialize_database(output_path)
 
     dest = sqlite3.connect(output_path)
@@ -59,9 +61,16 @@ def migrate(fdl_dir: str, output_path: str) -> None:
                     """INSERT INTO productos
                        (marca, modelo, descripcion, potencia, tension, corriente, frecuencia, clase)
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-                    (row["marca"], row["modelo"], row["descripcion"],
-                     row["potencia"], row["tension"], row["corriente"],
-                     row["frecuencia"], row["clase"]),
+                    (
+                        row["marca"],
+                        row["modelo"],
+                        row["descripcion"],
+                        row["potencia"],
+                        row["tension"],
+                        row["corriente"],
+                        row["frecuencia"],
+                        row["clase"],
+                    ),
                 )
                 count += 1
             logger.info("Migrados %d productos.", count)
@@ -84,8 +93,14 @@ def migrate(fdl_dir: str, output_path: str) -> None:
                     """UPDATE correcciones SET tension=?, corriente=?, fuga=?,
                        corte_neutro=?, puesta_a_tierra=?, tension_resistida=?
                        WHERE id = 1""",
-                    (row["tension"], row["corriente"], row["fuga"],
-                     row["corte_neutro"], row["puesta_a_tierra"], row["tension_resistida"]),
+                    (
+                        row["tension"],
+                        row["corriente"],
+                        row["fuga"],
+                        row["corte_neutro"],
+                        row["puesta_a_tierra"],
+                        row["tension_resistida"],
+                    ),
                 )
                 logger.info("Correcciones migradas.")
 
@@ -98,8 +113,14 @@ def migrate(fdl_dir: str, output_path: str) -> None:
                         """UPDATE cotas_verificacion SET fuga_pasa=?, pat_pasa=?, rd_pasa=?,
                            fuga_falla=?, pat_falla=?, rd_falla=?
                            WHERE id = 1""",
-                        (row["fuga_pasa"], row["pat_pasa"], row["rd_pasa"],
-                         row["fuga_falla"], row["pat_falla"], row["rd_falla"]),
+                        (
+                            row["fuga_pasa"],
+                            row["pat_pasa"],
+                            row["rd_pasa"],
+                            row["fuga_falla"],
+                            row["pat_falla"],
+                            row["rd_falla"],
+                        ),
                     )
                     logger.info("Cotas de verificación migradas.")
             except Exception as e:
@@ -121,15 +142,36 @@ def migrate(fdl_dir: str, output_path: str) -> None:
                                 if isinstance(parsed_val, list) and len(parsed_val) == 2:
                                     # Mapear al nuevo esquema
                                     field_map = {
-                                        "funcionamiento_fdl": ("consumo_duracion", "consumo_unidad"),
-                                        "fuga_activa_fdl": ("fuga_activa_duracion", "fuga_activa_unidad"),
-                                        "fuga_pasiva_fdl": ("fuga_pasiva_duracion", "fuga_pasiva_unidad"),
+                                        "funcionamiento_fdl": (
+                                            "consumo_duracion",
+                                            "consumo_unidad",
+                                        ),
+                                        "fuga_activa_fdl": (
+                                            "fuga_activa_duracion",
+                                            "fuga_activa_unidad",
+                                        ),
+                                        "fuga_pasiva_fdl": (
+                                            "fuga_pasiva_duracion",
+                                            "fuga_pasiva_unidad",
+                                        ),
                                         "puesta_a_tierra_fdl": ("pat_duracion", "pat_unidad"),
-                                        "rigidez_dielectrica_fdl": ("rigidez_duracion", "rigidez_unidad"),
+                                        "rigidez_dielectrica_fdl": (
+                                            "rigidez_duracion",
+                                            "rigidez_unidad",
+                                        ),
                                         "cant_ensayos": ("cant_ensayos_ciclicos", None),
-                                        "tiempo_entre_ensayos": ("tiempo_entre_ensayos", "tiempo_entre_ensayos_unidad"),
-                                        "tiempo_ensayo_consumo": ("tiempo_ensayo_consumo", "tiempo_ensayo_consumo_unidad"),
-                                        "tiempo_entre_muestras": ("tiempo_entre_muestras", "tiempo_entre_muestras_unidad"),
+                                        "tiempo_entre_ensayos": (
+                                            "tiempo_entre_ensayos",
+                                            "tiempo_entre_ensayos_unidad",
+                                        ),
+                                        "tiempo_ensayo_consumo": (
+                                            "tiempo_ensayo_consumo",
+                                            "tiempo_ensayo_consumo_unidad",
+                                        ),
+                                        "tiempo_entre_muestras": (
+                                            "tiempo_entre_muestras",
+                                            "tiempo_entre_muestras_unidad",
+                                        ),
                                     }
                                     if field in field_map:
                                         dur_field, unit_field = field_map[field]
@@ -162,9 +204,16 @@ def migrate(fdl_dir: str, output_path: str) -> None:
                            (fecha, hora, fuga_pasa, pat_pasa, rd_pasa,
                             fuga_falla, pat_falla, rd_falla)
                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-                        (row["fecha"], row["hora"], row["fuga_pasa"],
-                         row["pat_pasa"], row["rd_pasa"], row["fuga_falla"],
-                         row["pat_falla"], row["rd_falla"]),
+                        (
+                            row["fecha"],
+                            row["hora"],
+                            row["fuga_pasa"],
+                            row["pat_pasa"],
+                            row["rd_pasa"],
+                            row["fuga_falla"],
+                            row["pat_falla"],
+                            row["rd_falla"],
+                        ),
                     )
                     count += 1
                 logger.info("Migrados %d registros de verificación.", count)
@@ -186,12 +235,25 @@ def migrate(fdl_dir: str, output_path: str) -> None:
                         w_medida, consumo, fuga_medida, fuga, cn_medido, cn,
                         pat_medida, pat, resistida)
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                    (row["marca"], row["producto"], row["serial"],
-                     row["fecha"], row["hora"], row["tension"],
-                     row["A_medida"], row["fp"], row["W_medida"],
-                     row["consumo"], row["fuga_medida"], row["fuga"],
-                     row["cn_medido"], row["cn"], row["pat_medida"],
-                     row["pat"], row["resistida"]),
+                    (
+                        row["marca"],
+                        row["producto"],
+                        row["serial"],
+                        row["fecha"],
+                        row["hora"],
+                        row["tension"],
+                        row["A_medida"],
+                        row["fp"],
+                        row["W_medida"],
+                        row["consumo"],
+                        row["fuga_medida"],
+                        row["fuga"],
+                        row["cn_medido"],
+                        row["cn"],
+                        row["pat_medida"],
+                        row["pat"],
+                        row["resistida"],
+                    ),
                 )
                 count += 1
             logger.info("Migrados %d registros de historial FDL.", count)
@@ -209,10 +271,20 @@ def migrate(fdl_dir: str, output_path: str) -> None:
                        (n_ensayo, n_muestra, marca, modelo, nro_serial, fecha, hora,
                         tension, corriente, fp, potencia_ac, cdf)
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                    (row["n_ensayo"], row["n_muestra"], row["marca"],
-                     row["modelo"], row["nro_serial"], row["fecha"],
-                     row["hora"], row["tension"], row["corriente"],
-                     row["fp"], row["potencia_ac"], row["cdf"]),
+                    (
+                        row["n_ensayo"],
+                        row["n_muestra"],
+                        row["marca"],
+                        row["modelo"],
+                        row["nro_serial"],
+                        row["fecha"],
+                        row["hora"],
+                        row["tension"],
+                        row["corriente"],
+                        row["fp"],
+                        row["potencia_ac"],
+                        row["cdf"],
+                    ),
                 )
                 count += 1
             logger.info("Migrados %d muestras de consumo.", count)
@@ -236,7 +308,10 @@ def main():
     parser.add_argument(
         "--fdl-dir",
         required=True,
-        help="Directorio con las 3 bases de datos de FDL (database.db, historial_fdl.db, historial_consumo.db)",
+        help=(
+            "Directorio con las 3 bases de datos de FDL "
+            "(database.db, historial_fdl.db, historial_consumo.db)"
+        ),
     )
     parser.add_argument(
         "--output",

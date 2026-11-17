@@ -241,7 +241,9 @@ class ProductForm(QWidget):
         if self._selected_product is None:
             return
         reply = QMessageBox.question(
-            self, "Confirmar", f"¿Eliminar {self._selected_product.marca} - {self._selected_product.modelo}?",
+            self,
+            "Confirmar",
+            f"¿Eliminar {self._selected_product.marca} - {self._selected_product.modelo}?",
         )
         if reply == QMessageBox.Yes:
             self._repo.delete(self._selected_product.id)

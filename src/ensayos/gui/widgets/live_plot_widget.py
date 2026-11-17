@@ -1,7 +1,6 @@
 """Widget stub para gráficos en vivo (LivePlotWidget)."""
 
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import Qt
 
 
 class LivePlotWidget(QWidget):

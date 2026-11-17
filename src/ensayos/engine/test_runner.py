@@ -12,7 +12,7 @@ from ensayos.engine.tests.dielectric import DielectricTest
 from ensayos.engine.tests.grounding import GroundingTest
 from ensayos.engine.tests.passive_leakage import PassiveLeakageTest
 from ensayos.hardware.hardware_manager import HardwareManager
-from ensayos.models.enums import DeviceClass, TestType
+from ensayos.models.enums import TestType
 from ensayos.models.product import Product
 from ensayos.models.test_result import TestResult
 
@@ -152,30 +152,34 @@ class TestRunner:
                 self.on_test_started(test_type)
 
             is_consumption_with_leakage = test_type == TestType.CONSUMPTION and include_leakage
-            test = self._create_test(test_type, product, include_leakage=is_consumption_with_leakage)
+            test = self._create_test(
+                test_type, product, include_leakage=is_consumption_with_leakage
+            )
             result = test.run()
             results.append(result)
 
             # Si consumo midió fuga activa, agregar su resultado
-            if is_consumption_with_leakage and isinstance(test, ConsumptionTest):
-                if test.last_leakage is not None:
-                    from ensayos.engine.verdict import evaluate_active_leakage
+            if (
+                is_consumption_with_leakage
+                and isinstance(test, ConsumptionTest)
+                and test.last_leakage is not None
+            ):
+                from ensayos.engine.verdict import evaluate_active_leakage
 
-                    leakage_verdict = evaluate_active_leakage(test.last_leakage.leakage_ua)
-                    leakage_result = TestResult(
-                        test_type=TestType.ACTIVE_LEAKAGE,
-                        verdict=leakage_verdict,
-                        measurement=test.last_leakage,
-                    )
-                    results.append(leakage_result)
-                    if self.on_test_completed:
-                        self.on_test_completed(leakage_result)
+                leakage_verdict = evaluate_active_leakage(test.last_leakage.leakage_ua)
+                leakage_result = TestResult(
+                    test_type=TestType.ACTIVE_LEAKAGE,
+                    verdict=leakage_verdict,
+                    measurement=test.last_leakage,
+                )
+                results.append(leakage_result)
+                if self.on_test_completed:
+                    self.on_test_completed(leakage_result)
 
             if self.on_test_completed:
                 self.on_test_completed(result)
 
             # Pausa entre ensayos
-            inter_delay = self.hardware._cfg.relay.settle_delay
             time.sleep(tests_config.durations.inter_test_delay)
 
         if self.on_all_completed:

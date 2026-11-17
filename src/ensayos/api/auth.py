@@ -58,9 +58,7 @@ def verify_credentials(
 
     db_usuario, db_contrasena = admin_creds
 
-    usuario_correcto = secrets.compare_digest(
-        credentials.username.strip(), db_usuario.strip()
-    )
+    usuario_correcto = secrets.compare_digest(credentials.username.strip(), db_usuario.strip())
     contrasena_correcta = secrets.compare_digest(
         credentials.password.strip(), db_contrasena.strip()
     )
