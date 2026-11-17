@@ -39,7 +39,7 @@ class PassiveLeakageTest(AbstractTest):
         self.hardware.activate_relay(relay_map.fuga_activa)
 
     def measure(self) -> LeakageMeasurement | None:
-        return self.hardware.read_leakage()
+        return self.hardware.read_leakage(passive=True)
 
     def teardown(self) -> None:
         relay_map = self.hardware._cfg.relay.mapping
