@@ -54,6 +54,8 @@ exclude = [
     "venv",
     "build",
     "dist",
+    # Los notebooks son documentación con comandos, no código del paquete
+    "*.ipynb",
 ]
 line-length = 100
 target-version = "py311"
@@ -72,6 +74,14 @@ select = [
     "SIM", # flake8-simplify
 ]
 fixable = ["ALL"]
+
+[tool.ruff.lint.per-file-ignores]
+# FastAPI declara dependencias con Depends() en los valores por defecto
+"src/ensayos/api/*.py" = ["B008"]
+# Qt exige los nombres de sus métodos virtuales (closeEvent, etc.)
+"src/ensayos/gui/*.py" = ["N802"]
+# Hojas de estilo Qt en cadenas largas
+"src/ensayos/gui/styles.py" = ["E501"]
 
 [tool.ruff.format]
 # Use double quotes for strings
