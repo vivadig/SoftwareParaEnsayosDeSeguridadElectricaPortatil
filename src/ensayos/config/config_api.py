@@ -2,6 +2,7 @@
 
 import os
 from dataclasses import dataclass, field
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,8 +16,7 @@ class ApiConfig:
     port: int = int(os.environ.get("API_PORT", 8000))
     cors_origins: list[str] = field(
         default_factory=lambda: [
-            origin.strip()
-            for origin in os.environ.get("API_CORS_ORIGINS", "*").split(",")
+            origin.strip() for origin in os.environ.get("API_CORS_ORIGINS", "*").split(",")
         ]
     )
 

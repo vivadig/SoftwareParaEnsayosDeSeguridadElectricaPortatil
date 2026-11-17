@@ -62,8 +62,7 @@ def historial_fdl(
     if busqueda:
         busqueda_lower = busqueda.lower()
         resultados = [
-            r for r in resultados
-            if any(busqueda_lower in str(v).lower() for v in r.values())
+            r for r in resultados if any(busqueda_lower in str(v).lower() for v in r.values())
         ]
 
     return {
@@ -85,8 +84,7 @@ def historial_consumo(
     if busqueda:
         busqueda_lower = busqueda.lower()
         resultados = [
-            r for r in resultados
-            if any(busqueda_lower in str(v).lower() for v in r.values())
+            r for r in resultados if any(busqueda_lower in str(v).lower() for v in r.values())
         ]
 
     return {

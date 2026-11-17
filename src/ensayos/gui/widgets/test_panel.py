@@ -33,7 +33,7 @@ from ensayos.gui.styles import (
     PROGRESS_BAR_RED,
 )
 from ensayos.hardware.hardware_manager import HardwareManager
-from ensayos.models.enums import DeviceClass, TestMode, TestType, TimeUnit, Verdict
+from ensayos.models.enums import DeviceClass, TestType, TimeUnit, Verdict
 from ensayos.models.product import Product
 from ensayos.models.test_result import FdlTestRecord, TestResult
 
@@ -103,9 +103,12 @@ class TestPanel(QWidget):
         self.label_tension = QLabel("-")
         self.label_corriente = QLabel("-")
         for lbl_name, lbl in [
-            ("Marca:", self.label_marca), ("Modelo:", self.label_modelo),
-            ("Clase:", self.label_clase), ("W:", self.label_potencia),
-            ("V:", self.label_tension), ("A:", self.label_corriente),
+            ("Marca:", self.label_marca),
+            ("Modelo:", self.label_modelo),
+            ("Clase:", self.label_clase),
+            ("W:", self.label_potencia),
+            ("V:", self.label_tension),
+            ("A:", self.label_corriente),
         ]:
             info_row.addWidget(QLabel(lbl_name))
             info_row.addWidget(lbl)
@@ -273,6 +276,7 @@ class TestPanel(QWidget):
                 btn.setStyleSheet(BUTTON_ACTIVE)
             else:
                 btn.setStyleSheet(BUTTON_NORMAL)
+
         return toggle
 
     def _get_selected_tests(self) -> list[TestType]:
@@ -297,6 +301,7 @@ class TestPanel(QWidget):
         self._set_ui_running(True)
 
         from threading import Event
+
         cancel = Event()
 
         self._runner = TestRunner(
@@ -318,7 +323,10 @@ class TestPanel(QWidget):
             wait_secs = unit.to_seconds(self.spin_espera.value())
             self._executor.submit(
                 self._runner.run_cyclic,
-                selected, product, self.spin_repeticiones.value(), wait_secs,
+                selected,
+                product,
+                self.spin_repeticiones.value(),
+                wait_secs,
             )
         else:
             self._executor.submit(self._runner.run_end_of_line, selected, product)
@@ -445,6 +453,7 @@ class TestPanel(QWidget):
             m = r.measurement
             if r.test_type == TestType.CONSUMPTION and m is not None:
                 from ensayos.models.measurement import ConsumptionMeasurement
+
                 if isinstance(m, ConsumptionMeasurement):
                     record.tension = m.voltage
                     record.corriente = m.current
@@ -454,24 +463,28 @@ class TestPanel(QWidget):
             elif r.test_type == TestType.ACTIVE_LEAKAGE:
                 if m is not None:
                     from ensayos.models.measurement import LeakageMeasurement
+
                     if isinstance(m, LeakageMeasurement):
                         record.fuga_activa_medida = m.leakage_ua
                 record.veredicto_fuga_activa = r.verdict
             elif r.test_type == TestType.PASSIVE_LEAKAGE:
                 if m is not None:
                     from ensayos.models.measurement import LeakageMeasurement
+
                     if isinstance(m, LeakageMeasurement):
                         record.fuga_pasiva_medida = m.leakage_ua
                 record.veredicto_fuga_pasiva = r.verdict
             elif r.test_type == TestType.GROUNDING:
                 if m is not None:
                     from ensayos.models.measurement import GroundingMeasurement
+
                     if isinstance(m, GroundingMeasurement):
                         record.pat_medida = m.resistance_mohm
                 record.veredicto_pat = r.verdict
             elif r.test_type == TestType.DIELECTRIC:
                 if m is not None:
                     from ensayos.models.measurement import DielectricMeasurement
+
                     if isinstance(m, DielectricMeasurement):
                         record.rigidez_medida = m.current_ma
                 record.veredicto_rigidez = r.verdict

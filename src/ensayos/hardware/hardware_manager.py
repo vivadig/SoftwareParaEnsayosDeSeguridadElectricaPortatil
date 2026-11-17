@@ -146,7 +146,6 @@ class HardwareManager:
             logger.error("No se pudo leer PZEM de consumo.")
             self.watchdog_reset()
             return None
-        corrections = hardware_config.scale
         return ConsumptionMeasurement.from_pzem(
             reading,
             correction_voltage=0.0,

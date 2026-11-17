@@ -1,5 +1,6 @@
 """Cliente de comunicación serial con ESP32 para lectura de PZEM y control de relés."""
 
+import contextlib
 import logging
 import time
 from threading import Lock
@@ -91,10 +92,8 @@ class ESP32Client:
         while not self.is_connected:
             self.port = self.find_port()
             if self.port:
-                try:
+                with contextlib.suppress(ConnectionError):
                     self.connect()
-                except ConnectionError:
-                    pass
             if not self.is_connected:
                 logger.info("Reintentando conexión en %d segundos...", self.retry_interval)
                 time.sleep(self.retry_interval)
