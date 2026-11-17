@@ -20,7 +20,9 @@
  * Conexión de los PZEM (todos en el mismo bus UART2, cada uno con su dirección):
  *   ESP32 GPIO17 (TX2) -> RX del PZEM
  *   ESP32 GPIO16 (RX2) <- TX del PZEM
- *   ESP32 5V / GND     -> 5V / GND del PZEM
+ *   ESP32 3V3 / GND    -> VCC / GND del PZEM
+ *   El PZEM debe alimentarse con 3,3 V: con 5 V, su salida TX pone 5 V en GPIO16
+ *   y el ESP32 no arranca ("invalid header: 0xffffffff" en bucle).
  *
  * PZEM1 = consumo, PZEM2 = fuga / rigidez dieléctrica, PZEM3 = puesta a tierra.
  * Con varios PZEM en el bus, cada uno debe tener grabada su dirección (1, 2, 3)
