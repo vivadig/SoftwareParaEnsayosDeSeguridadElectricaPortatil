@@ -1,6 +1,7 @@
 """Facade de hardware: acceso unificado a relés USB y ESP32/PZEM."""
 
 import logging
+import threading
 import time
 
 from ensayos.config.config_hardware import hardware_config
@@ -39,6 +40,7 @@ class HardwareManager:
         # Correcciones de calibración (CORRECTION_* en .env), sumadas a cada lectura
         self._corrections = corrections or tests_config.corrections
         self._relay_serial: str | None = None
+        self._session_lock = threading.Lock()
 
     @property
     def relay(self) -> RelayController:
@@ -180,17 +182,22 @@ class HardwareManager:
         )
         return consumption, leakage
 
-    def read_leakage(self, passive: bool = False) -> LeakageMeasurement | None:
+    def read_leakage(
+        self, passive: bool = False, watchdog: bool = True
+    ) -> LeakageMeasurement | None:
         """Lee medición de fuga desde PZEM2.
 
         Args:
             passive: True para el ensayo de fuga pasiva (usa CORRECTION_PASSIVE_LEAKAGE);
                 False para fuga activa (CORRECTION_ACTIVE_LEAKAGE).
+            watchdog: Reiniciar el ESP32 si la lectura falla. Las lecturas opcionales
+                (por ejemplo, la fuga durante un perfil de consumo) pasan False.
         """
         reading = self.read_pzem(self._cfg.pzem.leakage)
         if reading is None:
-            logger.error("No se pudo leer PZEM de fuga.")
-            self.watchdog_reset()
+            if watchdog:
+                logger.error("No se pudo leer PZEM de fuga.")
+                self.watchdog_reset()
             return None
         correction = (
             self._corrections.passive_leakage if passive else self._corrections.active_leakage
@@ -228,6 +235,19 @@ class HardwareManager:
             correction=self._corrections.dielectric,
             current_multiplier=self._cfg.scale.dielectric_current_multiplier,
         )
+
+    def try_acquire_session(self) -> bool:
+        """Reserva el hardware para un ensayo. False si ya hay otro en curso.
+
+        El panel de ensayos y el perfil de consumo comparten relés y ESP32: no pueden
+        correr a la vez.
+        """
+        return self._session_lock.acquire(blocking=False)
+
+    def release_session(self) -> None:
+        """Libera la reserva tomada con try_acquire_session."""
+        if self._session_lock.locked():
+            self._session_lock.release()
 
     def deactivate_all_relays(self) -> bool:
         """Apaga todos los relés y confirma el estado.
