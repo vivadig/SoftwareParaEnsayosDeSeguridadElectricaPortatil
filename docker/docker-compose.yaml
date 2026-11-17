@@ -22,6 +22,7 @@ services:
     environment:
       - PYTHONPATH=/app
       - ENV=development
+      - RELAY_BACKEND=usbrelay
       - PYTHONUNBUFFERED=1
     stdin_open: true
     tty: true

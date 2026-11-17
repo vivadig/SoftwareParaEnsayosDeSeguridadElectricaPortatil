@@ -5,7 +5,7 @@ import time
 
 from ensayos.config.config_hardware import hardware_config
 from ensayos.hardware.esp32_client import ESP32Client
-from ensayos.hardware.relay_controller import RelayController
+from ensayos.hardware.relay_controller import RelayBoardNotFoundError, RelayController
 from ensayos.models.measurement import (
     ConsumptionMeasurement,
     DielectricMeasurement,
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class HardwareManager:
-    """Facade que unifica el acceso a relés USB (HW-554) y ESP32/PZEM.
+    """Facade que unifica el acceso a relés USB (dcttech/HW-554) y ESP32/PZEM.
 
     Provee métodos de alto nivel para:
     - Activar/desactivar relés por nombre semántico
@@ -77,9 +77,17 @@ class HardwareManager:
             self.relay.turn_on(self._relay_serial, relay_number)
 
     def deactivate_relay(self, relay_number: int) -> None:
-        """Desactiva un relé por su número."""
+        """Desactiva un relé por su número.
+
+        Si la placa se desconectó, espera a que vuelva y apaga todos los relés.
+        """
         if self._relay_serial:
-            self.relay.turn_off(self._relay_serial, relay_number)
+            try:
+                self.relay.turn_off(self._relay_serial, relay_number)
+            except RelayBoardNotFoundError:
+                logger.warning("Placa de relés desconectada al apagar el relé %d.", relay_number)
+                if not self.relay.turn_off_all(self._relay_serial):
+                    raise
 
     def activate_relay_by_name(self, name: str) -> None:
         """Activa un relé por nombre semántico (ej: 'fuga_activa', 'pat_power')."""
@@ -110,8 +118,15 @@ class HardwareManager:
     # ---- Watchdog ----
 
     def watchdog_reset(self) -> None:
-        """Ejecuta un pulso de reset en el relé watchdog."""
+        """Ejecuta un pulso de reset en el relé watchdog.
+
+        Con ``RELAY_WATCHDOG=0`` no hay relé de watchdog cableado: no se hace nada
+        más que registrar un aviso. La lectura fallida igual se trata como falla.
+        """
         watchdog_relay = self._cfg.relay.mapping.watchdog
+        if watchdog_relay == 0:
+            logger.warning("Watchdog desactivado (RELAY_WATCHDOG=0): no se reinicia el ESP32.")
+            return
         self.activate_relay(watchdog_relay)
         time.sleep(0.2)
         self.deactivate_relay(watchdog_relay)
@@ -200,12 +215,11 @@ class HardwareManager:
     def shutdown(self) -> None:
         """Apaga todos los relés y cierra conexiones."""
         if self._relay_serial and self._relay:
-            for i in range(1, RelayController.RELAY_COUNT + 1):
-                try:
-                    self.relay.turn_off(self._relay_serial, i)
-                except Exception:
-                    pass
-            logger.info("Todos los relés apagados.")
+            try:
+                if self.relay.turn_off_all(self._relay_serial):
+                    logger.info("Todos los relés apagados.")
+            except Exception:
+                logger.exception("No se pudieron apagar todos los relés.")
 
         if self._esp32:
             self._esp32.disconnect()
