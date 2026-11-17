@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from threading import Event
 
-from ensayos.config.config_tests import CalibrationCorrections, TestsConfig, tests_config
+from ensayos.config.config_tests import TestsConfig, tests_config
 from ensayos.hardware.hardware_manager import HardwareManager
 from ensayos.models.enums import TestType, Verdict
 from ensayos.models.test_result import TestResult

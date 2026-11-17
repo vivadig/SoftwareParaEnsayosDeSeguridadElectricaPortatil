@@ -11,21 +11,51 @@ from ensayos.database.schemas import get_connection
 logger = logging.getLogger(__name__)
 
 HEADERS_FDL = [
-    "N.º Ensayo", "Marca", "Modelo", "N.º Serie", "Fecha", "Hora",
-    "Tensión (V)", "Corriente (A)", "FP", "Potencia (W)", "CONSUMO V.",
-    "Fuga A. (μA)", "FUGA ACTIVA V.", "Fuga P. (μA)", "FUGA PASIVA V.",
-    "R. de P. a T. (mΩ)", "P. A T. V.", "Rigidez Dieléctrica V.",
+    "N.º Ensayo",
+    "Marca",
+    "Modelo",
+    "N.º Serie",
+    "Fecha",
+    "Hora",
+    "Tensión (V)",
+    "Corriente (A)",
+    "FP",
+    "Potencia (W)",
+    "CONSUMO V.",
+    "Fuga A. (μA)",
+    "FUGA ACTIVA V.",
+    "Fuga P. (μA)",
+    "FUGA PASIVA V.",
+    "R. de P. a T. (mΩ)",
+    "P. A T. V.",
+    "Rigidez Dieléctrica V.",
 ]
 
 HEADERS_CONSUMO = [
-    "N.º Ensayo", "N.º Muestra", "Marca", "Modelo", "N.º Serie",
-    "Fecha", "Hora", "Tensión (V)", "Corriente (A)", "FP",
-    "Potencia (W)", "Fuga Activa (μA)",
+    "N.º Ensayo",
+    "N.º Muestra",
+    "Marca",
+    "Modelo",
+    "N.º Serie",
+    "Fecha",
+    "Hora",
+    "Tensión (V)",
+    "Corriente (A)",
+    "FP",
+    "Potencia (W)",
+    "Fuga Activa (μA)",
 ]
 
 HEADERS_VERIFICACION = [
-    "ID", "Fecha", "Hora", "FUGA-1", "PAT-1", "RD-1",
-    "FUGA-2", "PAT-2", "RD-2",
+    "ID",
+    "Fecha",
+    "Hora",
+    "FUGA-1",
+    "PAT-1",
+    "RD-1",
+    "FUGA-2",
+    "PAT-2",
+    "RD-2",
 ]
 
 

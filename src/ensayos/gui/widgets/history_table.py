@@ -27,21 +27,51 @@ COLOR_OK = QColor(0, 180, 0)
 COLOR_FAIL = QColor(220, 0, 0)
 
 HEADERS_FDL = [
-    "N.º", "Marca", "Modelo", "N.º Serie", "Fecha", "Hora",
-    "Tensión (V)", "Corriente (A)", "FP", "Potencia (W)", "Consumo V.",
-    "Fuga A. (μA)", "Fuga Activa V.", "Fuga P. (μA)", "Fuga Pasiva V.",
-    "R. PAT (mΩ)", "PAT V.", "Rigidez D. V.",
+    "N.º",
+    "Marca",
+    "Modelo",
+    "N.º Serie",
+    "Fecha",
+    "Hora",
+    "Tensión (V)",
+    "Corriente (A)",
+    "FP",
+    "Potencia (W)",
+    "Consumo V.",
+    "Fuga A. (μA)",
+    "Fuga Activa V.",
+    "Fuga P. (μA)",
+    "Fuga Pasiva V.",
+    "R. PAT (mΩ)",
+    "PAT V.",
+    "Rigidez D. V.",
 ]
 
 HEADERS_CONSUMO = [
-    "N.º Ensayo", "N.º Muestra", "Marca", "Modelo", "N.º Serie",
-    "Fecha", "Hora", "Tensión (V)", "Corriente (A)", "FP",
-    "Potencia (W)", "Fuga Activa (μA)",
+    "N.º Ensayo",
+    "N.º Muestra",
+    "Marca",
+    "Modelo",
+    "N.º Serie",
+    "Fecha",
+    "Hora",
+    "Tensión (V)",
+    "Corriente (A)",
+    "FP",
+    "Potencia (W)",
+    "Fuga Activa (μA)",
 ]
 
 HEADERS_VERIFICACION = [
-    "ID", "Fecha", "Hora", "FUGA-PASA", "PAT-PASA", "RD-PASA",
-    "FUGA-FALLA", "PAT-FALLA", "RD-FALLA",
+    "ID",
+    "Fecha",
+    "Hora",
+    "FUGA-PASA",
+    "PAT-PASA",
+    "RD-PASA",
+    "FUGA-FALLA",
+    "PAT-FALLA",
+    "RD-FALLA",
 ]
 
 

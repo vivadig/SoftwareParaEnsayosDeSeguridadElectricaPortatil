@@ -35,8 +35,12 @@ class AdminDialog(QtWidgets.QMainWindow):
             self.input_correccion_corriente.setValue(float(correcciones.get("corriente", 0)))
             self.input_correccion_fuga_activa.setValue(float(correcciones.get("fuga", 0)))
             self.input_correccion_fuga_pasiva.setValue(float(correcciones.get("corte_neutro", 0)))
-            self.input_correccion_puesta_a_tierra.setValue(float(correcciones.get("puesta_a_tierra", 0)))
-            self.input_correccion_rigidez_dielectrica.setValue(float(correcciones.get("tension_resistida", 0)))
+            self.input_correccion_puesta_a_tierra.setValue(
+                float(correcciones.get("puesta_a_tierra", 0))
+            )
+            self.input_correccion_rigidez_dielectrica.setValue(
+                float(correcciones.get("tension_resistida", 0))
+            )
 
         cotas = self._config_repo.get_verification_patterns()
         if cotas:
@@ -75,10 +79,14 @@ class AdminDialog(QtWidgets.QMainWindow):
                 if credentials and pwd_actual == credentials[1]:
                     self._config_repo.set_admin_password(pwd_nueva)
                 else:
-                    QMessageBox.warning(self, "Contraseña incorrecta", "La contraseña actual es incorrecta.")
+                    QMessageBox.warning(
+                        self, "Contraseña incorrecta", "La contraseña actual es incorrecta."
+                    )
                     return
 
-            QMessageBox.information(self, "Datos guardados", "Los datos se han guardado correctamente.")
+            QMessageBox.information(
+                self, "Datos guardados", "Los datos se han guardado correctamente."
+            )
 
         except Exception:
             logger.exception("Error al guardar datos admin")

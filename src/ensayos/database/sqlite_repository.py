@@ -45,9 +45,7 @@ class SQLiteProductRepository:
 
     def get_by_id(self, product_id: int) -> Product | None:
         with get_connection(self.db_path) as conn:
-            row = conn.execute(
-                "SELECT * FROM productos WHERE id = ?", (product_id,)
-            ).fetchone()
+            row = conn.execute("SELECT * FROM productos WHERE id = ?", (product_id,)).fetchone()
         if row is None:
             return None
         return self._row_to_product(row)
@@ -166,9 +164,7 @@ class SQLiteFdlHistoryRepository:
 
     def list_all(self) -> list[dict]:
         with get_connection(self.db_path) as conn:
-            rows = conn.execute(
-                "SELECT * FROM historial_fdl ORDER BY id DESC"
-            ).fetchall()
+            rows = conn.execute("SELECT * FROM historial_fdl ORDER BY id DESC").fetchall()
         return [dict(row) for row in rows]
 
     def search(
@@ -186,9 +182,7 @@ class SQLiteFdlHistoryRepository:
             conditions.append("marca = ?")
             params.append(marca)
         if query:
-            conditions.append(
-                "(marca LIKE ? OR producto LIKE ? OR serial LIKE ?)"
-            )
+            conditions.append("(marca LIKE ? OR producto LIKE ? OR serial LIKE ?)")
             like = f"%{query}%"
             params.extend([like, like, like])
 
@@ -245,9 +239,7 @@ class SQLiteConsumptionHistoryRepository:
 
     def list_all(self) -> list[dict]:
         with get_connection(self.db_path) as conn:
-            rows = conn.execute(
-                "SELECT * FROM ensayos_consumo ORDER BY id DESC"
-            ).fetchall()
+            rows = conn.execute("SELECT * FROM ensayos_consumo ORDER BY id DESC").fetchall()
         return [dict(row) for row in rows]
 
     def search(
@@ -261,9 +253,7 @@ class SQLiteConsumptionHistoryRepository:
             conditions.append("fecha = ?")
             params.append(fecha)
         if query:
-            conditions.append(
-                "(marca LIKE ? OR modelo LIKE ? OR nro_serial LIKE ?)"
-            )
+            conditions.append("(marca LIKE ? OR modelo LIKE ? OR nro_serial LIKE ?)")
             like = f"%{query}%"
             params.extend([like, like, like])
 
@@ -308,8 +298,7 @@ class SQLiteVerificationHistoryRepository:
                        (fecha, hora, fuga_pasa, pat_pasa, rd_pasa,
                         fuga_falla, pat_falla, rd_falla)
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-                    (fecha, hora, fuga_pasa, pat_pasa, rd_pasa,
-                     fuga_falla, pat_falla, rd_falla),
+                    (fecha, hora, fuga_pasa, pat_pasa, rd_pasa, fuga_falla, pat_falla, rd_falla),
                 )
             return True
         except Exception as e:
@@ -318,9 +307,7 @@ class SQLiteVerificationHistoryRepository:
 
     def list_all(self) -> list[dict]:
         with get_connection(self.db_path) as conn:
-            rows = conn.execute(
-                "SELECT * FROM historial_verificacion ORDER BY id DESC"
-            ).fetchall()
+            rows = conn.execute("SELECT * FROM historial_verificacion ORDER BY id DESC").fetchall()
         return [dict(row) for row in rows]
 
 
@@ -386,9 +373,7 @@ class SQLiteConfigRepository:
 
     def get_verification_patterns(self) -> dict:
         with get_connection(self.db_path) as conn:
-            row = conn.execute(
-                "SELECT * FROM cotas_verificacion WHERE id = 1"
-            ).fetchone()
+            row = conn.execute("SELECT * FROM cotas_verificacion WHERE id = 1").fetchone()
         return dict(row) if row else {}
 
     def save_verification_patterns(
