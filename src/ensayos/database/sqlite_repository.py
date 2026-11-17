@@ -250,6 +250,14 @@ class SQLiteConsumptionHistoryRepository:
             rows = conn.execute("SELECT * FROM ensayos_consumo ORDER BY id DESC").fetchall()
         return [dict(row) for row in rows]
 
+    def next_test_number(self) -> int:
+        """Número para el próximo perfil de consumo (n_ensayo)."""
+        with get_connection(self.db_path) as conn:
+            row = conn.execute(
+                "SELECT COALESCE(MAX(n_ensayo), 0) + 1 FROM ensayos_consumo"
+            ).fetchone()
+        return int(row[0])
+
     def search(
         self,
         fecha: str | None = None,
