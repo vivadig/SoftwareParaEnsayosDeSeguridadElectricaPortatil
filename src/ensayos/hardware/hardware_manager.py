@@ -4,6 +4,7 @@ import logging
 import time
 
 from ensayos.config.config_hardware import hardware_config
+from ensayos.config.config_tests import CalibrationCorrections, tests_config
 from ensayos.hardware.esp32_client import ESP32Client
 from ensayos.hardware.relay_controller import RelayBoardNotFoundError, RelayController
 from ensayos.models.measurement import (
@@ -30,10 +31,13 @@ class HardwareManager:
         self,
         relay_controller: RelayController | None = None,
         esp32_client: ESP32Client | None = None,
+        corrections: CalibrationCorrections | None = None,
     ):
         self._relay = relay_controller
         self._esp32 = esp32_client
         self._cfg = hardware_config
+        # Correcciones de calibración (CORRECTION_* en .env), sumadas a cada lectura
+        self._corrections = corrections or tests_config.corrections
         self._relay_serial: str | None = None
 
     @property
@@ -148,8 +152,8 @@ class HardwareManager:
             return None
         return ConsumptionMeasurement.from_pzem(
             reading,
-            correction_voltage=0.0,
-            correction_current=0.0,
+            correction_voltage=self._corrections.voltage,
+            correction_current=self._corrections.current,
         )
 
     def read_consumption_and_leakage(
@@ -164,23 +168,37 @@ class HardwareManager:
             self.watchdog_reset()
             return None, None
 
-        consumption = ConsumptionMeasurement.from_pzem(reading_consumption)
+        consumption = ConsumptionMeasurement.from_pzem(
+            reading_consumption,
+            correction_voltage=self._corrections.voltage,
+            correction_current=self._corrections.current,
+        )
         leakage = LeakageMeasurement.from_pzem(
             reading_leakage,
             multiplier=self._cfg.scale.leakage_current_multiplier,
+            correction=self._corrections.active_leakage,
         )
         return consumption, leakage
 
-    def read_leakage(self) -> LeakageMeasurement | None:
-        """Lee medición de fuga desde PZEM2."""
+    def read_leakage(self, passive: bool = False) -> LeakageMeasurement | None:
+        """Lee medición de fuga desde PZEM2.
+
+        Args:
+            passive: True para el ensayo de fuga pasiva (usa CORRECTION_PASSIVE_LEAKAGE);
+                False para fuga activa (CORRECTION_ACTIVE_LEAKAGE).
+        """
         reading = self.read_pzem(self._cfg.pzem.leakage)
         if reading is None:
             logger.error("No se pudo leer PZEM de fuga.")
             self.watchdog_reset()
             return None
+        correction = (
+            self._corrections.passive_leakage if passive else self._corrections.active_leakage
+        )
         return LeakageMeasurement.from_pzem(
             reading,
             multiplier=self._cfg.scale.leakage_current_multiplier,
+            correction=correction,
         )
 
     def read_grounding(self) -> GroundingMeasurement | None:
@@ -194,6 +212,7 @@ class HardwareManager:
             reading,
             voltage_multiplier=self._cfg.scale.grounding_voltage_multiplier,
             resistance_multiplier=self._cfg.scale.grounding_resistance_multiplier,
+            correction=self._corrections.grounding,
         )
 
     def read_dielectric(self) -> DielectricMeasurement | None:
@@ -206,6 +225,7 @@ class HardwareManager:
         return DielectricMeasurement.from_pzem(
             reading,
             multiplier=self._cfg.scale.dielectric_voltage_multiplier,
+            correction=self._corrections.dielectric,
             current_multiplier=self._cfg.scale.dielectric_current_multiplier,
         )
 
