@@ -299,6 +299,14 @@ class TestPanel(QWidget):
             QMessageBox.warning(self, "Sin ensayos", "Seleccione al menos un ensayo.")
             return
 
+        if not self._hardware.try_acquire_session():
+            QMessageBox.warning(
+                self,
+                "Hardware ocupado",
+                "Hay otro ensayo en curso (por ejemplo, un perfil de consumo).",
+            )
+            return
+
         self._limpiar_resultados()
         self._set_ui_running(True)
 
@@ -352,6 +360,7 @@ class TestPanel(QWidget):
             if not relays_off:
                 msg += "\n\n¡No se pudo confirmar el apagado de los relés: cortar la red!"
             self.signals.error.emit(msg)
+        self._hardware.release_session()
         self.signals.finished.emit()
 
     def stop_and_wait(self) -> None:

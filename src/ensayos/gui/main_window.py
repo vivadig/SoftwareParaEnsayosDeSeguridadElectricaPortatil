@@ -3,7 +3,8 @@
 Carga el interfaz desde el archivo .ui de FDL y conecta la lógica de negocio.
 Las pestañas "Ensayos" y "Productos" del .ui se reemplazan por los paneles
 TestPanel y ProductForm, que tienen la lógica (y los campos de producto que
-eligen los límites de IEC 60335-1).
+eligen los límites de IEC 60335-1). Las pestañas "Consumo" y "Exportar" usan
+los widgets del .ui, conectados por ConsumptionTab y ExportTab.
 """
 
 import logging
@@ -21,7 +22,8 @@ from ensayos.database.sqlite_repository import (
     SQLiteProductRepository,
     SQLiteVerificationHistoryRepository,
 )
-from ensayos.gui.widgets.live_plot_widget import LivePlotWidget
+from ensayos.gui.consumption_tab import ConsumptionTab
+from ensayos.gui.export_tab import ExportTab
 from ensayos.gui.widgets.product_form import ProductForm
 from ensayos.gui.widgets.test_panel import TestPanel
 from ensayos.hardware.hardware_manager import HardwareManager
@@ -52,10 +54,9 @@ class MainWindow(QMainWindow):
     def __init__(self, db_path: str | None = None):
         super().__init__()
 
-        # Cargar UI desde archivo con widgets custom
+        # Cargar UI desde archivo (los gráficos son LivePlotWidget de pglive, según el .ui)
         ui_path = Path(__file__).parent / "resources" / "gui_c12_s0.ui"
-        custom_widgets = {"LivePlotWidget": LivePlotWidget}
-        uic.loadUi(str(ui_path), self, custom_widgets)
+        uic.loadUi(str(ui_path), self)
 
         # Inicializar base de datos
         db = db_path or database_config.path
@@ -75,6 +76,17 @@ class MainWindow(QMainWindow):
         # Paneles con la lógica de ensayos y de productos
         self._integrate_panels()
 
+        # Pestañas Consumo (perfil de consumo) y Exportar
+        self.consumption_tab = ConsumptionTab(
+            self,
+            self._hardware,
+            self._product_repo,
+            self._consumo_repo,
+            self._config_repo,
+            on_samples_changed=self._load_consumption_table,
+        )
+        self.export_tab = ExportTab(self, db)
+
         # Conectar signals
         self._connect_signals()
 
@@ -85,8 +97,9 @@ class MainWindow(QMainWindow):
         # Cargar datos en tablas
         self._load_tables()
 
-        # Productos nuevos o editados aparecen en el panel de ensayos
+        # Productos nuevos o editados aparecen en el panel de ensayos y en Consumo
         self.product_form.products_changed.connect(self.test_panel.refresh_products)
+        self.product_form.products_changed.connect(self.consumption_tab.refresh_products)
         # Al terminar un ensayo, TestPanel guarda el historial (se conectó primero)
         # y después se recargan las tablas
         self.test_panel.signals.all_completed.connect(lambda _results: self._load_tables())
@@ -221,52 +234,42 @@ class MainWindow(QMainWindow):
         except Exception as e:
             logger.debug(f"Error cargando tabla verificación: {e}")
 
+        self._load_consumption_table()
+
+    _CONSUMPTION_COLUMNS = (
+        ("n_ensayo", "N.º Ensayo"),
+        ("n_muestra", "N.º Muestra"),
+        ("marca", "Marca"),
+        ("modelo", "Modelo"),
+        ("nro_serial", "Serie"),
+        ("fecha", "Fecha"),
+        ("hora", "Hora"),
+        ("tension", "Tensión (V)"),
+        ("corriente", "Corriente (A)"),
+        ("fp", "FP"),
+        ("potencia_ac", "Potencia (W)"),
+        ("cdf", "Fuga activa (µA)"),
+    )
+
+    def _load_consumption_table(self) -> None:
+        """Recarga el historial de consumo (pestañas Consumo e Historial)."""
         try:
-            # Tabla historial consumo
-            if hasattr(self, "tabla_historial_consumo"):
-                consumo_data = self._consumo_repo.list_all()
-                rows = [
-                    [
-                        d.get(k)
-                        for k in [
-                            "id",
-                            "n_ensayo",
-                            "n_muestra",
-                            "marca",
-                            "modelo",
-                            "nro_serial",
-                            "fecha",
-                            "hora",
-                            "tension",
-                            "corriente",
-                            "fp",
-                            "potencia_ac",
-                            "cdf",
-                        ]
-                    ]
-                    for d in consumo_data
-                ]
-                self._populate_table(
-                    self.tabla_historial_consumo,
-                    rows,
-                    [
-                        "ID",
-                        "N Ensayo",
-                        "N Muestra",
-                        "Marca",
-                        "Modelo",
-                        "Serial",
-                        "Fecha",
-                        "Hora",
-                        "Tensión",
-                        "Corriente",
-                        "FP",
-                        "Potencia AC",
-                        "CDF",
-                    ],
-                )
+            self.show_consumption_rows(self._consumo_repo.list_all())
         except Exception as e:
             logger.debug(f"Error cargando tabla consumo: {e}")
+
+    def show_consumption_rows(self, consumo_data: list[dict]) -> None:
+        """Muestra filas del historial de consumo en las tablas de Consumo e Historial.
+
+        Args:
+            consumo_data: Filas de la tabla ensayos_consumo.
+        """
+        keys = [k for k, _ in self._CONSUMPTION_COLUMNS]
+        headers = [h for _, h in self._CONSUMPTION_COLUMNS]
+        rows = [[d.get(k) for k in keys] for d in consumo_data]
+        for name in ("tabla_historial_consumo", "tabla_historial_consumo_2"):
+            if hasattr(self, name):
+                self._populate_table(getattr(self, name), rows, headers)
 
     def _populate_table(self, table_widget, data, headers) -> None:
         """Popula un QTableWidget con datos."""
@@ -283,10 +286,11 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event) -> None:
         """Maneja el cierre de la ventana: detiene el ensayo en curso y apaga el hardware."""
-        try:
-            self.test_panel.stop_and_wait()
-        except Exception:
-            logger.exception("Error al detener el ensayo en curso")
+        for panel in (self.test_panel, self.consumption_tab):
+            try:
+                panel.stop_and_wait()
+            except Exception:
+                logger.exception("Error al detener el ensayo en curso")
         try:
             self._hardware.shutdown()
         except Exception:
