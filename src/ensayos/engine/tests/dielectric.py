@@ -27,6 +27,8 @@ class DielectricTest(AbstractTest):
     Lectura: PZEM2 (leakage) voltage × multiplicador → V, current × multiplicador → mA
     """
 
+    fail_on_missing_reading = True
+
     def __init__(self, *args, device_class: DeviceClass = DeviceClass.CLASS_1, **kwargs):
         super().__init__(*args, **kwargs)
         self.device_class = device_class

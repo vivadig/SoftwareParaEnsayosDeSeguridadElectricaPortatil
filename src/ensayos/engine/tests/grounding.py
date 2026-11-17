@@ -25,6 +25,8 @@ class GroundingTest(AbstractTest):
     Una lectura fallida se declara FAIL porque no se puede verificar la continuidad.
     """
 
+    fail_on_missing_reading = True
+
     def __init__(self, *args, with_cord: bool = True, **kwargs):
         super().__init__(*args, **kwargs)
         self.with_cord = with_cord
