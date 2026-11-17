@@ -5,7 +5,7 @@ import time
 
 from ensayos.config.config_hardware import hardware_config
 from ensayos.hardware.esp32_client import ESP32Client
-from ensayos.hardware.relay_controller import RelayController
+from ensayos.hardware.relay_controller import RelayBoardNotFoundError, RelayController
 from ensayos.models.measurement import (
     ConsumptionMeasurement,
     DielectricMeasurement,
@@ -77,9 +77,17 @@ class HardwareManager:
             self.relay.turn_on(self._relay_serial, relay_number)
 
     def deactivate_relay(self, relay_number: int) -> None:
-        """Desactiva un relé por su número."""
+        """Desactiva un relé por su número.
+
+        Si la placa se desconectó, espera a que vuelva y apaga todos los relés.
+        """
         if self._relay_serial:
-            self.relay.turn_off(self._relay_serial, relay_number)
+            try:
+                self.relay.turn_off(self._relay_serial, relay_number)
+            except RelayBoardNotFoundError:
+                logger.warning("Placa de relés desconectada al apagar el relé %d.", relay_number)
+                if not self.relay.turn_off_all(self._relay_serial):
+                    raise
 
     def activate_relay_by_name(self, name: str) -> None:
         """Activa un relé por nombre semántico (ej: 'fuga_activa', 'pat_power')."""
@@ -208,8 +216,8 @@ class HardwareManager:
         """Apaga todos los relés y cierra conexiones."""
         if self._relay_serial and self._relay:
             try:
-                self.relay.turn_off_all(self._relay_serial)
-                logger.info("Todos los relés apagados.")
+                if self.relay.turn_off_all(self._relay_serial):
+                    logger.info("Todos los relés apagados.")
             except Exception:
                 logger.exception("No se pudieron apagar todos los relés.")
 

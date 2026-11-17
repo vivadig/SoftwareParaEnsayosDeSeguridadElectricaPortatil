@@ -9,6 +9,7 @@ Soporta dos backends, elegidos con ``RELAY_BACKEND``:
 
 import importlib
 import logging
+import time
 from typing import Protocol
 
 from ensayos.config.config_hardware import hardware_config
@@ -25,6 +26,10 @@ _CMD_OFF = 0xFD
 
 # Datos de cada placa: (serie, cantidad de relés, máscara de estado; bit 0 = relé 1)
 BoardInfo = tuple[str, int, int]
+
+
+class RelayBoardNotFoundError(ConnectionError):
+    """La placa de relés no está conectada o no responde (por ejemplo, tras un reinicio)."""
 
 
 class RelayBackend(Protocol):
@@ -85,7 +90,12 @@ class HidapiBackend:
         boards: list[BoardInfo] = []
         self._paths.clear()
         for info in self._hid.enumerate(VENDOR_ID, PRODUCT_ID):
-            report = self._read_report(info["path"])
+            try:
+                report = self._read_report(info["path"])
+            except OSError as e:
+                # La placa aparece pero todavía no responde (se está reconectando)
+                logger.warning("Placa de relés presente pero sin responder: %s", e)
+                continue
             serial = bytes(report[:5]).decode("ascii", errors="replace")
             self._paths[serial] = info["path"]
             boards.append((serial, _relay_count_from_product(info["product_string"]), report[7]))
@@ -248,10 +258,13 @@ class RelayController:
             Resultado del comando (0 si tuvo éxito).
 
         Raises:
+            RelayBoardNotFoundError: Si la placa no está conectada.
             ValueError: Si el relé no existe en la placa. Se interrumpe en lugar de
                 seguir, para no ensayar con un circuito que no quedó conmutado.
         """
         count = self.relay_count(serial)
+        if count == 0:
+            raise RelayBoardNotFoundError(f"La placa de relés {serial} no está conectada.")
         if not 1 <= relay_number <= count:
             raise ValueError(
                 f"El relé {relay_number} no existe en la placa {serial} ({count} relés). "
@@ -278,11 +291,50 @@ class RelayController:
         """
         return self.control_relay(serial, relay_number, 0)
 
-    def turn_off_all(self, serial: str) -> None:
-        """Apaga todos los relés de una placa.
+    def turn_off_all(
+        self,
+        serial: str,
+        retries: int | None = None,
+        retry_delay: float | None = None,
+    ) -> bool:
+        """Apaga todos los relés de una placa y verifica que quedaron apagados.
+
+        Si la placa se desconectó (por ejemplo, la reinició una interferencia al
+        conmutar el contactor), espera a que vuelva y reintenta.
 
         Args:
             serial: Serial de la placa.
+            retries: Intentos máximos (por defecto RELAY_OFF_RETRIES).
+            retry_delay: Segundos entre intentos (por defecto RELAY_OFF_RETRY_DELAY).
+
+        Returns:
+            True si la placa confirmó todos los relés apagados; False si no se pudo
+            confirmar, en cuyo caso el contactor podría seguir cerrado.
         """
-        for relay_number in range(1, self.relay_count(serial) + 1):
-            self.turn_off(serial, relay_number)
+        cfg = hardware_config.relay
+        retries = retries if retries is not None else cfg.off_retries
+        retry_delay = retry_delay if retry_delay is not None else cfg.off_retry_delay
+        for attempt in range(1, retries + 1):
+            try:
+                count = self.relay_count(serial)
+                if count == 0:
+                    raise RelayBoardNotFoundError(f"La placa de relés {serial} no está conectada.")
+                for relay_number in range(1, count + 1):
+                    self._backend.board_control(serial, relay_number, 0)
+                if self.get_state(serial) == 0:
+                    if attempt > 1:
+                        logger.warning(
+                            "Placa de relés %s recuperada: relés apagados en el intento %d.",
+                            serial,
+                            attempt,
+                        )
+                    return True
+            except (RelayBoardNotFoundError, OSError) as e:
+                logger.warning("Intento %d de apagar los relés falló: %s", attempt, e)
+            time.sleep(retry_delay)
+        logger.critical(
+            "No se pudo confirmar el apagado de los relés de la placa %s. "
+            "El contactor podría seguir cerrado: cortar la red.",
+            serial,
+        )
+        return False

@@ -81,6 +81,9 @@ class RelayConfig:
     backend: str = _get_str("RELAY_BACKEND", "hidapi")
     board_serial: str = _get_str("RELAY_BOARD_SERIAL", "auto")
     settle_delay: float = _get_float("RELAY_SETTLE_DELAY", 0.05)
+    # Reintentos para apagar los relés si la placa se desconecta y reconecta
+    off_retries: int = _get_int("RELAY_OFF_RETRIES", 20)
+    off_retry_delay: float = _get_float("RELAY_OFF_RETRY_DELAY", 0.5)
     mapping: RelayMapping = field(default_factory=RelayMapping)
 
 
