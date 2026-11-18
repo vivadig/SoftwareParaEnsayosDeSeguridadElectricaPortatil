@@ -1,0 +1,46 @@
+% ============================================================
+%  Ensayos aplicados
+% ============================================================
+\section{Ensayos aplicados}
+\label{sec:ensayos}
+
+El sistema realiza los siguientes ensayos sobre aparatos de tensión nominal
+mayor a \SI{150}{\volt} (\SIrange{220}{240}{\volt}). La Tabla~\ref{tab:ensayos}
+resume el criterio de aprobación de cada uno; los valores completos, las
+condiciones de ensayo y las tolerancias de consumo por tipo de aparato se
+detallan en el Anexo~\ref{anx:valores_referencia}.
+
+\begin{table}[htbp]
+\centering
+\caption{Ensayos del sistema y criterio de aprobación según IEC~60335-1}
+\label{tab:ensayos}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\linewidth}{@{} l X l @{}}
+\toprule
+\textbf{Ensayo} & \textbf{Criterio de aprobación} & \textbf{Referencia} \\
+\midrule
+Rigidez dieléctrica
+  & Corriente $\leq$ \SI{5}{\milli\ampere} con \SI{1000}{\volt} (Clase~I) o
+    \SI{2500}{\volt} (Clase~II) aplicados
+  & Anexo~A.2 \\
+Puesta a tierra
+  & $\leq$ \SI{200}{\milli\ohm} con cable fijo o $\leq$ \SI{100}{\milli\ohm} sin
+    él, con corriente $\geq$ \SI{10}{\ampere}; solo Clase~I
+  & Anexo~A.1 \\
+Fuga activa
+  & $\leq$ \SI{750}{\micro\ampere} (Clase~I portátil)
+  & 13.2 \\
+Fuga pasiva
+  & $\leq$ \SI{750}{\micro\ampere}; \SI{1500}{\micro\ampere} solo si el aparato
+    cumple una condición de duplicación
+  & 16.2 \\
+Consumo
+  & Potencia o corriente dentro de la tolerancia según el tipo de aparato y la
+    potencia nominal
+  & 10.1 y 10.2 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Estos ensayos permiten detectar fallas críticas de aislamiento, de conexión a
+tierra o de funcionamiento durante la etapa de producción.

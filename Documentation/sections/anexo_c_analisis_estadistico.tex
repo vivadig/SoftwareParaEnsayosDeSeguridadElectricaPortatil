@@ -1,0 +1,142 @@
+% ============================================================
+%  Anexo C: desarrollo estadístico e incertidumbre
+%  Datos: evidencia_banco/datos/banco_pruebas_2026-11-17.db
+% ============================================================
+\section{Desarrollo estadístico y análisis de incertidumbre}
+\label{anx:estadistica}
+
+Este anexo desarrolla los cálculos cuyos resultados se presentan en la
+Sección~\ref{subsec:resultados_consumo}. Se analizan dos series del soldador
+registradas el 17/11/2026 en la base de datos del banco:
+\begin{itemize}
+    \item \textbf{Serie~A:} los cuatro ensayos de final de línea posteriores a la
+          corrección de la estabilización (cada valor es el promedio del
+          intervalo de ensayo).
+    \item \textbf{Serie~B:} las ocho muestras del perfil de consumo tomadas con el
+          contactor ya estabilizado (se excluyen las muestras del transitorio de
+          cierre).
+\end{itemize}
+
+\begin{table}[htbp]
+\centering
+\caption{Valores de potencia activa de las series analizadas}
+\label{tab:series}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{} l l @{}}
+\toprule
+\textbf{Serie} & \textbf{Potencia activa $P_i$ [\si{\watt}]} \\
+\midrule
+A (final de línea, $V \approx \SI{228}{\volt}$) & 36,8; 36,7; 36,7; 36,6 \\
+B (perfil, $V \approx \SI{227}{\volt}$)
+  & 36,1; 36,2; 36,1; 36,2; 36,3; 36,4; 36,4; 36,2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Estadísticos descriptivos}
+
+Para cada serie de $N$ valores se calculan la media, la desviación estándar
+experimental, la incertidumbre tipo~A de la media y el coeficiente de variación:
+\begin{align}
+    \bar{P} &= \frac{1}{N}\sum_{i=1}^{N} P_i
+    \label{eq:media} \\
+    s_P &= \sqrt{\frac{1}{N-1}\sum_{i=1}^{N}\left(P_i - \bar{P}\right)^2}
+    \label{eq:desvio} \\
+    u_A &= \frac{s_P}{\sqrt{N}}
+    \label{eq:tipoA} \\
+    \mathrm{CV} &= \frac{s_P}{\bar{P}} \times \SI{100}{\percent}
+    \label{eq:cv}
+\end{align}
+
+\subsection{Incertidumbre de medición}
+
+Siguiendo la Guía para la Expresión de la Incertidumbre de Medición
+\cite{gum}, se consideran como fuentes independientes:
+\begin{itemize}
+    \item \textbf{Tipo~A}, la dispersión de las mediciones, según la
+          ecuación~\eqref{eq:tipoA}.
+    \item \textbf{Tipo~B}, la exactitud declarada del medidor
+          (\SI{0,5}{\percent} de la lectura), con distribución rectangular:
+          \begin{equation}
+              u_{B} = \frac{0{,}005\,\bar{P}}{\sqrt{3}}
+              \label{eq:tipoB}
+          \end{equation}
+    \item \textbf{Tipo~B}, la resolución del medidor en potencia
+          (\SI{0,1}{\watt}), con distribución rectangular:
+          \begin{equation}
+              u_{\mathrm{res}} = \frac{\SI{0,1}{\watt}}{2\sqrt{3}}
+                               \approx \SI{0,029}{\watt}
+              \label{eq:resolucion}
+          \end{equation}
+\end{itemize}
+La incertidumbre combinada y la expandida, con factor de cobertura $k = 2$
+(nivel de confianza aproximado del \SI{95}{\percent}), son:
+\begin{align}
+    u_c &= \sqrt{u_A^2 + u_B^2 + u_{\mathrm{res}}^2}
+    \label{eq:combinada} \\
+    U &= k \, u_c
+    \label{eq:expandida}
+\end{align}
+
+La exactitud del medidor se toma de su hoja de datos; al no haberse contrastado
+con un patrón, no se incluyen el error sistemático del conjunto (transformador de
+corriente, cableado y conexiones) ni las correcciones de calibración. La variación
+de la tensión de red durante cada serie fue menor a \SI{1}{\volt} y su efecto
+queda contenido en la dispersión tipo~A.
+
+\subsection{Resultados}
+
+\begin{table}[htbp]
+\centering
+\caption{Estadísticos e incertidumbre de la potencia medida}
+\label{tab:estadisticos}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{} l c c @{}}
+\toprule
+\textbf{Magnitud} & \textbf{Serie A} & \textbf{Serie B} \\
+\midrule
+$N$                                            & 4       & 8 \\
+Media $\bar{P}$ [\si{\watt}]                   & 36,700  & 36,238 \\
+Mínimo y máximo [\si{\watt}]                   & 36,6 -- 36,8 & 36,1 -- 36,4 \\
+Desviación estándar $s_P$ [\si{\watt}]         & 0,082   & 0,119 \\
+Coeficiente de variación [\si{\percent}]       & 0,22    & 0,33 \\
+$u_A$ [\si{\watt}]                             & 0,041   & 0,042 \\
+$u_B$ (exactitud) [\si{\watt}]                 & 0,106   & 0,105 \\
+$u_{\mathrm{res}}$ [\si{\watt}]                & 0,029   & 0,029 \\
+$u_c$ [\si{\watt}]                             & 0,117   & 0,116 \\
+$U$ ($k = 2$) [\si{\watt}]                     & 0,23    & 0,23 \\
+Desviación respecto de \SI{40}{\watt} [\si{\percent}] & $-8{,}3$ & $-9{,}4$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El resultado de la serie~A se expresa como
+\begin{equation}
+    P = (\num{36,70} \pm \num{0,23})~\si{\watt} \qquad (k = 2)
+    \label{eq:resultado_final}
+\end{equation}
+La incertidumbre expandida representa el \SI{5,8}{\percent} de la semibanda de
+tolerancia (\SI{4}{\watt}), por debajo del cociente de un cuarto que se suele
+exigir entre la incertidumbre del instrumento y la tolerancia a verificar. La
+contribución dominante es la exactitud declarada del medidor; la repetibilidad
+aporta menos de la mitad.
+
+\subsection{Efecto de la tensión de ensayo}
+
+La cláusula~10.1 establece que el consumo se mide a la tensión nominal. En una
+carga resistiva la potencia es proporcional al cuadrado de la tensión, por lo que
+la potencia a la tensión nominal $V_n$ puede estimarse a partir de la medida a la
+tensión $V$ como
+\begin{equation}
+    P_n = P \left(\frac{V_n}{V}\right)^2
+    \label{eq:correccion_tension}
+\end{equation}
+Con $P = \SI{36,7}{\watt}$ a $V = \SI{227,9}{\volt}$, resulta
+$P_n \approx \SI{37,4}{\watt}$ si $V_n = \SI{230}{\volt}$ (desviación
+\SI{-6,6}{\percent}, aprobado) y $P_n \approx \SI{34,2}{\watt}$ si
+$V_n = \SI{220}{\volt}$ (desviación \SI{-14,5}{\percent}, rechazado). Para un
+aparato cercano al límite, la tensión de ensayo puede cambiar el veredicto: el
+sistema debería alimentar el aparato a su tensión nominal o, para cargas
+resistivas, aplicar esta corrección. Las lecturas del 15/11 a \SI{230,1}{\volt}
+(\SIrange{37,5}{37,7}{\watt}) son coherentes con la
+ecuación~\eqref{eq:correccion_tension}.

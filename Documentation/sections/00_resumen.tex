@@ -1,0 +1,35 @@
+% ============================================================
+%  Resumen
+% ============================================================
+\begin{center}
+    \textbf{\huge Resumen}
+\end{center}
+\vspace{1cm}
+
+En la actualidad, la seguridad eléctrica de los equipos de uso doméstico y
+comercial constituye un requisito fundamental para su comercialización. Sin
+embargo, los métodos tradicionales de ensayo, basados en la intervención manual
+del operario, pueden generar variaciones en los resultados, extender los tiempos
+de prueba y aumentar los riesgos para el personal y los dispositivos bajo
+evaluación.
+
+Este trabajo presenta el desarrollo de un sistema integral, conformado por un
+dispositivo de ensayos y una interfaz de software, destinado a verificar en final
+de línea el cumplimiento de la norma IEC~60335-1 en aparatos electrodomésticos:
+consumo, corriente de fuga activa y pasiva, resistencia de puesta a tierra y
+rigidez dieléctrica. El dispositivo se basa en un microcontrolador ESP32 que lee
+medidores PZEM-004T y en relés y contactores que conmutan los circuitos de ensayo;
+la interfaz, desarrollada en Python y PyQt5, configura y secuencia los ensayos,
+emite el veredicto, registra los resultados en una base de datos y los exporta.
+
+Durante el desarrollo se alinearon los criterios de aprobación con los ensayos de
+rutina del Anexo~A y las cláusulas~10 y~16 de la norma, se escribió el firmware
+del microcontrolador y se integró y verificó el sistema en un banco de pruebas
+real. El ensayo de consumo quedó validado de punta a punta sobre cargas reales;
+los ensayos de fuga, puesta a tierra y rigidez dieléctrica están implementados en
+el software y verificados con hardware simulado, y su validación en banco depende
+de completar el hardware de medición específico. Se documentan además las
+dificultades encontradas ---entre ellas un problema de compatibilidad
+electromagnética en el control de los relés--- y las soluciones adoptadas.
+
+\newpage

@@ -1,0 +1,232 @@
+% ============================================================
+%  Resultados y análisis
+%  Solo resultados y su lectura; el desarrollo estadístico y de
+%  incertidumbre está en el Anexo C.
+% ============================================================
+\section{Resultados y análisis}
+\label{sec:resultados}
+
+Los resultados se obtuvieron en un banco de pruebas armado con los componentes
+descritos en la Sección~\ref{subsec:metodologia_hw}
+(Figura~\ref{fig:conexion_red}), entre el 1 y el 18 de noviembre de 2026, operando
+la aplicación real con el hardware real. Se usaron dos cargas: un soldador de
+\SI{40}{\watt} declarados (carga resistiva) y un ventilador (carga con motor). La
+evidencia ---fotografías, base de datos, exportación y scripts de prueba--- se
+lista en el Anexo~\ref{anx:evidencia}.
+
+Al momento de las pruebas no se disponía de un instrumento patrón, por lo que los
+resultados verifican el funcionamiento del sistema y la corrección de sus
+veredictos, pero \textbf{no constituyen una validación metrológica}.
+
+% ------------------------------------------------------------
+\subsection{Ensayo de consumo}
+\label{subsec:resultados_consumo}
+% ------------------------------------------------------------
+
+La Tabla~\ref{tab:resultados_consumo} resume las mediciones con carga. La tensión
+de red medida varió entre \SIlist{226;231}{\volt} a lo largo de los días de
+prueba.
+
+\begin{table}[htbp]
+\centering
+\caption{Mediciones de consumo en el banco de pruebas}
+\label{tab:resultados_consumo}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabular}{@{} l l c c c c @{}}
+\toprule
+\textbf{Carga} & \textbf{Prueba} & \textbf{$V$ [\si{\volt}]} &
+\textbf{$I$ [\si{\ampere}]} & \textbf{$P$ [\si{\watt}]} & \textbf{FP} \\
+\midrule
+Ventilador & Lectura directa (15/11)
+  & 228,7--228,9 & 0,236--0,242 & 52,1--53,4 & 0,96--0,97 \\
+Soldador   & Lectura directa (15/11)
+  & 230,1--230,2 & 0,163--0,164 & 37,5--37,7 & 1,00 \\
+Soldador   & Final de línea, 4 ensayos (17/11)
+  & 227,7--228,0 & 0,161--0,162 & 36,6--36,8 & 0,99--1,00 \\
+Soldador   & Perfil de consumo, 8 muestras (17/11)
+  & 226,2--227,3 & 0,160--0,161 & 36,1--36,4 & 1,00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Para el soldador, configurado como aparato de calefacción de \SI{40}{\watt}, la
+tolerancia aplicable es de \SI{\pm 10}{\percent} (\SIrange{36}{44}{\watt}). La
+Tabla~\ref{tab:resultados_veredicto} resume el resultado del ensayo de final de
+línea.
+
+\begin{table}[htbp]
+\centering
+\caption{Veredicto del ensayo de consumo del soldador}
+\label{tab:resultados_veredicto}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{} l r @{}}
+\toprule
+\textbf{Parámetro} & \textbf{Valor} \\
+\midrule
+Potencia nominal declarada        & \SI{40}{\watt} \\
+Intervalo admisible (calefacción, \SIrange{25}{200}{\watt}) & \SIrange{36}{44}{\watt} \\
+Potencia media medida ($n = 4$)   & \SI{36,70}{\watt} \\
+Desviación respecto del nominal   & \SI{-8,3}{\percent} \\
+Coeficiente de variación          & \SI{0,22}{\percent} \\
+Incertidumbre expandida ($k = 2$) & \SI{0,23}{\watt} \\
+\midrule
+\textbf{Veredicto del sistema}    & \textbf{OK} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Análisis.}
+\begin{itemize}
+    \item La \textbf{repetibilidad} es muy buena: los cuatro ensayos de final de
+          línea difieren en \SI{0,2}{\watt} y el coeficiente de variación es del
+          \SI{0,22}{\percent}, del mismo orden que la resolución del medidor.
+    \item La \textbf{incertidumbre} estimada (\SI{0,23}{\watt}) es pequeña frente
+          al ancho de la banda de tolerancia (\SI{\pm 4}{\watt}), por lo que la
+          dispersión del sistema no compromete el veredicto. El desarrollo del
+          cálculo está en el Anexo~\ref{anx:estadistica}.
+    \item El resultado queda \textbf{cerca del límite inferior} (\SI{36}{\watt}).
+          La cláusula~10.1 pide medir a la tensión nominal y el banco mide a la
+          tensión de red disponible, sin regularla. En una carga resistiva la
+          potencia varía con el cuadrado de la tensión, de modo que la tensión de
+          ensayo puede cambiar el veredicto de un aparato cercano al límite; el
+          Anexo~\ref{anx:estadistica} cuantifica este efecto.
+          \pendiente{confirmar la tensión nominal marcada en el soldador}
+    \item Las lecturas del perfil (\SI{36,2}{\watt} en promedio) son
+          \SI{0,5}{\watt} menores que las de final de línea, coherente con la
+          menor tensión de red en ese momento (\SI{227}{\volt} frente a
+          \SI{228}{\volt}).
+\end{itemize}
+
+% ------------------------------------------------------------
+\subsection{Prueba de punta a punta}
+\label{subsec:resultados_e2e}
+% ------------------------------------------------------------
+
+La prueba de punta a punta del 17/11 recorrió la aplicación completa sobre el
+banco: detección del hardware, alta de productos, ensayos de final de línea y
+cíclico, parada de emergencia, cierre de la ventana durante un ensayo, historial,
+exportación y API. Encontró seis defectos, que se corrigieron y se volvieron a
+verificar en el banco (Tabla~\ref{tab:resultados_e2e}).
+
+\begin{table}[htbp]
+\centering
+\caption{Defectos encontrados en la prueba de punta a punta y verificación de la
+         corrección en el banco}
+\label{tab:resultados_e2e}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabularx}{\linewidth}{@{} l X X @{}}
+\toprule
+\textbf{Área} & \textbf{Antes} & \textbf{Después de la corrección} \\
+\midrule
+Consumo (soldador)
+  & \SIlist{27,2;33,2;31,6;32,6}{\watt}: FALLA
+  & \SIlist{36,8;36,7;36,7;36,6}{\watt}: OK \\
+Modo cíclico
+  & La interfaz se liberaba tras el primer ciclo
+  & Bloqueada hasta el tercer ciclo (\SI{22,1}{\second}) \\
+Error durante un ensayo
+  & Interfaz bloqueada, sin aviso
+  & Aviso visible, interfaz libre en \SI{0,5}{\second}, relés abiertos \\
+Fuga sin medidor
+  & NO EJECUTADO
+  & FALLA (lectura fallida = FALLA) \\
+Historial
+  & Columnas de corriente y potencia vacías
+  & Completas, con la resolución del medidor \\
+Cierre durante un ensayo
+  & El ensayo seguía unos \SI{4}{\second}
+  & Se detiene en \SI{0,4}{\second}, relés abiertos \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+El defecto más relevante fue la \textbf{subestimación del consumo en un
+\SI{27}{\percent}}: el promedio incluía lecturas tomadas mientras el contactor
+cerraba (\SI{0}{\watt}, luego \SI{26}{\watt} y recién después \SI{37}{\watt}), y
+un aparato en buen estado resultaba rechazado. Se corrigió descartando las
+lecturas de estabilización (Sección~\ref{subsec:criterios_ensayo}). Además, la
+parada de emergencia cortó el ensayo en \SI{0,6}{\second} con los relés abiertos,
+y la exportación generó un archivo Excel con las hojas de historial, consumo y
+verificación.
+
+% ------------------------------------------------------------
+\subsection{Ensayos de seguridad}
+\label{subsec:resultados_seguridad}
+% ------------------------------------------------------------
+
+Los ensayos de fuga, puesta a tierra y rigidez dieléctrica están implementados con
+los límites de la norma y verificados con hardware simulado, pero no pudieron
+ejecutarse en el banco por falta de su hardware de medición
+(Tabla~\ref{tab:estado_ensayos}). En el banco se comprobó que, sin ese hardware,
+el sistema responde de forma segura: informa FALLA y deja los relés abiertos.
+
+\begin{table}[htbp]
+\centering
+\caption{Estado de cada ensayo al cierre del trabajo}
+\label{tab:estado_ensayos}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabularx}{\linewidth}{@{} l l X @{}}
+\toprule
+\textbf{Ensayo} & \textbf{Estado} & \textbf{Falta para validarlo en banco} \\
+\midrule
+Consumo (final de línea, perfil, cíclico) & Validado en banco & Contraste con patrón \\
+Fuga activa y pasiva & Software verificado
+  & PZEM-004T de \SI{10}{\ampere} y red de medición IEC~60990 \\
+Puesta a tierra & Software verificado
+  & PZEM3, transformador de \SI{2,2}{\volt} y verificar $\geq$ \SI{10}{\ampere} \\
+Rigidez dieléctrica & Software verificado
+  & Transformador de alta tensión y medición de \SI{5}{\milli\ampere} \\
+Verificación con patrones & Software verificado & Hardware de los tres ensayos anteriores \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ------------------------------------------------------------
+\subsection{Calidad del software}
+\label{subsec:resultados_software}
+% ------------------------------------------------------------
+
+Las pruebas automáticas pasaron de 63 a 158 a lo largo del período y cubren los
+veredictos de la norma, las tolerancias de consumo, los ensayos con hardware
+simulado, los relés (incluida la reconexión), las correcciones de calibración, las
+credenciales y todas las pestañas de la interfaz. La integración continua, que no
+ejecutaba las pruebas desde el primer commit por un error de configuración, quedó
+en verde en sus tres etapas: pruebas, análisis estático y prueba en Docker.
+
+% ------------------------------------------------------------
+\subsection{Evaluación de los criterios de éxito}
+\label{subsec:resultados_criterios}
+% ------------------------------------------------------------
+
+\begin{table}[htbp]
+\centering
+\caption{Evaluación de los criterios de éxito}
+\label{tab:criterios_exito}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabularx}{\linewidth}{@{} l l X @{}}
+\toprule
+\textbf{Criterio} & \textbf{Meta} & \textbf{Resultado} \\
+\midrule
+Tiempo de prueba & $\geq$ \SI{30}{\percent} menos
+  & \pendiente{medir frente al método manual} \\
+Intervención del operario & $\geq$ \SI{80}{\percent} menos
+  & \pendiente{medir frente al método manual} \\
+Seguridad & Alarmas y falla segura
+  & Cumplido en el banco: relés abiertos ante error, parada y cierre;
+    lectura fallida = FALLA \\
+Escalabilidad & Adaptable a productos y normas
+  & Cumplido: límites por atributos del producto y umbrales configurables \\
+Cumplimiento normativo & Límites IEC~60335
+  & Límites alineados con la norma; consumo validado; trazabilidad metrológica
+    pendiente de patrón \\
+Cronograma & Tolerancia de 10 días
+  & \pendiente{completar} \\
+Presupuesto & $\leq$ \SI{1030}{USD}
+  & \pendiente{costo real} \\
+\bottomrule
+\end{tabularx}
+\end{table}

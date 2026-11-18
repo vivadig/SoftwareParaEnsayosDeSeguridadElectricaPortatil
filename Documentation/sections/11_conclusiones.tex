@@ -1,0 +1,136 @@
+% ============================================================
+%  Conclusiones
+% ============================================================
+\section{Conclusiones}
+\label{sec:conclusiones}
+
+El objetivo del trabajo fue diseñar y construir un sistema semiautomatizado,
+formado por un dispositivo y una interfaz de software, capaz de ejecutar en final
+de línea los ensayos de seguridad eléctrica de la norma IEC~60335 con precisión,
+repetibilidad y trazabilidad, y con menor intervención y riesgo para el operario.
+Al cierre del trabajo, ese objetivo se cumple en forma completa para el ensayo de
+consumo y en forma parcial para los ensayos de seguridad, cuya lógica está
+terminada pero cuyo hardware de medición está pendiente.
+
+\subsection{Logros respecto del objetivo y el alcance}
+
+\begin{itemize}
+    \item Se construyó un \textbf{sistema integrado y funcional}: el software
+          detecta el hardware, comanda los relés y el contactor, lee los
+          medidores, emite el veredicto, registra cada ensayo y lo exporta. El
+          ensayo de consumo quedó validado de punta a punta sobre cargas reales,
+          en sus modos de final de línea, perfil y cíclico, con una repetibilidad
+          del \SI{0,22}{\percent}.
+    \item Los \textbf{criterios de aprobación quedaron alineados con la norma}.
+          La revisión de la IEC~60335-1 mostró que los límites de partida no la
+          reflejaban: la rigidez dieléctrica se evaluaba solo por tensión, la fuga
+          pasiva tenía un límite fijo de \SI{1500}{\micro\ampere}, la puesta a
+          tierra usaba un valor único y el consumo porcentajes fijos. Se
+          adoptaron los ensayos de rutina del Anexo~A y las tablas de tolerancia
+          de la cláusula~10, y los límites pasaron a depender de los atributos de
+          cada producto.
+    \item El \textbf{software pasó de un esqueleto a una aplicación completa}: la
+          interfaz inicial tenía mayormente botones sin lógica y hoy integra las
+          ocho pestañas previstas, con 158 pruebas automáticas y una integración
+          continua que efectivamente verifica cada cambio.
+    \item Se escribió el \textbf{firmware del microcontrolador}, que no existía:
+          el módulo venía con un firmware de fábrica que no atendía a los
+          medidores.
+    \item Se priorizó la \textbf{seguridad del operario}: el sistema nunca emite
+          un aprobado ante una lectura fallida, abre los relés ante cualquier
+          error, y la parada de emergencia y el cierre de la aplicación detienen el
+          ensayo en menos de un segundo.
+\end{itemize}
+
+\subsection{Dificultades encontradas y cómo se resolvieron}
+\label{subsec:dificultades}
+
+\paragraph{Límites normativos mal interpretados.}
+Los valores de la tabla de cotas de la formulación inicial (\SI{125}{\milli\ohm}
+para puesta a tierra, \SI{50}{\milli\ampere} para rigidez dieléctrica o
+\SI{\pm 10}{\percent} fijo para consumo) no coincidían con la norma. En
+particular, los \SI{50}{\milli\ampere} eran la capacidad del transformador de alta
+tensión y no un límite de aprobación. Se resolvió con una lectura detallada de la
+norma, distinguiendo los ensayos de tipo de los de rutina, y con pruebas
+automáticas que fijan cada límite.
+
+\paragraph{Puesta en marcha del microcontrolador.}
+El ESP32 no era reconocido (el cable USB era solo de carga, y luego faltaba el
+controlador del conversor CP2102), y una vez conectado al medidor entraba en un
+bucle de reinicio. La causa era doble: el medidor estaba en los pines del puerto
+USB y, alimentado con \SI{5}{\volt}, su salida de datos imponía \SI{5}{\volt} en
+un pin del ESP32 y le impedía arrancar. Se resolvió moviendo el medidor al
+segundo puerto serie y alimentándolo desde \SI{3,3}{\volt}. Los bornes de potencia
+del medidor, sin serigrafía, se identificaron midiendo con multímetro.
+
+\paragraph{Interferencia electromagnética en el control de los relés.}
+La placa de relés USB se desconectaba de la PC al abrir el contactor con una carga
+con motor; con la carga resistiva no ocurría. La placa implementa el USB por
+software en un microcontrolador pequeño, muy sensible a las perturbaciones que
+genera la apertura de una carga inductiva. Se mitigó en dos frentes: el software
+pasó a tolerar la desconexión (reintenta, confirma que los relés quedaron abiertos
+o pide cortar la red) y se aprovechó que, al reiniciarse, la placa deja los relés
+abiertos, lo que hace que la falla sea segura; además, se agregó un varistor en la
+bobina del contactor, que redujo el problema sin eliminarlo. Fue la principal
+lección de diseño del trabajo: los supresores en las bobinas, la aislación
+galvánica del USB y la elección de controladores con USB por hardware deben
+considerarse desde el inicio.
+
+\paragraph{Subestimación del consumo.}
+La prueba de punta a punta reveló que el consumo se subestimaba en un
+\SI{27}{\percent} porque el promedio incluía las lecturas del transitorio de cierre
+del contactor, lo que hacía fallar a un aparato sano. Se corrigió descartando las
+lecturas de estabilización y se verificó en el banco. Esta dificultad muestra el
+valor de probar con el hardware real: las pruebas con hardware simulado no podían
+detectarla.
+
+\paragraph{Calidad del proceso de software.}
+La integración continua estaba mal configurada desde el primer commit y nunca
+había ejecutado las pruebas ni el análisis estático; además, las correcciones de
+calibración configuradas nunca se aplicaban y la API tenía credenciales de fábrica
+en texto plano. Se corrigieron los tres puntos: la integración continua quedó en
+verde, las correcciones se aplican a todas las lecturas y las contraseñas se
+guardan con hash, rechazando las de fábrica.
+
+\subsection{Limitaciones}
+
+\begin{itemize}
+    \item Los ensayos de fuga, puesta a tierra y rigidez dieléctrica no se
+          validaron en el banco por falta de su hardware de medición.
+    \item No se contó con un instrumento patrón: los resultados no constituyen
+          una validación metrológica y las correcciones de calibración no están
+          ajustadas.
+    \item El banco mide a la tensión de red disponible y no a la tensión nominal
+          del aparato, lo que afecta el veredicto de aparatos cercanos al límite.
+    \item La interferencia de la placa de relés está mitigada, pero no eliminada.
+    \item El banco no tiene interruptor diferencial.
+\end{itemize}
+
+\subsection{Trabajo futuro}
+
+\begin{itemize}
+    \item Completar el hardware de los ensayos de seguridad: medidor de
+          \SI{10}{\ampere} con red de medición IEC~60990 para fuga, transformador
+          de puesta a tierra verificado a \SI{10}{\ampere} y transformador de alta
+          tensión con medición de \SI{5}{\milli\ampere}.
+    \item Calibrar el sistema contra un instrumento patrón y validar con los
+          patrones del modo de verificación.
+    \item Comandar el contactor desde el ESP32 con un relé optoacoplado (el
+          firmware ya admite los comandos) y aislar galvánicamente el USB.
+    \item Incorporar un interruptor diferencial y regular o corregir la tensión de
+          ensayo de consumo.
+    \item Registrar en el historial la tensión y la corriente medidas en rigidez
+          dieléctrica, y medir los tiempos frente al método manual para evaluar
+          los criterios de éxito pendientes.
+\end{itemize}
+
+\subsection{Reflexión final}
+
+Más allá del equipo construido, el trabajo dejó un aprendizaje sobre el proceso
+de desarrollo de un instrumento de seguridad: leer la norma en detalle antes de
+fijar un límite, desconfiar de un resultado hasta comprobarlo con el hardware real
+y diseñar cada parte para que, ante una falla, el sistema quede en un estado
+seguro. El prototipo ofrece una base abierta, de bajo costo y verificada para
+completar los ensayos restantes y avanzar hacia su uso en una línea de producción.
+
+\pendiente{sumar la reflexión personal sobre el proceso del TFG}

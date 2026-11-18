@@ -1,0 +1,91 @@
+% ============================================================
+%  Alcance del proyecto
+% ============================================================
+\section{Alcance del proyecto}
+\label{sec:alcance}
+
+El proyecto contempla el diseño y la construcción de un sistema integral de
+ensayos de seguridad eléctrica, compuesto por un dispositivo físico y una interfaz
+de software, destinado a verificar el cumplimiento de la norma IEC~60335. El
+alcance abarca tanto los aspectos funcionales como no funcionales, además de las
+restricciones, supuestos y riesgos asociados al desarrollo.
+
+\subsection{Requerimientos funcionales y no funcionales}
+
+\subsubsection{Requerimientos funcionales}
+\begin{itemize}
+    \item Ejecución de los ensayos de consumo, rigidez dieléctrica, continuidad de
+          tierra y corrientes de fuga (activa y pasiva).
+    \item Automatización de la configuración, conmutación, adquisición y
+          procesamiento de datos.
+    \item Generación de reportes digitales trazables y exportables.
+    \item Interfaz gráfica intuitiva para la configuración y supervisión de
+          ensayos.
+\end{itemize}
+
+\subsubsection{Requerimientos no funcionales}
+\begin{itemize}
+    \item \textbf{Confiabilidad:} resultados reproducibles con un error acotado
+          respecto de los límites de la norma IEC~60335.
+    \item \textbf{Seguridad:} protecciones contra sobrecargas, aislamiento
+          adecuado, alarmas y comportamiento seguro ante fallas.
+    \item \textbf{Usabilidad:} intervención mínima del operario y curva de
+          aprendizaje baja.
+    \item \textbf{Escalabilidad:} posibilidad de incorporar nuevos ensayos o
+          adaptarse a modificaciones normativas.
+    \item \textbf{Mantenibilidad:} arquitectura modular de hardware y software que
+          facilite la reparación, actualización y extensión del sistema.
+\end{itemize}
+
+\subsection{Restricciones}
+\begin{itemize}
+    \item Presupuesto limitado para la construcción del prototipo y la adquisición
+          de componentes.
+    \item Disponibilidad restringida de equipamiento especializado para
+          calibración y validación.
+    \item Tiempo máximo de ejecución establecido en el cronograma del proyecto
+          (Anexo~\ref{anx:cronograma}).
+    \item Cumplimiento de las normativas IEC aplicables.
+\end{itemize}
+
+\subsection{Supuestos}
+\begin{itemize}
+    \item Se contará con un laboratorio equipado para la ejecución de ensayos de
+          validación.
+    \item Los componentes electrónicos necesarios estarán disponibles en el
+          mercado local o mediante proveedores confiables.
+    \item El personal que utilice el sistema tendrá capacitación básica en
+          seguridad eléctrica y operación de equipos de ensayo.
+\end{itemize}
+
+\subsection{Riesgos y mitigación}
+\begin{itemize}
+    \item \textbf{Retrasos en la adquisición de componentes:} pueden comprometer el
+          cronograma. Se mitigan identificando tempranamente proveedores
+          alternativos.
+    \item \textbf{Fallas en la calibración o en la validación del sistema:} podrían
+          impedir la aceptación del proyecto. Se mitigan con pruebas piloto e
+          intercomparaciones con equipos certificados.
+    \item \textbf{Limitaciones presupuestarias:} aumentos de costos podrían superar
+          lo estimado. Se mitigan con un margen de contingencia.
+    \item \textbf{Problemas de integración entre hardware y software:} se mitigan
+          con un desarrollo incremental y pruebas de integración tempranas.
+\end{itemize}
+
+\subsection{Aspectos fuera del alcance}
+
+El proyecto se centra en el diseño, construcción y verificación de un sistema
+semiautomatizado de ensayos eléctricos orientado a la norma IEC~60335. No forman
+parte del alcance:
+\begin{itemize}
+    \item La certificación oficial del equipo ante organismos nacionales o
+          internacionales (OAA, IEC, UL, entre otros), aunque el diseño se orienta
+          a cumplir con dichas normativas.
+    \item Ensayos no contemplados en la IEC~60335, como medición de armónicos,
+          pruebas de sobrecarga o compatibilidad electromagnética.
+    \item La fabricación industrial en serie del dispositivo; el trabajo se limita
+          a un prototipo funcional.
+    \item El mantenimiento y soporte a largo plazo del sistema.
+    \item La integración con sistemas de gestión externos (ERP, MES, etc.), más
+          allá del almacenamiento local y la exportación de datos.
+\end{itemize}

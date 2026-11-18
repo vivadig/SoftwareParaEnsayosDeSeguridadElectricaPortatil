@@ -1,24 +1,9 @@
 % ============================================================
-%  TABLAS DE VALORES DE REFERENCIA — IEC 60335-1
-%  Tesis: Equipo de Ensayos de Seguridad Eléctrica Portátil
-%  Autor: Valentina Ferrini
+%  Anexo B: valores de referencia según IEC 60335-1
+%  (origen: tablas_IEC60335.tex)
 % ============================================================
-%
-% Paquetes requeridos en el preámbulo principal:
-%   \usepackage{booktabs}
-%   \usepackage{multirow}
-%   \usepackage{array}
-%   \usepackage{float}
-%   \usepackage[table]{xcolor}
-%   \usepackage{siunitx}
-%   \sisetup{output-decimal-marker={,}}
-%   \usepackage[spanish]{babel}
-%
-% Uso: \input{tablas_IEC60335}
-% ============================================================
-
 \section{Valores de referencia según IEC~60335-1}
-\label{sec:valores_referencia}
+\label{anx:valores_referencia}
 
 Las tablas presentadas en esta sección sintetizan los valores límite
 y los parámetros de ensayo definidos por la norma IEC~60335-1
@@ -468,12 +453,11 @@ Rigidez dieléctrica
 \end{table}
 
 \noindent\textbf{Nota sobre la incertidumbre de medición:}
-los valores límite de la norma son valores máximos absolutos.
-Para garantizar que el equipo no declare como aprobado un DUT
-que se encuentra en el margen de tolerancia, se aplica el
-criterio de \emph{guardia metrológica}: el sistema emite una
-alerta de \emph{valor próximo al límite} cuando el resultado
-supera el \SI{80}{\percent} del límite normativo
-(p.ej., alerta en $I_{\text{fuga}} > \SI{600}{\micro\ampere}$ para Clase~I),
-permitiendo al operario decidir si realiza una medición adicional
-con un instrumento patrón antes de emitir el reporte final.
+los valores límite de la norma son valores máximos absolutos. Para evitar
+declarar como aprobado un aparato cuyo resultado queda dentro de la
+incertidumbre del equipo, se propone como mejora aplicar una \emph{banda de
+guarda}: emitir una alerta de valor próximo al límite cuando el resultado
+supere, por ejemplo, el \SI{80}{\percent} del límite normativo (alerta en
+$I_{\text{fuga}} > \SI{600}{\micro\ampere}$ para Clase~I), para que el operario
+decida si repetir la medición con un instrumento patrón. Esta alerta todavía no
+está implementada en el software.

@@ -1,0 +1,74 @@
+% ============================================================
+%  Estado del arte y normativa
+% ============================================================
+\section{Estado del arte y normativas aplicables}
+\label{sec:estado_arte}
+
+\subsection{Panorama de los ensayos de seguridad eléctrica en la industria}
+
+La seguridad eléctrica es un aspecto fundamental en la fabricación de productos
+eléctricos y electrónicos, ya que garantiza tanto la integridad de los equipos como
+la protección de los usuarios. Los ensayos de seguridad, que incluyen pruebas de
+rigidez dieléctrica, continuidad de tierra y corriente de fuga, son requisitos
+obligatorios para la certificación de productos en diversos mercados.
+Tradicionalmente, estos ensayos se han realizado de manera manual, lo que puede dar
+lugar a variabilidad en los resultados, prolongar los tiempos de prueba y generar
+riesgos tanto para el personal como para los productos. Por esta razón, ha surgido
+un creciente interés en la automatización de estos procesos, con el objetivo de
+mejorar la precisión, la reproducibilidad y la eficiencia operativa, además de
+garantizar la trazabilidad y un historial completo de las pruebas realizadas.
+Existen en el mercado equipos comerciales que integran estos ensayos, como la
+línea EFE Plus \cite{efeplus} o los equipos de Insatec \cite{insatec}, y
+laboratorios que los ofrecen como servicio \cite{labconsultar}.
+
+\subsection{Los ensayos de seguridad eléctrica más comunes}
+\begin{itemize}
+    \item \textbf{Rigidez dieléctrica (tensión resistida):} se aplica una tensión
+          elevada entre las partes activas y las partes accesibles para verificar
+          el aislamiento.
+    \item \textbf{Continuidad de tierra:} verifica que la resistencia entre el
+          borne de tierra y las partes metálicas accesibles sea baja.
+    \item \textbf{Corriente de fuga:} asegura que las corrientes indeseadas hacia
+          las partes accesibles estén dentro de los límites permitidos.
+    \item \textbf{Consumo:} verifica que la potencia o la corriente absorbida no se
+          aparte del valor nominal marcado más allá de la tolerancia admitida.
+\end{itemize}
+
+\subsection{Métodos tradicionales y su grado de automatización}
+
+El proceso de prueba tradicional requiere intervención manual del operario y la
+disposición del instrumental junto con personal capacitado, lo cual puede
+producir variaciones en los resultados, demoras en las pruebas y posibles riesgos
+para el personal, los instrumentos y los productos.
+
+\subsection{Normativa aplicable}
+\label{subsec:normativa}
+
+La norma IEC~60335 establece requisitos de seguridad para aparatos eléctricos de
+uso doméstico y aplicaciones comerciales de baja tensión. La parte~1
+(IEC~60335-1) contiene los requisitos generales aplicables a todos los aparatos
+comprendidos en la norma; en este trabajo se toma como referencia la
+edición~4.1 \cite{iec60335}. La norma distingue los \textbf{ensayos de tipo}
+(cláusulas~10 a~32), que certifican un diseño sobre muestras representativas, de
+los \textbf{ensayos de rutina} (Anexo~A), que se aplican a cada unidad producida.
+Por ser un equipo de final de línea, el sistema adopta los ensayos de rutina del
+Anexo~A donde existen.
+
+Otras normas de referencia contextual son:
+\begin{itemize}
+    \item \textbf{IEC~61010:} seguridad de equipos de medida, control y laboratorio
+          \cite{iec61010}.
+    \item \textbf{IEC~60950 / IEC~62368:} seguridad de equipos de tecnología de la
+          información y audio/video \cite{iec62368}.
+    \item \textbf{UL~60950 / UL~62368:} equivalentes para el mercado de EE.\,UU.
+    \item \textbf{IRAM~2435:} norma argentina de referencia \cite{iram2435}.
+    \item \textbf{ISO/IEC~17025:} competencia de laboratorios de ensayo y
+          calibración \cite{iso17025}.
+    \item \textbf{IEC~60990:} métodos de medición de la corriente de contacto y de
+          la corriente del conductor de protección \cite{iec60990}.
+\end{itemize}
+
+\noindent Para el alcance de este proyecto se aplica la IEC~60335 y sus anexos.
+La certificación del equipo ante el Organismo Argentino de Acreditación (OAA) u
+otros organismos queda fuera del alcance, aunque el diseño se orienta al
+cumplimiento normativo.

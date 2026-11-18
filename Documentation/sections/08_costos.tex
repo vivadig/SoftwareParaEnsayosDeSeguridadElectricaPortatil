@@ -1,0 +1,125 @@
+% ============================================================
+%  Evaluación de costos
+% ============================================================
+\section{Evaluación de costos}
+\label{sec:costos}
+
+El presupuesto del proyecto se fijó en \SI{1030}{USD}, distribuido por concepto
+según la Tabla~\ref{tab:presupuesto}.
+
+\begin{table}[htbp]
+\centering
+\caption{Presupuesto del proyecto por concepto}
+\label{tab:presupuesto}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{} l r @{}}
+\toprule
+\textbf{Concepto} & \textbf{Costo (USD)} \\
+\midrule
+Medición de corriente de fuga activa       & 30 \\
+Medición de corriente de fuga pasiva       & 30 \\
+Medición de resistencia de puesta a tierra & 30 \\
+Medición de rigidez dieléctrica            & 30 \\
+Elementos de conexión                      & 70 \\
+Elementos de medición                      & 150 \\
+Elementos de seguridad                     & 60 \\
+Elementos de potencia                      & 180 \\
+Elementos de control                       & 50 \\
+Elementos de procesamiento                 & 400 \\
+Horas de trabajo                           & --- \\
+\midrule
+\textbf{Total}                             & \textbf{1030} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+La Tabla~\ref{tab:costos_detalle} presenta una estimación por componente, con
+precios de referencia de distribuidores nacionales y plataformas de importación
+relevados en el segundo semestre de 2025. Los valores son estimativos: el tipo de
+cambio y la disponibilidad de stock pueden modificar el costo final. Las horas de
+ingeniería no se incluyen, por corresponder al esfuerzo académico del trabajo.
+
+\begin{table}[htbp]
+\centering
+\caption{Estimación de costos del prototipo por componente (USD)}
+\label{tab:costos_detalle}
+\renewcommand{\arraystretch}{1.2}
+\small
+\begin{tabular}{@{} l l r r r @{}}
+\toprule
+\textbf{Categoría} & \textbf{Componente} & \textbf{Cant.} & \textbf{Unit.} &
+\textbf{Subtotal} \\
+\midrule
+\multirow{2}{*}{Procesamiento}
+  & ESP32, módulo de desarrollo           & 1 & 8,00  & 8,00  \\
+  & Módulo de relés USB de 8 canales      & 1 & 12,00 & 12,00 \\
+\midrule
+\multirow{3}{*}{Medición}
+  & PZEM-004T (con transformador de corriente) & 3 & 12,00 & 36,00 \\
+  & Placas de interfaz propias            & 2 & ---   & \pendiente{} \\
+  & Cables de medición y puntas           & --- & 10,00 & 10,00 \\
+\midrule
+\multirow{3}{*}{Potencia}
+  & Contactor \SI{12}{\ampere}, bobina \SI{220}{\volt} & 4 & 9,00 & 36,00 \\
+  & Transformador de rigidez dieléctrica  & 1 & 80,00 & 80,00 \\
+  & Transformador \SI{2,2}{\volt} / \SI{75}{\volt\ampere} & 1 & 35,00 & 35,00 \\
+\midrule
+\multirow{3}{*}{Seguridad}
+  & Fusibles y portafusibles              & 4 & 2,00  & 8,00  \\
+  & Pilotos indicadores                   & 4 & 1,50  & 6,00  \\
+  & Pulsador de paro de emergencia        & 1 & 8,00  & 8,00  \\
+\midrule
+\multirow{3}{*}{Conexionado}
+  & Cable \SI{1,5}{\milli\meter\squared} (\SI{10}{\meter}) & 2 & 6,00 & 12,00 \\
+  & Borneras, terminales y bridas         & --- & 8,00 & 8,00 \\
+  & Tomacorriente industrial y fichas     & 2 & 5,00  & 10,00 \\
+\midrule
+\multirow{2}{*}{Estructura}
+  & \emph{Flight case} de aluminio        & 1 & 60,00 & 60,00 \\
+  & Riel DIN y panel frontal              & 1 & 15,00 & 15,00 \\
+\midrule
+\multicolumn{4}{r}{\textbf{Total estimado}}             & \textbf{344,00} \\
+\multicolumn{4}{r}{Contingencia (\SI{15}{\percent})}     & 51,60 \\
+\multicolumn{4}{r}{\textbf{Total con contingencia}}     & \textbf{395,60} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\pendiente{completar con el costo real de lo adquirido para el prototipo}
+
+\subsection{Comparación con soluciones comerciales}
+\label{subsec:comparacion_comercial}
+
+La Tabla~\ref{tab:comparacion_comercial} compara el prototipo con equipos
+comerciales nacionales de la línea SYGlab (SYG~Group), que realizan ensayos
+similares bajo IEC~60335.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparación entre el prototipo y equipos comerciales}
+\label{tab:comparacion_comercial}
+\renewcommand{\arraystretch}{1.2}
+\small
+\begin{tabular}{@{} l c c c @{}}
+\toprule
+\textbf{Característica} & \textbf{Prototipo} & \textbf{SYGlab CL12-S0} &
+\textbf{SYGlab MG5} \\
+\midrule
+Consumo                  & Validado en banco    & \checkmark & \checkmark \\
+Fuga activa y pasiva     & Implementado (software) & \checkmark & \checkmark \\
+Puesta a tierra          & Implementado (software) & \checkmark & \checkmark \\
+Rigidez dieléctrica      & Implementado (software) & \checkmark & \checkmark \\
+Clase~I y~II             & \checkmark           & \checkmark & \checkmark \\
+Canales simultáneos      & 1                    & 1          & 5 \\
+Interfaz                 & PC (PyQt5)           & Pantalla integrada & Pantalla integrada \\
+Registro y exportación   & SQLite, Excel, API   & QR y base de datos & QR y base de datos \\
+Costo                    & $\sim$\SI{400}{USD}  & Consultar  & Consultar \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El prototipo cubre el mismo conjunto de ensayos que los equipos de referencia. Su
+ventaja diferencial es el bajo costo de construcción, el código fuente abierto y la
+posibilidad de adaptar los límites a otras normativas sin restricciones de
+licencia; su principal desventaja actual es que tres de los cinco ensayos todavía
+no están validados con su hardware de medición.
