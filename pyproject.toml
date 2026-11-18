@@ -46,6 +46,8 @@ packages = ["src"]
 [tool.ruff]
 # Exclude common directories
 exclude = [
+    # Scripts de prueba del banco: se guardan tal como se corrieron (evidencia)
+    "Documentation/evidencia_banco",
     "*.pyi",
     "__pycache__",
     "__init__.py",
