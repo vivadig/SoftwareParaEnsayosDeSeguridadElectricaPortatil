@@ -1,0 +1,69 @@
+% ============================================================
+%  Criterios de éxito y plan de validación
+% ============================================================
+\section{Criterios de evaluación y éxito}
+\label{sec:criterios_evaluacion}
+
+El sistema se considera exitoso si cumple con los siguientes criterios:
+\begin{itemize}
+    \item \textbf{Tiempo de prueba:} reducción de al menos \SI{30}{\percent} del
+          tiempo de ensayo respecto de los métodos manuales, gracias a la
+          secuencia automática y a la eliminación de ajustes manuales.
+    \item \textbf{Automatización:} reducción de al menos \SI{80}{\percent} de la
+          intervención del operario en configuración, conmutación entre ensayos y
+          adquisición de datos.
+    \item \textbf{Seguridad:} alarmas ante ensayos no aprobados o exposición a
+          tensiones peligrosas, y comportamiento seguro ante fallas.
+    \item \textbf{Escalabilidad:} adaptación a nuevos tipos de dispositivos y a
+          cambios normativos sin reestructurar el sistema.
+    \item \textbf{Cumplimiento normativo:} ensayos realizados conforme a la
+          IEC~60335 y mediciones evaluadas contra sus límites, con trazabilidad.
+    \item \textbf{Cronograma:} respeto de las fases y plazos planificados
+          (Anexo~\ref{anx:cronograma}), con una tolerancia máxima de diez días.
+    \item \textbf{Presupuesto:} costo de desarrollo dentro de \SI{1030}{USD},
+          con un margen razonable solo ante contingencias justificadas.
+\end{itemize}
+
+\section{Plan de validación}
+\label{sec:plan_validacion}
+
+La validación se plantea en tres niveles complementarios: hardware, software y
+sistema integrado.
+
+\subsection{Validación del hardware}
+\begin{itemize}
+    \item \textbf{Verificación funcional:} cada módulo (alimentación, protección,
+          medición y desconexión) se evalúa por separado frente a sus
+          especificaciones.
+    \item \textbf{Pruebas de seguridad:} aislamiento, funcionamiento de las
+          protecciones y activación de alarmas ante fallas.
+    \item \textbf{Calibración:} contraste con instrumentos patrón certificados,
+          cuya incertidumbre sea al menos diez veces menor que la del
+          dispositivo.
+\end{itemize}
+
+\subsection{Validación del software}
+\begin{itemize}
+    \item \textbf{Pruebas unitarias:} veredictos, ensayos con hardware simulado,
+          relés, base de datos y pestañas de la interfaz.
+    \item \textbf{Pruebas de integración:} comunicación entre módulos y con el
+          hardware, y correcta transferencia y almacenamiento de datos.
+    \item \textbf{Usabilidad y seguridad:} configuración y ejecución intuitivas,
+          con mensajes claros de error o advertencia.
+\end{itemize}
+
+\subsection{Validación del sistema frente a la norma IEC~60335}
+\begin{itemize}
+    \item \textbf{Ensayos comparativos:} mediciones con el prototipo y con un
+          instrumento calibrado comercial, para verificar la concordancia dentro
+          del margen normativo.
+    \item \textbf{Verificación con patrones:} el sistema incluye un modo en el que
+          se ensayan dos patrones conocidos; el primero debe aprobar y el segundo
+          fallar en fuga, puesta a tierra y rigidez, y cada medición debe quedar
+          dentro de \SI{\pm 10}{\percent} del valor del patrón.
+    \item \textbf{Intercomparación:} cuando sea posible, contraste con resultados
+          emitidos por un laboratorio acreditado.
+    \item \textbf{Criterio de aceptación:} el sistema es válido si emite el
+          veredicto correcto frente a los límites de la norma
+          (Anexo~\ref{anx:valores_referencia}) con trazabilidad demostrable.
+\end{itemize}

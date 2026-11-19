@@ -1,0 +1,119 @@
+% ============================================================
+%  Informe final del proyecto
+%  Equipo de Ensayos de Seguridad Eléctrica Portátil
+%  Autora: Valentina Ferrini
+%
+%  Compilar con: latexmk -pdf main.tex   (o pdflatex + biber + pdflatex x2)
+%  Estructura: este archivo arma el documento; cada sección está en /sections.
+% ============================================================
+\documentclass[a4paper,12pt]{article}
+
+% --- Codificación e idioma ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-tabla]{babel}
+
+% --- Página ---
+\usepackage[margin=2.5cm]{geometry}
+
+% --- Matemática, unidades y tablas ---
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{siunitx}
+\sisetup{output-decimal-marker={,}, group-minimum-digits=4, per-mode=symbol}
+\DeclareSIUnit\baud{Bd}
+\DeclareSIUnit\USD{USD}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+
+% --- Figuras ---
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\graphicspath{{figuras/}{evidencia_banco/fotos/}}
+% Las figuras y tablas no pasan a la sección siguiente
+\usepackage[section]{placeins}
+
+% Índice: espacio para números de sección de dos dígitos
+\usepackage{tocloft}
+\setlength{\cftsecnumwidth}{2.2em}
+\setlength{\cftsubsecnumwidth}{3.2em}
+\setlength{\cftsubsubsecnumwidth}{4.2em}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+% --- Títulos de párrafo en bloque ---
+\usepackage{titlesec}
+\titleformat{\paragraph}[block]{\normalfont\normalsize\bfseries}{}{0em}{}
+\titlespacing*{\paragraph}{0pt}{1ex plus .2ex}{0.5ex}
+
+% --- Anexos y referencias ---
+\usepackage[title,titletoc]{appendix}
+% Los anexos se titulan "Anexo" (babel en español usa "Apéndice")
+\addto\captionsspanish{\renewcommand{\appendixname}{Anexo}}
+\renewcommand{\appendixtocname}{Anexos}
+\renewcommand{\appendixpagename}{Anexos}
+\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
+\addbibresource{referencias.bib}
+\usepackage{csquotes}
+\usepackage{xurl}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=blue!50!black,
+            urlcolor=blue!50!black}
+
+% --- Macros del documento ---
+% Figura que se incluye solo si el archivo existe; si no, deja un recuadro
+% indicando qué imagen falta (para no romper la compilación).
+\newcommand{\figuraopcional}[2]{%
+  \IfFileExists{figuras/#1}{\includegraphics[width=#2]{#1}}{%
+    \fbox{\parbox{#2}{\centering\vspace{1.5cm}%
+      \textit{Falta la imagen \texttt{figuras/\detokenize{#1}}}\vspace{1.5cm}}}}}
+% Marca visible de contenido pendiente (eliminar antes de la entrega).
+\newcommand{\pendiente}[1]{\textcolor{red}{\textbf{[PENDIENTE: #1]}}}
+
+\title{Equipo de Ensayos de Seguridad Eléctrica Portátil\\[0.5em]
+       \large Informe final del Trabajo Final de Grado}
+\author{Valentina Ferrini}
+\date{Noviembre 2026}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+\input{sections/00_resumen}
+
+\tableofcontents
+\newpage
+
+\input{sections/01_introduccion}
+\input{sections/02_estado_del_arte}
+\input{sections/03_motivacion}
+\input{sections/04_alcance}
+\input{sections/05_requisitos}
+\input{sections/06_metodologia}
+\input{sections/07_ensayos}
+\input{sections/08_costos}
+\input{sections/09_criterios_validacion}
+\input{sections/10_resultados}
+\input{sections/11_conclusiones}
+
+\printbibliography[heading=bibintoc, title={Referencias}]
+
+\input{sections/12_glosario}
+
+\newpage
+\begin{appendices}
+\input{sections/anexo_a_cronograma}
+\input{sections/anexo_b_valores_referencia}
+\input{sections/anexo_c_analisis_estadistico}
+\input{sections/anexo_d_evidencia}
+\end{appendices}
+
+\end{document}
