@@ -33,59 +33,70 @@ Horas de trabajo                           & --- \\
 \end{tabular}
 \end{table}
 
-La Tabla~\ref{tab:costos_detalle} presenta una estimación por componente, con
-precios de referencia de distribuidores nacionales y plataformas de importación
-relevados en el segundo semestre de 2025. Los valores son estimativos: el tipo de
-cambio y la disponibilidad de stock pueden modificar el costo final. Las horas de
-ingeniería no se incluyen, por corresponder al esfuerzo académico del trabajo.
+La Tabla~\ref{tab:costos_detalle} presenta el costo del prototipo por componente,
+a partir de un relevamiento de precios de publicaciones de Mercado Libre Argentina
+realizado en noviembre de 2026, convertidos a un tipo de cambio de
+\num{1570}~pesos por dólar. Para los componentes sin publicaciones comparables
+(transformador de alta tensión, elementos de seguridad, conexionado y riel DIN) se
+mantiene la estimación previa en dólares, indicada como ``est.''. Los precios de
+las publicaciones varían entre vendedores, por lo que el total debe leerse como
+un valor de referencia. Las horas de ingeniería no se incluyen, por corresponder
+al esfuerzo académico del trabajo.
 
 \begin{table}[htbp]
 \centering
-\caption{Estimación de costos del prototipo por componente (USD)}
+\caption{Costo del prototipo por componente (precios de Mercado Libre, noviembre
+         de 2026; \num{1570}~ARS/USD)}
 \label{tab:costos_detalle}
 \renewcommand{\arraystretch}{1.2}
 \small\setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{} l p{6.3cm} r r r @{}}
+\begin{tabular}{@{} l p{5.6cm} r r r @{}}
 \toprule
-\textbf{Categoría} & \textbf{Componente} & \textbf{Cant.} & \textbf{Unit.} &
-\textbf{Subtotal} \\
+\textbf{Categoría} & \textbf{Componente} & \textbf{Cant.} &
+\textbf{Unit. (ARS)} & \textbf{Subtotal (USD)} \\
 \midrule
 \multirow{2}{*}{Procesamiento}
-  & ESP32, módulo de desarrollo           & 1 & 8,00  & 8,00  \\
-  & Módulo de relés USB de 8 canales      & 1 & 12,00 & 12,00 \\
+  & ESP32 NodeMCU-32S                     & 1 & \num{13500}  & 8,60  \\
+  & Módulo de relés USB de 8 canales      & 1 & \num{29471}  & 18,77 \\
 \midrule
-\multirow{3}{*}{Medición}
-  & PZEM-004T (con transformador de corriente) & 3 & 12,00 & 36,00 \\
-  & Placas de interfaz propias            & 2 & ---   & \pendiente{} \\
-  & Cables de medición y puntas           & --- & 10,00 & 10,00 \\
+\multirow{2}{*}{Medición}
+  & PZEM-004T \SI{100}{\ampere} con transformador de corriente
+                                          & 3 & \num{47990}  & 91,70 \\
+  & Cables de medición y puntas           & --- & est.       & 10,00 \\
 \midrule
 \multirow{3}{*}{Potencia}
-  & Contactor \SI{12}{\ampere}, bobina \SI{220}{\volt} & 4 & 9,00 & 36,00 \\
-  & Transformador de rigidez dieléctrica  & 1 & 80,00 & 80,00 \\
-  & Transformador \SI{2,2}{\volt} / \SI{75}{\volt\ampere} & 1 & 35,00 & 35,00 \\
+  & Minicontactor CHINT NXC-12M/22, bobina \SI{220}{\volt}
+                                          & 4 & \num{30000}  & 76,43 \\
+  & Transformador de rigidez dieléctrica  & 1 & est.         & 80,00 \\
+  & Transformador \SI{75}{\volt\ampere} (puesta a tierra)
+                                          & 1 & \num{77000}  & 49,04 \\
 \midrule
 \multirow{3}{*}{Seguridad}
-  & Fusibles y portafusibles              & 4 & 2,00  & 8,00  \\
-  & Pilotos indicadores                   & 4 & 1,50  & 6,00  \\
-  & Pulsador de paro de emergencia        & 1 & 8,00  & 8,00  \\
+  & Fusibles y portafusibles              & 4 & est.         & 8,00  \\
+  & Pilotos indicadores                   & 4 & est.         & 6,00  \\
+  & Pulsador de paro de emergencia        & 1 & est.         & 8,00  \\
 \midrule
 \multirow{3}{*}{Conexionado}
-  & Cable \SI{1,5}{\milli\meter\squared} (\SI{10}{\meter}) & 2 & 6,00 & 12,00 \\
-  & Borneras, terminales y bridas         & --- & 8,00 & 8,00 \\
-  & Tomacorriente industrial y fichas     & 2 & 5,00  & 10,00 \\
+  & Cable \SI{1,5}{\milli\meter\squared} (\SI{10}{\meter}) & 2 & est. & 12,00 \\
+  & Borneras, terminales y bridas         & --- & est.       & 8,00  \\
+  & Tomacorriente y fichas                & 2 & est.         & 10,00 \\
 \midrule
 \multirow{2}{*}{Estructura}
-  & \emph{Flight case} de aluminio        & 1 & 60,00 & 60,00 \\
-  & Riel DIN y panel frontal              & 1 & 15,00 & 15,00 \\
+  & Valija de aluminio reforzada          & 1 & \num{79909}  & 50,90 \\
+  & Riel DIN y panel frontal              & 1 & est.         & 15,00 \\
 \midrule
-\multicolumn{4}{r}{\textbf{Total estimado}}             & \textbf{344,00} \\
-\multicolumn{4}{r}{Contingencia (\SI{15}{\percent})}     & 51,60 \\
-\multicolumn{4}{r}{\textbf{Total con contingencia}}     & \textbf{395,60} \\
+\multicolumn{4}{@{}r}{\textbf{Total}}                       & \textbf{452,44} \\
+\multicolumn{4}{@{}r}{Contingencia (\SI{15}{\percent})}      & 67,87 \\
+\multicolumn{4}{@{}r}{\textbf{Total con contingencia}}       & \textbf{520,31} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\noindent\pendiente{completar con el costo real de lo adquirido para el prototipo}
+\noindent El costo del prototipo, de unos \SI{520}{USD} con contingencia
+(aproximadamente \num{817000}~pesos), se ubica en la mitad del presupuesto de
+\SI{1030}{USD}. Los precios relevados son en general más altos que las
+estimaciones iniciales en dólares, sobre todo en los medidores y los contactores,
+pero el margen del presupuesto absorbe la diferencia.
 
 \subsection{Comparación con soluciones comerciales}
 \label{subsec:comparacion_comercial}
@@ -113,7 +124,7 @@ Clase~I y~II             & \checkmark           & \checkmark & \checkmark \\
 Canales simultáneos      & 1                    & 1          & 5 \\
 Interfaz                 & PC (PyQt5)           & Pantalla integrada & Pantalla integrada \\
 Registro y exportación   & SQLite, Excel, API   & QR y base de datos & QR y base de datos \\
-Costo                    & $\sim$\SI{400}{USD}  & Consultar  & Consultar \\
+Costo                    & $\sim$\SI{520}{USD}  & Consultar  & Consultar \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -199,6 +199,51 @@ ejecutaba las pruebas desde el primer commit por un error de configuración, que
 en verde en sus tres etapas: pruebas, análisis estático y prueba en Docker.
 
 % ------------------------------------------------------------
+\subsection{Tiempo de ensayo e intervención del operario}
+\label{subsec:resultados_tiempos}
+% ------------------------------------------------------------
+
+Como no se realizó una medición comparativa con un operario ensayando con
+instrumentos convencionales, la Tabla~\ref{tab:tiempos} presenta una
+\textbf{estimación} por aparato. Para el método manual se considera que cada
+ensayo exige conectar el instrumento, configurarlo, ejecutar y anotar el
+resultado; para el sistema, la duración configurada de cada ensayo
+(\SI{5}{\second}) más la conmutación, coherente con lo observado en el banco
+(tres ciclos de consumo en \SI{22,1}{\second}).
+
+\begin{table}[htbp]
+\centering
+\caption{Estimación del tiempo y de las intervenciones del operario por aparato}
+\label{tab:tiempos}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabularx}{\linewidth}{@{} X r r @{}}
+\toprule
+\textbf{Etapa} & \textbf{Manual} & \textbf{Sistema} \\
+\midrule
+Conexión del aparato y configuración          & \SI{75}{\second} & \SI{40}{\second} \\
+Consumo                                       & \SI{60}{\second} & \multirow{5}{*}{\SI{30}{\second}} \\
+Fuga activa                                   & \SI{45}{\second} & \\
+Fuga pasiva                                   & \SI{45}{\second} & \\
+Puesta a tierra                               & \SI{45}{\second} & \\
+Rigidez dieléctrica                           & \SI{60}{\second} & \\
+Registro de resultados                        & \SI{60}{\second} & automático \\
+\midrule
+\textbf{Tiempo total por aparato}             & \textbf{\SI{6,5}{\minute}}
+                                              & \textbf{\SI{70}{\second}} \\
+\textbf{Intervenciones del operario}          & \textbf{21} & \textbf{4} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Con estas estimaciones, el sistema reduce el tiempo de ensayo en torno al
+\SI{80}{\percent} y las intervenciones del operario de 21 (conectar, configurar,
+iniciar y anotar en cada uno de los cinco ensayos, y desconectar) a 4 (conectar,
+elegir el producto, iniciar y desconectar), es decir, un \SI{81}{\percent}.
+Ambos valores deben confirmarse con mediciones cuando estén operativos los cinco
+ensayos.
+
+% ------------------------------------------------------------
 \subsection{Evaluación de los criterios de éxito}
 \label{subsec:resultados_criterios}
 % ------------------------------------------------------------
@@ -214,9 +259,11 @@ en verde en sus tres etapas: pruebas, análisis estático y prueba en Docker.
 \textbf{Criterio} & \textbf{Meta} & \textbf{Resultado} \\
 \midrule
 Tiempo de prueba & $\geq$ \SI{30}{\percent} menos
-  & \pendiente{medir frente al método manual} \\
+  & Cumplido según la estimación: alrededor de \SI{80}{\percent} menos
+    (Tabla~\ref{tab:tiempos}); a confirmar con mediciones \\
 Intervención del operario & $\geq$ \SI{80}{\percent} menos
-  & \pendiente{medir frente al método manual} \\
+  & Cumplido según la estimación: de 21 a 4 intervenciones
+    (\SI{81}{\percent} menos); a confirmar con mediciones \\
 Seguridad & Alarmas y falla segura
   & Cumplido en el banco: relés abiertos ante error, parada y cierre;
     lectura fallida = FALLA \\
@@ -226,9 +273,12 @@ Cumplimiento normativo & Límites IEC~60335
   & Límites alineados con la norma; consumo validado; trazabilidad metrológica
     pendiente de patrón \\
 Cronograma & Tolerancia de 10 días
-  & \pendiente{completar} \\
+  & Cumplido: el hardware se demoró unos días por los envíos de componentes,
+    dentro de la tolerancia, y el software se adelantó unas dos semanas
+    (Anexo~\ref{anx:cronograma}) \\
 Presupuesto & $\leq$ \SI{1030}{USD}
-  & \pendiente{costo real} \\
+  & Cumplido: unos \SI{520}{USD} con contingencia
+    (Tabla~\ref{tab:costos_detalle}) \\
 \bottomrule
 \end{tabularx}
 \end{table}

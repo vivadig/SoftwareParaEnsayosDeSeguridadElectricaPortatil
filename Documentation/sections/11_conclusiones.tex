@@ -92,6 +92,14 @@ en texto plano. Se corrigieron los tres puntos: la integración continua quedó 
 verde, las correcciones se aplican a todas las lecturas y las contraseñas se
 guardan con hash, rechazando las de fábrica.
 
+\paragraph{Plazos de los componentes.}
+Las demoras en los envíos de algunos componentes retrasaron unos días la
+construcción del prototipo. El impacto se compensó con el adelanto del software:
+el uso de herramientas de programación asistida por inteligencia artificial
+permitió completar la implementación y las pruebas alrededor de dos semanas antes
+de lo previsto, y ese tiempo se reinvirtió en la integración y en las pruebas en
+el banco (Anexo~\ref{anx:cumplimiento_cronograma}).
+
 \subsection{Limitaciones}
 
 \begin{itemize}
@@ -120,8 +128,8 @@ guardan con hash, rechazando las de fábrica.
     \item Incorporar un interruptor diferencial y regular o corregir la tensión de
           ensayo de consumo.
     \item Registrar en el historial la tensión y la corriente medidas en rigidez
-          dieléctrica, y medir los tiempos frente al método manual para evaluar
-          los criterios de éxito pendientes.
+          dieléctrica, y medir los tiempos frente al método manual para
+          confirmar las estimaciones de tiempo e intervención del operario.
 \end{itemize}
 
 \subsection{Reflexión final}
@@ -133,4 +141,18 @@ y diseñar cada parte para que, ante una falla, el sistema quede en un estado
 seguro. El prototipo ofrece una base abierta, de bajo costo y verificada para
 completar los ensayos restantes y avanzar hacia su uso en una línea de producción.
 
-\noindent\pendiente{reflexión personal sobre el proceso}
+En lo personal, este trabajo me permitió recorrer el ciclo completo de un
+desarrollo de ingeniería: desde la formulación y la lectura de la norma hasta el
+armado del banco, la programación y la verificación con cargas reales. Las
+etapas que más me enseñaron fueron las que no salieron como estaba previsto: el
+microcontrolador que no arrancaba, la placa de relés que se desconectaba o el
+ensayo que rechazaba un aparato sano. Cada una obligó a volver a las mediciones,
+plantear hipótesis y comprobarlas antes de dar algo por resuelto, y me mostró que
+en un equipo de seguridad la confiabilidad se construye tanto en el diseño como
+en la verificación. También aprendí a integrar herramientas de programación
+asistida por inteligencia artificial sin delegar el criterio técnico: aceleraron
+el desarrollo, pero cada límite normativo y cada resultado se contrastaron con la
+norma y con el banco. Cierro este trabajo con un prototipo funcional, con una
+idea clara de lo que falta para completarlo y con la convicción de que la
+automatización de los ensayos de seguridad es un camino viable y necesario para
+la industria local.
