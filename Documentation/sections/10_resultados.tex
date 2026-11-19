@@ -6,10 +6,14 @@
 \section{Resultados y análisis}
 \label{sec:resultados}
 
-Los resultados se obtuvieron en un banco de pruebas armado con los componentes
-descritos en la Sección~\ref{subsec:metodologia_hw}
-(Figura~\ref{fig:conexion_red}), entre el 1 y el 18 de noviembre de 2026, operando
-la aplicación real con el hardware real. Se usaron dos cargas: un soldador de
+Los resultados provienen de dos fuentes
+(Sección~\ref{subsubsec:equipo_syglab}): los registros del equipo completo de
+referencia provisto por SYGlab, que ejecutó los ensayos de seguridad con el
+sistema FDL (Sección~\ref{subsec:resultados_syglab}), y las pruebas del software
+nuevo en el prototipo propio, armado con los componentes descritos en la
+Sección~\ref{subsec:metodologia_hw} (Figura~\ref{fig:conexion_red}) y operado
+entre el 1 y el 18 de noviembre de 2026 con la aplicación y el hardware reales.
+En el prototipo se usaron dos cargas: un soldador de
 \SI{40}{\watt} declarados (carga resistiva) y un ventilador (carga con motor). La
 evidencia ---fotografías, base de datos, exportación y scripts de prueba--- se
 lista en el Anexo~\ref{anx:evidencia}.
@@ -154,15 +158,72 @@ y la exportación generó un archivo Excel con las hojas de historial, consumo y
 verificación.
 
 % ------------------------------------------------------------
-\subsection{Ensayos de seguridad}
+\subsection{Ensayos en el equipo completo de SYGlab}
+\label{subsec:resultados_syglab}
+% ------------------------------------------------------------
+
+La base de datos del sistema FDL instalado en el equipo de SYGlab registra
+\textbf{86 verificaciones con patrones} realizadas en 18 jornadas entre el
+14/12/2023 y el 11/04/2025. En cada verificación el equipo ensaya dos patrones
+conocidos ---uno que debe aprobar y otro que debe fallar--- en corte de neutro,
+puesta a tierra y tensión resistida, y registra si obtuvo el resultado esperado
+(OK) o no (ERROR). La Tabla~\ref{tab:verificaciones_fdl} resume los resultados;
+la base registra además tres ensayos de consumo de un producto Indelplas IV~20
+(11/04/2025).
+
+\begin{table}[htbp]
+\centering
+\caption{Verificaciones con patrones del equipo completo de SYGlab (sistema FDL,
+         diciembre de 2023 a abril de 2025)}
+\label{tab:verificaciones_fdl}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabular}{@{} l c c c c c @{}}
+\toprule
+& \multicolumn{2}{c}{\textbf{Patrón que debe aprobar}}
+& \multicolumn{3}{c}{\textbf{Patrón que debe fallar}} \\
+\cmidrule(lr){2-3}\cmidrule(l){4-6}
+\textbf{Ensayo} & \textbf{OK} & \textbf{ERROR} & \textbf{OK} & \textbf{ERROR} &
+\textbf{No ensayado} \\
+\midrule
+Corte de neutro    & 86 & 0  & 76 & 0 & 10 \\
+Puesta a tierra    & 42 & 44 & 69 & 7 & 10 \\
+Tensión resistida  & 84 & 2  & 69 & 7 & 10 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Análisis.}
+\begin{itemize}
+    \item El corte de neutro y la tensión resistida se comportaron de forma
+          consistente: el patrón que debe aprobar dio el resultado esperado en
+          el \SI{100}{\percent} y el \SI{98}{\percent} de las verificaciones.
+    \item La \textbf{puesta a tierra} fue la medición más sensible: el patrón que
+          debe aprobar resultó en ERROR en 44 de las 86 verificaciones. Coincide
+          con que el sistema tenía configurada una corrección de calibración de
+          puesta a tierra, y con lo observado en el diseño de este trabajo: la
+          medición de resistencias de pocos miliohmios depende de la corriente de
+          ensayo (al menos \SI{10}{\ampere}), de la resistencia de contacto y del
+          método de medición (Anexo~\ref{anx:valores_referencia}). Esto motivó
+          exigir en el software nuevo que la corriente alcance el mínimo de la
+          norma para dar por válido el ensayo.
+    \item Solo 39 de las 86 verificaciones resultaron completamente correctas en
+          los seis controles, lo que muestra el valor de verificar el equipo con
+          patrones antes de cada jornada, función que el software nuevo conserva.
+\end{itemize}
+
+% ------------------------------------------------------------
+\subsection{Ensayos de seguridad con el software nuevo}
 \label{subsec:resultados_seguridad}
 % ------------------------------------------------------------
 
-Los ensayos de fuga, puesta a tierra y rigidez dieléctrica están implementados con
-los límites de la norma y verificados con hardware simulado, pero no pudieron
-ejecutarse en el banco por falta de su hardware de medición
-(Tabla~\ref{tab:estado_ensayos}). En el banco se comprobó que, sin ese hardware,
-el sistema responde de forma segura: informa FALLA y deja los relés abiertos.
+En el software nuevo, los ensayos de fuga, puesta a tierra y rigidez dieléctrica
+están implementados con los límites de la norma y verificados con hardware
+simulado, pero no se ejecutaron con hardware real: el prototipo propio no incluye
+su hardware de medición y no hay registros de su ejecución en el equipo de
+SYGlab (Tabla~\ref{tab:estado_ensayos}). En el prototipo se comprobó que, sin ese
+hardware, el sistema responde de forma segura: informa FALLA y deja los relés
+abiertos.
 
 \begin{table}[htbp]
 \centering

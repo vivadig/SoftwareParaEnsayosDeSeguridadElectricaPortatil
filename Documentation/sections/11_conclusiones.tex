@@ -21,6 +21,11 @@ terminada pero cuyo hardware de medición está pendiente.
           ensayo de consumo quedó validado de punta a punta sobre cargas reales,
           en sus modos de final de línea, perfil y cíclico, con una repetibilidad
           del \SI{0,22}{\percent}.
+    \item Se \textbf{esquematizó el equipo completo de SYGlab}, que sirvió de
+          referencia para la arquitectura y para los esquemas de conexión de los
+          ensayos de seguridad. Sus registros (86 verificaciones con patrones
+          entre 2023 y 2025) mostraron que la puesta a tierra era la medición más
+          delicada, lo que orientó los criterios de validez del software nuevo.
     \item Los \textbf{criterios de aprobación quedaron alineados con la norma}.
           La revisión de la IEC~60335-1 mostró que los límites de partida no la
           reflejaban: la rigidez dieléctrica se evaluaba solo por tensión, la fuga
@@ -103,8 +108,10 @@ el banco (Anexo~\ref{anx:cumplimiento_cronograma}).
 \subsection{Limitaciones}
 
 \begin{itemize}
-    \item Los ensayos de fuga, puesta a tierra y rigidez dieléctrica no se
-          validaron en el banco por falta de su hardware de medición.
+    \item Los ensayos de fuga, puesta a tierra y rigidez dieléctrica del software
+          nuevo no se ejecutaron con hardware real: el prototipo propio no incluye
+          su hardware de medición, y en el equipo de SYGlab solo hay registros del
+          sistema anterior.
     \item No se contó con un instrumento patrón: los resultados no constituyen
           una validación metrológica y las correcciones de calibración no están
           ajustadas.
