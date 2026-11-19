@@ -131,12 +131,14 @@ tensión $V$ como
     P_n = P \left(\frac{V_n}{V}\right)^2
     \label{eq:correccion_tension}
 \end{equation}
-Con $P = \SI{36,7}{\watt}$ a $V = \SI{227,9}{\volt}$, resulta
-$P_n \approx \SI{37,4}{\watt}$ si $V_n = \SI{230}{\volt}$ (desviación
-\SI{-6,6}{\percent}, aprobado) y $P_n \approx \SI{34,2}{\watt}$ si
-$V_n = \SI{220}{\volt}$ (desviación \SI{-14,5}{\percent}, rechazado). Para un
-aparato cercano al límite, la tensión de ensayo puede cambiar el veredicto: el
-sistema debería alimentar el aparato a su tensión nominal o, para cargas
+El soldador está marcado para $V_n = \SI{230}{\volt}$. Con
+$P = \SI{36,7}{\watt}$ a $V = \SI{227,9}{\volt}$ resulta
+$P_n \approx \SI{37,4}{\watt}$, es decir, una desviación de \SI{-6,6}{\percent}
+respecto del nominal: el aparato aprueba también a su tensión nominal y con mayor
+margen. El efecto, sin embargo, no es despreciable: si el mismo aparato estuviera
+marcado para \SI{220}{\volt}, la potencia estimada sería de \SI{34,2}{\watt}
+(\SI{-14,5}{\percent}) y el veredicto sería FALLA. Para aparatos cercanos al
+límite, el sistema debería alimentar el aparato a su tensión nominal o, en cargas
 resistivas, aplicar esta corrección. Las lecturas del 15/11 a \SI{230,1}{\volt}
 (\SIrange{37,5}{37,7}{\watt}) son coherentes con la
 ecuación~\eqref{eq:correccion_tension}.

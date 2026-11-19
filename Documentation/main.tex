@@ -11,6 +11,7 @@
 % --- Codificación e idioma ---
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage[spanish,es-tabla]{babel}
 
 % --- Página ---
@@ -36,6 +37,15 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \graphicspath{{figuras/}{evidencia_banco/fotos/}}
+% Las figuras y tablas no pasan a la sección siguiente
+\usepackage[section]{placeins}
+
+% Índice: espacio para números de sección de dos dígitos
+\usepackage{tocloft}
+\setlength{\cftsecnumwidth}{2.2em}
+\setlength{\cftsubsecnumwidth}{3.2em}
+\setlength{\cftsubsubsecnumwidth}{4.2em}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 
 % --- Títulos de párrafo en bloque ---
 \usepackage{titlesec}
@@ -51,6 +61,7 @@
 \usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
 \addbibresource{referencias.bib}
 \usepackage{csquotes}
+\usepackage{xurl}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, linkcolor=black, citecolor=blue!50!black,
             urlcolor=blue!50!black}
@@ -61,7 +72,7 @@
 \newcommand{\figuraopcional}[2]{%
   \IfFileExists{figuras/#1}{\includegraphics[width=#2]{#1}}{%
     \fbox{\parbox{#2}{\centering\vspace{1.5cm}%
-      \textit{Falta la imagen \texttt{figuras/#1}}\vspace{1.5cm}}}}}
+      \textit{Falta la imagen \texttt{figuras/\detokenize{#1}}}\vspace{1.5cm}}}}}
 % Marca visible de contenido pendiente (eliminar antes de la entrega).
 \newcommand{\pendiente}[1]{\textcolor{red}{\textbf{[PENDIENTE: #1]}}}
 

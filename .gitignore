@@ -145,3 +145,7 @@ Documentation/Folleto_*.pdf
 
 # PlatformIO (firmware)
 .pio/
+
+# Compilación del informe LaTeX
+Documentation/build/
+Documentation/informe_final.pdf

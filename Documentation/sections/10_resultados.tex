@@ -32,8 +32,8 @@ prueba.
 \caption{Mediciones de consumo en el banco de pruebas}
 \label{tab:resultados_consumo}
 \renewcommand{\arraystretch}{1.25}
-\small
-\begin{tabular}{@{} l l c c c c @{}}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{} l p{3.6cm} c c c c @{}}
 \toprule
 \textbf{Carga} & \textbf{Prueba} & \textbf{$V$ [\si{\volt}]} &
 \textbf{$I$ [\si{\ampere}]} & \textbf{$P$ [\si{\watt}]} & \textbf{FP} \\
@@ -87,11 +87,13 @@ Incertidumbre expandida ($k = 2$) & \SI{0,23}{\watt} \\
           cálculo está en el Anexo~\ref{anx:estadistica}.
     \item El resultado queda \textbf{cerca del límite inferior} (\SI{36}{\watt}).
           La cláusula~10.1 pide medir a la tensión nominal y el banco mide a la
-          tensión de red disponible, sin regularla. En una carga resistiva la
-          potencia varía con el cuadrado de la tensión, de modo que la tensión de
-          ensayo puede cambiar el veredicto de un aparato cercano al límite; el
-          Anexo~\ref{anx:estadistica} cuantifica este efecto.
-          \pendiente{confirmar la tensión nominal marcada en el soldador}
+          tensión de red disponible, sin regularla. El soldador está marcado para
+          \SI{230}{\volt}; como en una carga resistiva la potencia varía con el
+          cuadrado de la tensión, su consumo a la tensión nominal se estima en
+          \SI{37,4}{\watt} (\SI{-6,6}{\percent}), con lo que el veredicto se
+          mantiene. En un aparato más cercano al límite, en cambio, la tensión de
+          ensayo podría cambiar el veredicto; el Anexo~\ref{anx:estadistica}
+          desarrolla este efecto.
     \item Las lecturas del perfil (\SI{36,2}{\watt} en promedio) son
           \SI{0,5}{\watt} menores que las de final de línea, coherente con la
           menor tensión de red en ese momento (\SI{227}{\volt} frente a

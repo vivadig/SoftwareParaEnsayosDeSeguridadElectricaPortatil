@@ -46,7 +46,8 @@ en caso contrario, como aparatos de calefacción.
 \caption{Desviación admisible del consumo respecto del valor nominal --- IEC~60335-1, tablas~1 y~2}
 \label{tab:potencia_desviacion}
 \renewcommand{\arraystretch}{1.35}
-\begin{tabular}{@{} l l l l @{}}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{} p{2.8cm} l l p{4.4cm} @{}}
 \toprule
 \textbf{Tipo de aparato}
     & \textbf{Potencia nominal}
@@ -58,27 +59,23 @@ Todos
     & $\leq \SI{0.2}{\ampere}$
     & $+\SI{20}{\percent}$ \\
 \addlinespace
-\multirow{2}{*}{Calefacción y combinados}
+\multirow{2}{2.8cm}{Calefacción y combinados}
     & \SIrange[range-phrase={ a }]{25}{200}{\watt}
     & \SIrange[range-phrase={ a }]{0.2}{1}{\ampere}
     & $\pm\SI{10}{\percent}$ \\
     & $> \SI{200}{\watt}$
     & $> \SI{1}{\ampere}$
-    & \begin{tabular}[t]{@{}l@{}}
-        $+\SI{5}{\percent}$ o $+\SI{20}{\watt}$ ($+\SI{0.10}{\ampere}$),\\
-        el mayor; $-\SI{10}{\percent}$
-      \end{tabular} \\
+    & $+\SI{5}{\percent}$ o $+\SI{20}{\watt}$ ($+\SI{0.10}{\ampere}$),
+      el mayor; $-\SI{10}{\percent}$ \\
 \addlinespace
-\multirow{2}{*}{A motor}
+\multirow{2}{2.8cm}{A motor}
     & \SIrange[range-phrase={ a }]{25}{300}{\watt}
     & \SIrange[range-phrase={ a }]{0.2}{1.5}{\ampere}
     & $+\SI{20}{\percent}$ \\
     & $> \SI{300}{\watt}$
     & $> \SI{1.5}{\ampere}$
-    & \begin{tabular}[t]{@{}l@{}}
-        $+\SI{15}{\percent}$ o $+\SI{60}{\watt}$ ($+\SI{0.30}{\ampere}$),\\
-        el mayor
-      \end{tabular} \\
+    & $+\SI{15}{\percent}$ o $+\SI{60}{\watt}$ ($+\SI{0.30}{\ampere}$),
+      el mayor \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -213,7 +210,7 @@ Red de medición
 Puntos de medición
     & Entre cualquier polo de la alimentación y las partes metálicas
       accesibles, incluida una lámina metálica de hasta
-      \SI{20 x 10}{\centi\meter} sobre superficies accesibles de
+      \qtyproduct{20 x 10}{\centi\meter} sobre superficies accesibles de
       material aislante \\
 \addlinespace
 Repetición
@@ -289,6 +286,7 @@ la resistencia de los cables de prueba.
 \caption{Tensiones de ensayo de rigidez dieléctrica para tensión nominal entre \SI{150}{\volt} y \SI{250}{\volt} --- IEC~60335-1, tablas~4, 7 y~A.1}
 \label{tab:hipot_tensiones}
 \renewcommand{\arraystretch}{1.35}
+\small
 \begin{tabular}{@{} l r r r @{}}
 \toprule
 \textbf{Aislamiento}
@@ -383,7 +381,8 @@ a la norma.
 \label{tab:resumen_cotas}
 \renewcommand{\arraystretch}{1.4}
 \rowcolors{2}{gray!10}{white}
-\begin{tabular}{@{} l l l l @{}}
+\small
+\begin{tabular}{@{} l p{3.6cm} p{5.2cm} l @{}}
 \toprule
 \textbf{Ensayo}
     & \textbf{Parámetro controlado}
@@ -400,17 +399,13 @@ Fuga activa
     & Cl.~13.2 \\
 Fuga pasiva
     & $I_{\text{fuga}}$ (Clase~I portátil)
-    & \begin{tabular}[t]{@{}l@{}}
-        $\leq \SI{0.75}{\milli\ampere}$\\
-        ($\leq \SI{1.5}{\milli\ampere}$ con duplicación)
-      \end{tabular}
+    & $\leq \SI{0.75}{\milli\ampere}$
+      ($\leq \SI{1.5}{\milli\ampere}$ con duplicación)
     & Cl.~16.2 \\
 Puesta a tierra
     & $R_{\text{PE}}$ con $I \geq \SI{10}{\ampere}$
-    & \begin{tabular}[t]{@{}l@{}}
-        $\leq \SI{200}{\milli\ohm}$ con cable de alimentación\\
-        $\leq \SI{100}{\milli\ohm}$ sin cable
-      \end{tabular}
+    & $\leq \SI{200}{\milli\ohm}$ con cable de alimentación;
+      $\leq \SI{100}{\milli\ohm}$ sin cable
     & Anexo~A.1 \\
 Rigidez dieléctrica
     & $I_{\text{HV}}$ a \SI{1000}{\volt} (Clase~I) / \SI{2500}{\volt} (Clase~II)
