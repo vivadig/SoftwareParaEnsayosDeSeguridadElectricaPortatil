@@ -6,15 +6,20 @@
 \section{Resultados y análisis}
 \label{sec:resultados}
 
-Los resultados se obtuvieron en un banco de pruebas armado con los componentes
-descritos en la Sección~\ref{subsec:metodologia_hw}
-(Figura~\ref{fig:conexion_red}), entre el 1 y el 18 de noviembre de 2026, operando
-la aplicación real con el hardware real. Se usaron dos cargas: un soldador de
+Los resultados provienen de dos fuentes
+(Sección~\ref{subsubsec:equipo_syglab}): los registros del equipo completo de
+referencia provisto por SYGlab, que ejecutó los ensayos de seguridad con la
+versión inicial del software (Sección~\ref{subsec:resultados_syglab}), y las pruebas de la versión
+final en el prototipo propio, armado con los componentes descritos en la
+Sección~\ref{subsec:metodologia_hw} (Figura~\ref{fig:conexion_red}) y operado
+con la aplicación y el hardware reales.
+En el prototipo se usaron dos cargas: un soldador de
 \SI{40}{\watt} declarados (carga resistiva) y un ventilador (carga con motor). La
 evidencia ---fotografías, base de datos, exportación y scripts de prueba--- se
 lista en el Anexo~\ref{anx:evidencia}.
 
-Al momento de las pruebas no se disponía de un instrumento patrón, por lo que los
+Al momento de las pruebas no se había realizado el contraste con el instrumento
+patrón previsto (Sección~\ref{subsec:metodologia_hw}), por lo que los
 resultados verifican el funcionamiento del sistema y la corrección de sus
 veredictos, pero \textbf{no constituyen una validación metrológica}.
 
@@ -38,13 +43,13 @@ prueba.
 \textbf{Carga} & \textbf{Prueba} & \textbf{$V$ [\si{\volt}]} &
 \textbf{$I$ [\si{\ampere}]} & \textbf{$P$ [\si{\watt}]} & \textbf{FP} \\
 \midrule
-Ventilador & Lectura directa (15/11)
+Ventilador & Lectura directa
   & 228,7--228,9 & 0,236--0,242 & 52,1--53,4 & 0,96--0,97 \\
-Soldador   & Lectura directa (15/11)
+Soldador   & Lectura directa
   & 230,1--230,2 & 0,163--0,164 & 37,5--37,7 & 1,00 \\
-Soldador   & Final de línea, 4 ensayos (17/11)
+Soldador   & Final de línea, 4 ensayos
   & 227,7--228,0 & 0,161--0,162 & 36,6--36,8 & 0,99--1,00 \\
-Soldador   & Perfil de consumo, 8 muestras (17/11)
+Soldador   & Perfil de consumo, 8 muestras
   & 226,2--227,3 & 0,160--0,161 & 36,1--36,4 & 1,00 \\
 \bottomrule
 \end{tabular}
@@ -105,7 +110,7 @@ Incertidumbre expandida ($k = 2$) & \SI{0,23}{\watt} \\
 \label{subsec:resultados_e2e}
 % ------------------------------------------------------------
 
-La prueba de punta a punta del 17/11 recorrió la aplicación completa sobre el
+La prueba de punta a punta recorrió la aplicación completa sobre el
 banco: detección del hardware, alta de productos, ensayos de final de línea y
 cíclico, parada de emergencia, cierre de la ventana durante un ensayo, historial,
 exportación y API. Encontró seis defectos, que se corrigieron y se volvieron a
@@ -154,15 +159,72 @@ y la exportación generó un archivo Excel con las hojas de historial, consumo y
 verificación.
 
 % ------------------------------------------------------------
-\subsection{Ensayos de seguridad}
+\subsection{Ensayos en el equipo completo de SYGlab}
+\label{subsec:resultados_syglab}
+% ------------------------------------------------------------
+
+La base de datos de la versión inicial del software, instalada en el equipo de
+SYGlab, registra \textbf{86 verificaciones con patrones} realizadas en 18
+jornadas entre 2023 y 2025. En cada verificación el equipo ensaya dos patrones
+conocidos ---uno que debe aprobar y otro que debe fallar--- en corte de neutro,
+puesta a tierra y tensión resistida, y registra si obtuvo el resultado esperado
+(OK) o no (ERROR). La Tabla~\ref{tab:verificaciones_fdl} resume los resultados;
+la base registra además tres ensayos de consumo de un producto Indelplas IV~20.
+
+\begin{table}[htbp]
+\centering
+\caption{Verificaciones con patrones del equipo completo de SYGlab (versión inicial
+         del software, 2023 a 2025)}
+\label{tab:verificaciones_fdl}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabular}{@{} l c c c c c @{}}
+\toprule
+& \multicolumn{2}{c}{\textbf{Patrón que debe aprobar}}
+& \multicolumn{3}{c}{\textbf{Patrón que debe fallar}} \\
+\cmidrule(lr){2-3}\cmidrule(l){4-6}
+\textbf{Ensayo} & \textbf{OK} & \textbf{ERROR} & \textbf{OK} & \textbf{ERROR} &
+\textbf{No ensayado} \\
+\midrule
+Corte de neutro    & 86 & 0  & 76 & 0 & 10 \\
+Puesta a tierra    & 42 & 44 & 69 & 7 & 10 \\
+Tensión resistida  & 84 & 2  & 69 & 7 & 10 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Análisis.}
+\begin{itemize}
+    \item El corte de neutro y la tensión resistida se comportaron de forma
+          consistente: el patrón que debe aprobar dio el resultado esperado en
+          el \SI{100}{\percent} y el \SI{98}{\percent} de las verificaciones.
+    \item La \textbf{puesta a tierra} fue la medición más sensible: el patrón que
+          debe aprobar resultó en ERROR en 44 de las 86 verificaciones. Coincide
+          con que el sistema tenía configurada una corrección de calibración de
+          puesta a tierra, y con lo observado en el diseño de este trabajo: la
+          medición de resistencias de pocos miliohmios depende de la corriente de
+          ensayo (al menos \SI{10}{\ampere}), de la resistencia de contacto y del
+          método de medición (Anexo~\ref{anx:valores_referencia}). Esto motivó
+          exigir en la versión final que la corriente alcance el mínimo de la
+          norma para dar por válido el ensayo.
+    \item Solo 39 de las 86 verificaciones resultaron completamente correctas en
+          los seis controles, lo que muestra el valor de verificar el equipo con
+          patrones antes de cada jornada, función que la versión final conserva.
+\end{itemize}
+
+% ------------------------------------------------------------
+\subsection{Ensayos de seguridad con la versión final}
 \label{subsec:resultados_seguridad}
 % ------------------------------------------------------------
 
-Los ensayos de fuga, puesta a tierra y rigidez dieléctrica están implementados con
-los límites de la norma y verificados con hardware simulado, pero no pudieron
-ejecutarse en el banco por falta de su hardware de medición
-(Tabla~\ref{tab:estado_ensayos}). En el banco se comprobó que, sin ese hardware,
-el sistema responde de forma segura: informa FALLA y deja los relés abiertos.
+En la versión final, los ensayos de fuga, puesta a tierra y rigidez dieléctrica
+están implementados con los límites de la norma y verificados con hardware
+simulado. Su ejecución con hardware real corresponde a la versión inicial en el
+equipo de SYGlab (Sección~\ref{subsec:resultados_syglab}): el prototipo propio no
+incluye su hardware de medición, y no hay registros de la versión final en
+aquel equipo (Tabla~\ref{tab:estado_ensayos}). En el prototipo se comprobó que, sin ese
+hardware, el sistema responde de forma segura: informa FALLA y deja los relés
+abiertos.
 
 \begin{table}[htbp]
 \centering

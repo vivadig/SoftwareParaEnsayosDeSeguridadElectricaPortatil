@@ -15,6 +15,28 @@ el del software y los criterios metodológicos adoptados para cada ensayo.
 \label{subsec:metodologia_hw}
 % ------------------------------------------------------------
 
+\subsubsection{Equipo completo de referencia y prototipo propio}
+\label{subsubsec:equipo_syglab}
+
+El trabajo se apoyó en dos equipos con propósitos distintos:
+\begin{itemize}
+    \item \textbf{Equipo completo de referencia:} un equipo de ensayos de final de
+          línea provisto por SYGlab, que realiza los ensayos de consumo,
+          corriente de fuga, puesta a tierra, tensión resistida (rigidez
+          dieléctrica) y corte de neutro, con la misma
+          arquitectura de este proyecto: medidores PZEM, relés, contactores y
+          transformadores de ensayo comandados desde una PC. El hardware fue
+          provisto por SYGlab; su esquematización ---el relevamiento del
+          conexionado y los esquemas de conexión de cada ensayo
+          (Anexo~\ref{anx:evidencia})--- fue realizada por la autora. En ese equipo
+          se ejecutó la versión inicial del software desarrollado en este
+          trabajo, que luego se amplió y corrigió hasta su versión final.
+    \item \textbf{Prototipo propio:} un banco armado por la autora para el ensayo
+          de consumo, sobre el que se desarrolló y verificó de punta a punta la
+          versión final del software con hardware real
+          (Figura~\ref{fig:conexion_red}).
+\end{itemize}
+
 \subsubsection{Criterios de selección de componentes}
 
 La selección de los componentes se realizó mediante un análisis de mercado con
@@ -88,6 +110,33 @@ tierra de protección conectada directamente al DUT, sin pasar por el contactor.
 El banco no cuenta con interruptor diferencial; el riesgo se mitiga por
 procedimiento (no manipular nada energizado y desconectar antes de intervenir).
 
+\paragraph{Instrumento patrón previsto.}
+Para calibrar y validar metrológicamente el equipo se prevé contrastarlo con
+instrumentos de exactitud claramente superior a la de los medidores PZEM, con
+certificado de calibración trazable emitido por un laboratorio acreditado por el
+OAA:
+\begin{itemize}
+    \item \textbf{Consumo:} un analizador de potencia de laboratorio, como el
+          Yokogawa WT310E \cite{wt310e}, conectado en serie con el aparato para
+          comparar ambas lecturas sobre la misma carga. Su exactitud en potencia
+          es del orden de \SIrange{0,1}{0,15}{\percent}, entre tres y cinco veces
+          mejor que el \SI{0,5}{\percent} del PZEM-004T.
+    \item \textbf{Ensayos de seguridad:} un calibrador de equipos de ensayo de
+          seguridad eléctrica, como el Fluke 5322A \cite{fluke5322a}. A
+          diferencia de un segundo equipo de ensayo, el calibrador genera
+          valores conocidos que el sistema debe medir: simula corrientes de fuga
+          de \SIrange{0,1}{30}{\milli\ampere} con resolución de
+          \SI{10}{\micro\ampere} (cubre el límite de \SI{0,75}{\milli\ampere}),
+          ofrece resistencias de tierra a cuatro hilos desde
+          \SI{1}{\milli\ohm} (cubre los límites de \SI{100}{\milli\ohm} y
+          \SI{200}{\milli\ohm}) y mide la tensión de rigidez dieléctrica con un
+          divisor de \SI{10}{\kilo\volt}.
+\end{itemize}
+Los patrones de resistencia y de fuga del modo de verificación se contrastarían
+con el mismo calibrador antes de usarlos en producción.
+Al cierre del trabajo este contraste no se había realizado
+(Sección~\ref{sec:resultados}).
+
 \paragraph{Carcasa.}
 El equipo final se aloja en una valija de aluminio reforzada, del tipo
 \emph{flight case}, con cierre por pestillos, manija y posibilidad de montar
@@ -120,8 +169,7 @@ versión ilustrada se incluyen en el Anexo~\ref{anx:evidencia}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{conexion_red_banco.pdf}
-    \caption{Banco de pruebas: conexión de red, protecciones y control. El
-             aislador USB se indica como mejora recomendada.}
+    \caption{Banco de pruebas: conexión de red, protecciones y control.}
     \label{fig:conexion_red}
 \end{figure}
 
@@ -188,6 +236,40 @@ El paquete se organiza en módulos con responsabilidades separadas:
     \figuraopcional{arquitectura_interfaz.png}{0.85\linewidth}
     \caption{Diagrama general de la interfaz.}
     \label{fig:arquitectura_interfaz}
+\end{figure}
+
+\subsubsection{Interfaz gráfica}
+
+La Figura~\ref{fig:gui} muestra las pantallas principales de la aplicación: la
+pestaña de Ensayos, donde el operario elige el producto y ejecuta la secuencia;
+la de Consumo, con los valores en vivo y los gráficos del perfil; la de
+Productos, donde se cargan los datos de placa que definen los límites; y la de
+Configuraciones, con los tiempos de cada ensayo y los modos de ejecución.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{gui_ensayos.png}
+        \caption{Ensayos.}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{gui_consumo.png}
+        \caption{Consumo.}
+    \end{subfigure}\\[1em]
+    \begin{subfigure}[b]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{gui_productos.png}
+        \caption{Productos.}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{gui_configuraciones.png}
+        \caption{Configuraciones.}
+    \end{subfigure}
+    \caption{Pantallas principales de la interfaz gráfica.}
+    \label{fig:gui}
 \end{figure}
 
 % ------------------------------------------------------------

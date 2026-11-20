@@ -5,9 +5,9 @@
 \section{Evidencia del banco de pruebas}
 \label{anx:evidencia}
 
-Este anexo reúne la evidencia de las pruebas realizadas entre el 1 y el 18 de
-noviembre de 2026. Los archivos se encuentran en el repositorio del proyecto,
-en la carpeta \texttt{Documentation/evidencia\_banco}.
+Este anexo reúne la evidencia de las pruebas realizadas en el banco. Los
+archivos se conservan junto con la documentación del proyecto, en la carpeta
+\texttt{evidencia\_banco}.
 
 \subsection{Esquemas de conexión}
 
@@ -24,6 +24,39 @@ en la carpeta \texttt{Documentation/evidencia\_banco}.
     \includegraphics[width=\linewidth]{mapa_cableado.pdf}
     \caption{Versión ilustrada del esquema de cableado.}
     \label{fig:mapa_cableado}
+\end{figure}
+
+\subsection{Esquemas de conexión de los ensayos de seguridad}
+
+Las Figuras~\ref{fig:conexion_fuga_activa} a~\ref{fig:conexion_pat} muestran el
+\textbf{diseño propuesto} de conexión de los ensayos de seguridad, elaborado por
+la autora a partir del equipo completo de SYGlab y de los requisitos de la norma.
+No es hardware implementado en el prototipo propio: cada esquema indica la
+secuencia que ejecuta el software y, en un recuadro, los puntos que quedan por
+definir para construirlo (por ejemplo, la resolución del medidor para
+\SI{0,75}{\milli\ampere} o la medición de la caída de tensión en puesta a
+tierra).
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{conexion_fuga_activa.pdf}
+    \caption{Esquema de conexión del ensayo de fuga activa (IEC~60335-1, 13.2).}
+    \label{fig:conexion_fuga_activa}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{conexion_fuga_pasiva.pdf}
+    \caption{Esquema de conexión del ensayo de fuga pasiva (IEC~60335-1, 16.2).}
+    \label{fig:conexion_fuga_pasiva}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{conexion_pat.pdf}
+    \caption{Esquema de conexión del ensayo de puesta a tierra (IEC~60335-1,
+             Anexo~A.1).}
+    \label{fig:conexion_pat}
 \end{figure}
 
 \subsection{Fotografías}
@@ -161,18 +194,13 @@ Fuga sin medidor: NO EJECUTADO
 \bottomrule
 \end{longtable}
 
-\subsection{Datos, scripts y control de versiones}
+\subsection{Datos y scripts}
 
 \begin{itemize}
-    \item \texttt{datos/banco\_pruebas\_2026-11-17.db}: base de datos de la prueba
-          de punta a punta (16 ensayos y 10 muestras de perfil de consumo).
-    \item \texttt{datos/exportacion\_historial\_2026-11-17.xlsx}: exportación
-          generada por la aplicación.
-    \item \texttt{datos/notebook\_comandos\_con\_salidas.ipynb}: lecturas del
-          ventilador y del soldador del 15/11.
-    \item \texttt{scripts\_prueba/}: scripts que operan la aplicación real con el
+    \item Base de datos de la prueba de punta a punta (16 ensayos y 10 muestras de perfil de consumo).
+    \item Exportación a Excel generada por la aplicación.
+    \item Cuaderno de comandos con las lecturas directas del ventilador y del
+          soldador.
+    \item Scripts de prueba que operan la aplicación real con el
           hardware real.
-    \item Repositorio \url{https://github.com/vivadig/SoftwareParaEnsayosDeSeguridadElectricaPortatil}:
-          las solicitudes de cambio \#1 a \#19 describen cada modificación y las
-          pruebas realizadas.
 \end{itemize}
