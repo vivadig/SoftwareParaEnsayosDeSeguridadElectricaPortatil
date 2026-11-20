@@ -116,15 +116,24 @@ instrumentos de exactitud claramente superior a la de los medidores PZEM, con
 certificado de calibración trazable emitido por un laboratorio acreditado por el
 OAA:
 \begin{itemize}
-    \item \textbf{Consumo:} un analizador de potencia de precisión, por ejemplo
-          el Yokogawa WT310E, con exactitud básica del orden de
-          \SI{0,1}{\percent} en potencia, frente al \SI{0,5}{\percent} del
-          PZEM-004T.
-    \item \textbf{Ensayos de seguridad:} un analizador de seguridad eléctrica
-          calibrado que integre rigidez dieléctrica, continuidad de tierra y
-          corriente de fuga, por ejemplo el Chroma 19032, junto con los patrones
-          de resistencia y de fuga que usa el modo de verificación.
+    \item \textbf{Consumo:} un analizador de potencia de laboratorio, como el
+          Yokogawa WT310E \cite{wt310e}, conectado en serie con el aparato para
+          comparar ambas lecturas sobre la misma carga. Su exactitud en potencia
+          es del orden de \SIrange{0,1}{0,15}{\percent}, entre tres y cinco veces
+          mejor que el \SI{0,5}{\percent} del PZEM-004T.
+    \item \textbf{Ensayos de seguridad:} un calibrador de equipos de ensayo de
+          seguridad eléctrica, como el Fluke 5322A \cite{fluke5322a}. A
+          diferencia de un segundo equipo de ensayo, el calibrador genera
+          valores conocidos que el sistema debe medir: simula corrientes de fuga
+          de \SIrange{0,1}{30}{\milli\ampere} con resolución de
+          \SI{10}{\micro\ampere} (cubre el límite de \SI{0,75}{\milli\ampere}),
+          ofrece resistencias de tierra a cuatro hilos desde
+          \SI{1}{\milli\ohm} (cubre los límites de \SI{100}{\milli\ohm} y
+          \SI{200}{\milli\ohm}) y mide la tensión de rigidez dieléctrica con un
+          divisor de \SI{10}{\kilo\volt}.
 \end{itemize}
+Los patrones de resistencia y de fuga del modo de verificación se contrastarían
+con el mismo calibrador antes de usarlos en producción.
 Al cierre del trabajo este contraste no se había realizado
 (Sección~\ref{sec:resultados}).
 
