@@ -1,0 +1,38 @@
+% ============================================================
+%  Requisitos del sistema
+% ============================================================
+\section{Requisitos del sistema a desarrollar}
+\label{sec:requisitos}
+
+\subsection{Hardware}
+\label{subsec:requisitos_hw}
+
+El subsistema de hardware constituye el núcleo físico del equipo. Su función es
+ejecutar, de forma controlada y repetible, los procedimientos de medición
+definidos por la norma IEC~60335, garantizando la seguridad del operario y la
+trazabilidad de los resultados. El dispositivo debe cubrir:
+\begin{itemize}
+    \item Medición de consumo (tensión, corriente, potencia activa y factor de
+          potencia).
+    \item Medición de corriente de fuga activa y pasiva.
+    \item Medición de resistencia de puesta a tierra.
+    \item Ensayo de rigidez dieléctrica (tensión resistida).
+    \item Conmutación automática entre los circuitos de ensayo y desconexión
+          del aparato bajo ensayo (DUT).
+    \item Medidas de seguridad: aislamiento entre etapas, protecciones,
+          desconexión ante falla, indicadores y paro de emergencia.
+\end{itemize}
+
+\subsection{Software}
+\label{subsec:requisitos_sw}
+
+La interfaz debe abarcar:
+\begin{itemize}
+    \item Ejecución de los cinco ensayos, adaptando los límites a los atributos
+          del producto (clase de aislamiento, tipo de aparato, cable de
+          alimentación, condición de duplicación del límite de fuga).
+    \item Configuración de productos y tiempos de ensayo, secuencia automática de
+          ensayos, adquisición y procesamiento de datos y veredicto automático.
+    \item Alarmas ante valores anormales o fallas del equipo.
+    \item Registro histórico trazable y exportación de resultados.
+\end{itemize}

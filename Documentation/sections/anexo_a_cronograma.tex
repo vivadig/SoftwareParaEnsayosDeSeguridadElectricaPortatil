@@ -1,0 +1,140 @@
+% ============================================================
+%  Anexo A: cronograma de trabajo
+% ============================================================
+\section{Cronograma de trabajo}
+\label{anx:cronograma}
+
+Las Tablas~\ref{tab:cronograma_hw} y~\ref{tab:cronograma_sw} presentan la
+planificación por fases del hardware y del software, y las
+Figuras~\ref{fig:gantt_hardware} y~\ref{fig:gantt_software} los diagramas de
+Gantt correspondientes, organizados en \emph{sprints} de diez días laborales.
+
+\subsection{Hardware}
+
+\begin{longtable}{@{} l p{8.5cm} r @{}}
+\caption{Cronograma del hardware}\label{tab:cronograma_hw}\\
+\toprule
+\textbf{Fase} & \textbf{Tareas} & \textbf{Duración} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Fase} & \textbf{Tareas} & \textbf{Duración} \\
+\midrule
+\endhead
+\textbf{1} & \textbf{Diseño inicial del sistema y disposición de elementos}
+           & \textbf{7 días} \\
+  & Relevamiento y ubicación de componentes          & 3 días \\
+  & Definición de layout mecánico y eléctrico        & 3 días \\
+  & Revisión de seguridad y mantenibilidad           & 1 día \\
+\midrule
+\textbf{2} & \textbf{Adquisición de datos por tipo de ensayo} & \textbf{52 días} \\
+  & Corriente de fuga activa                         & 15 días \\
+  & Corriente de fuga pasiva                         & 7 días \\
+  & Resistencia de puesta a tierra                   & 15 días \\
+  & Rigidez dieléctrica                              & 15 días \\
+\midrule
+\textbf{3} & \textbf{Arquitectura de comunicación}    & \textbf{21 días} \\
+  & Definición de buses y protocolos (UART/I\textsuperscript{2}C/SPI) & 8 días \\
+  & Diseño de capas de comunicación y direccionamiento & 8 días \\
+  & Pruebas de integridad, EMI y robustez            & 5 días \\
+\midrule
+\textbf{4} & \textbf{Integración con módulos de medición} & \textbf{5 días} \\
+  & Integración eléctrica y lógica con sensores      & 3 días \\
+  & Verificación funcional básica                    & 2 días \\
+\midrule
+\textbf{5} & \textbf{Diseño e implementación del conexionado interno}
+           & \textbf{30 días} \\
+  & Diseño del conexionado (esquemáticos, calibres, protecciones) & 15 días \\
+  & Implementación y ordenado de mazos y cableado    & 15 días \\
+\midrule
+\textbf{6} & \textbf{Desarrollo de módulos de control y procesamiento}
+           & \textbf{30 días} \\
+  & Diseño lógico de control y procesamiento         & 15 días \\
+  & Implementación y validación                      & 15 días \\
+\midrule
+\multicolumn{2}{@{}r}{\textbf{Total estimado (suma de fases)}} & \textbf{145 días} \\
+\multicolumn{2}{@{}r}{Margen de tolerancia}                    & hasta 10 días \\
+\multicolumn{2}{@{}r}{\textbf{Total con margen}} & \textbf{155 días (620 h)} \\
+\bottomrule
+\end{longtable}
+
+\begin{figure}[htbp]
+    \centering
+    \figuraopcional{gantt_hardware.png}{\linewidth}
+    \caption{Diagrama de Gantt del hardware (\emph{sprints} de diez días
+             laborales).}
+    \label{fig:gantt_hardware}
+\end{figure}
+
+\subsection{Software}
+
+\begin{longtable}{@{} l p{8.5cm} r @{}}
+\caption{Cronograma del software}\label{tab:cronograma_sw}\\
+\toprule
+\textbf{Fase} & \textbf{Tareas} & \textbf{Duración} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Fase} & \textbf{Tareas} & \textbf{Duración} \\
+\midrule
+\endhead
+\textbf{1} & \textbf{Planificación y análisis de requerimientos} & \textbf{5 días} \\
+  & Definición del alcance del proyecto                       & 1 día \\
+  & Revisión de normativas y estándares aplicables            & 1 día \\
+  & Identificación de dispositivos de prueba y protocolos     & 2 días \\
+  & Análisis de riesgos y planificación de seguridad          & 1 día \\
+\midrule
+\textbf{2} & \textbf{Diseño del sistema y arquitectura}        & \textbf{14 días} \\
+  & Diseño de la arquitectura del software (modular, con adaptadores) & 7 días \\
+  & Selección de lenguajes, herramientas y tecnologías        & 1 día \\
+  & Diseño de la interfaz de usuario                          & 2 días \\
+  & Definición de la estructura de la base de datos           & 4 días \\
+\midrule
+\textbf{3} & \textbf{Módulo de procesamiento y almacenamiento} & \textbf{8 días} \\
+  & Algoritmos de medición (rigidez dieléctrica, fuga, etc.)  & 3 días \\
+  & Integración con sensores y dispositivos                   & 2 días \\
+  & Lógica de reportes y almacenamiento                       & 3 días \\
+\midrule
+\textbf{4} & \textbf{Interfaz de usuario}                      & \textbf{20 días} \\
+  & Pantalla de configuración                                 & 5 días \\
+  & Pantalla de monitoreo en tiempo real                      & 6 días \\
+  & Alertas de seguridad y notificaciones                     & 5 días \\
+  & Conexión de la interfaz con el módulo de procesamiento    & 4 días \\
+\midrule
+\textbf{5} & \textbf{Pruebas y validación}                     & \textbf{15 días} \\
+  & Pruebas unitarias                                         & 7 días \\
+  & Pruebas de integración                                    & 4 días \\
+  & Pruebas con dispositivos reales                           & 4 días \\
+\midrule
+\textbf{6} & \textbf{Documentación y entrenamiento}            & \textbf{8 días} \\
+  & Documentación del código y funcionalidades                & 3 días \\
+  & Manual de usuario e instrucciones de operación            & 3 días \\
+  & Entrenamiento del operario y revisión de seguridad        & 2 días \\
+\midrule
+\textbf{7} & \textbf{Entrega final y soporte}                  & \textbf{5 días} \\
+  & Entrega de la interfaz finalizada                         & 2 días \\
+  & Soporte y ajustes posteriores                             & 3 días \\
+\midrule
+\multicolumn{2}{@{}r}{\textbf{Total estimado (suma de fases)}} & \textbf{75 días} \\
+\bottomrule
+\end{longtable}
+
+\subsection{Cumplimiento del cronograma}
+\label{anx:cumplimiento_cronograma}
+
+En el \textbf{hardware}, las demoras en los envíos de algunos componentes
+extendieron unos días la construcción del prototipo; el retraso quedó dentro de
+la tolerancia de diez días prevista. En el \textbf{software}, el uso de
+herramientas de programación asistida por inteligencia artificial aceleró la
+implementación, las pruebas automáticas y la corrección de defectos, y la
+integración se completó alrededor de dos semanas antes de lo planificado. Ese
+adelanto permitió dedicar más tiempo a la integración y a las pruebas en el
+banco. En conjunto, el proyecto cumplió el criterio de cronograma.
+
+\begin{figure}[htbp]
+    \centering
+    \figuraopcional{gantt_software.png}{\linewidth}
+    \caption{Diagrama de Gantt del software (\emph{sprints} de diez días
+             laborales).}
+    \label{fig:gantt_software}
+\end{figure}

@@ -1,0 +1,346 @@
+% ============================================================
+%  Resultados y análisis
+%  Solo resultados y su lectura; el desarrollo estadístico y de
+%  incertidumbre está en el Anexo C.
+% ============================================================
+\section{Resultados y análisis}
+\label{sec:resultados}
+
+Los resultados provienen de dos fuentes
+(Sección~\ref{subsubsec:equipo_syglab}): los registros del equipo completo de
+referencia provisto por SYGlab, que ejecutó los ensayos de seguridad con la
+versión inicial del software (Sección~\ref{subsec:resultados_syglab}), y las pruebas de la versión
+final en el prototipo propio, armado con los componentes descritos en la
+Sección~\ref{subsec:metodologia_hw} (Figura~\ref{fig:conexion_red}) y operado
+con la aplicación y el hardware reales.
+En el prototipo se usaron dos cargas: un soldador de
+\SI{40}{\watt} declarados (carga resistiva) y un ventilador (carga con motor). La
+evidencia ---fotografías, base de datos, exportación y scripts de prueba--- se
+lista en el Anexo~\ref{anx:evidencia}.
+
+Al momento de las pruebas no se había realizado el contraste con el instrumento
+patrón previsto (Sección~\ref{subsec:metodologia_hw}), por lo que los
+resultados verifican el funcionamiento del sistema y la corrección de sus
+veredictos, pero \textbf{no constituyen una validación metrológica}.
+
+% ------------------------------------------------------------
+\subsection{Ensayo de consumo}
+\label{subsec:resultados_consumo}
+% ------------------------------------------------------------
+
+La Tabla~\ref{tab:resultados_consumo} resume las mediciones con carga. La tensión
+de red medida varió entre \SIlist{226;231}{\volt} a lo largo de los días de
+prueba.
+
+\begin{table}[htbp]
+\centering
+\caption{Mediciones de consumo en el banco de pruebas}
+\label{tab:resultados_consumo}
+\renewcommand{\arraystretch}{1.25}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{} l p{3.6cm} c c c c @{}}
+\toprule
+\textbf{Carga} & \textbf{Prueba} & \textbf{$V$ [\si{\volt}]} &
+\textbf{$I$ [\si{\ampere}]} & \textbf{$P$ [\si{\watt}]} & \textbf{FP} \\
+\midrule
+Ventilador & Lectura directa
+  & 228,7--228,9 & 0,236--0,242 & 52,1--53,4 & 0,96--0,97 \\
+Soldador   & Lectura directa
+  & 230,1--230,2 & 0,163--0,164 & 37,5--37,7 & 1,00 \\
+Soldador   & Final de línea, 4 ensayos
+  & 227,7--228,0 & 0,161--0,162 & 36,6--36,8 & 0,99--1,00 \\
+Soldador   & Perfil de consumo, 8 muestras
+  & 226,2--227,3 & 0,160--0,161 & 36,1--36,4 & 1,00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Para el soldador, configurado como aparato de calefacción de \SI{40}{\watt}, la
+tolerancia aplicable es de \SI{\pm 10}{\percent} (\SIrange{36}{44}{\watt}). La
+Tabla~\ref{tab:resultados_veredicto} resume el resultado del ensayo de final de
+línea.
+
+\begin{table}[htbp]
+\centering
+\caption{Veredicto del ensayo de consumo del soldador}
+\label{tab:resultados_veredicto}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{} l r @{}}
+\toprule
+\textbf{Parámetro} & \textbf{Valor} \\
+\midrule
+Potencia nominal declarada        & \SI{40}{\watt} \\
+Intervalo admisible (calefacción, \SIrange{25}{200}{\watt}) & \SIrange{36}{44}{\watt} \\
+Potencia media medida ($n = 4$)   & \SI{36,70}{\watt} \\
+Desviación respecto del nominal   & \SI{-8,3}{\percent} \\
+Coeficiente de variación          & \SI{0,22}{\percent} \\
+Incertidumbre expandida ($k = 2$) & \SI{0,23}{\watt} \\
+\midrule
+\textbf{Veredicto del sistema}    & \textbf{OK} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Análisis.}
+\begin{itemize}
+    \item La \textbf{repetibilidad} es muy buena: los cuatro ensayos de final de
+          línea difieren en \SI{0,2}{\watt} y el coeficiente de variación es del
+          \SI{0,22}{\percent}, del mismo orden que la resolución del medidor.
+    \item La \textbf{incertidumbre} estimada (\SI{0,23}{\watt}) es pequeña frente
+          al ancho de la banda de tolerancia (\SI{\pm 4}{\watt}), por lo que la
+          dispersión del sistema no compromete el veredicto. El desarrollo del
+          cálculo está en el Anexo~\ref{anx:estadistica}.
+    \item El resultado queda \textbf{cerca del límite inferior} (\SI{36}{\watt}).
+          La cláusula~10.1 pide medir a la tensión nominal y el banco mide a la
+          tensión de red disponible, sin regularla. El soldador está marcado para
+          \SI{230}{\volt}; como en una carga resistiva la potencia varía con el
+          cuadrado de la tensión, su consumo a la tensión nominal se estima en
+          \SI{37,4}{\watt} (\SI{-6,6}{\percent}), con lo que el veredicto se
+          mantiene. En un aparato más cercano al límite, en cambio, la tensión de
+          ensayo podría cambiar el veredicto; el Anexo~\ref{anx:estadistica}
+          desarrolla este efecto.
+    \item Las lecturas del perfil (\SI{36,2}{\watt} en promedio) son
+          \SI{0,5}{\watt} menores que las de final de línea, coherente con la
+          menor tensión de red en ese momento (\SI{227}{\volt} frente a
+          \SI{228}{\volt}).
+\end{itemize}
+
+% ------------------------------------------------------------
+\subsection{Prueba de punta a punta}
+\label{subsec:resultados_e2e}
+% ------------------------------------------------------------
+
+La prueba de punta a punta recorrió la aplicación completa sobre el
+banco: detección del hardware, alta de productos, ensayos de final de línea y
+cíclico, parada de emergencia, cierre de la ventana durante un ensayo, historial,
+exportación y API. Encontró seis defectos, que se corrigieron y se volvieron a
+verificar en el banco (Tabla~\ref{tab:resultados_e2e}).
+
+\begin{table}[htbp]
+\centering
+\caption{Defectos encontrados en la prueba de punta a punta y verificación de la
+         corrección en el banco}
+\label{tab:resultados_e2e}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabularx}{\linewidth}{@{} l X X @{}}
+\toprule
+\textbf{Área} & \textbf{Antes} & \textbf{Después de la corrección} \\
+\midrule
+Consumo (soldador)
+  & \SIlist{27,2;33,2;31,6;32,6}{\watt}: FALLA
+  & \SIlist{36,8;36,7;36,7;36,6}{\watt}: OK \\
+Modo cíclico
+  & La interfaz se liberaba tras el primer ciclo
+  & Bloqueada hasta el tercer ciclo (\SI{22,1}{\second}) \\
+Error durante un ensayo
+  & Interfaz bloqueada, sin aviso
+  & Aviso visible, interfaz libre en \SI{0,5}{\second}, relés abiertos \\
+Fuga sin medidor
+  & NO EJECUTADO
+  & FALLA (lectura fallida = FALLA) \\
+Historial
+  & Columnas de corriente y potencia vacías
+  & Completas, con la resolución del medidor \\
+Cierre durante un ensayo
+  & El ensayo seguía unos \SI{4}{\second}
+  & Se detiene en \SI{0,4}{\second}, relés abiertos \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+El defecto más relevante fue la \textbf{subestimación del consumo en un
+\SI{27}{\percent}}: el promedio incluía lecturas tomadas mientras el contactor
+cerraba (\SI{0}{\watt}, luego \SI{26}{\watt} y recién después \SI{37}{\watt}), y
+un aparato en buen estado resultaba rechazado. Se corrigió descartando las
+lecturas de estabilización (Sección~\ref{subsec:criterios_ensayo}). Además, la
+parada de emergencia cortó el ensayo en \SI{0,6}{\second} con los relés abiertos,
+y la exportación generó un archivo Excel con las hojas de historial, consumo y
+verificación.
+
+% ------------------------------------------------------------
+\subsection{Ensayos en el equipo completo de SYGlab}
+\label{subsec:resultados_syglab}
+% ------------------------------------------------------------
+
+La base de datos de la versión inicial del software, instalada en el equipo de
+SYGlab, registra \textbf{86 verificaciones con patrones} realizadas en 18
+jornadas entre 2023 y 2025. En cada verificación el equipo ensaya dos patrones
+conocidos ---uno que debe aprobar y otro que debe fallar--- en corte de neutro,
+puesta a tierra y tensión resistida, y registra si obtuvo el resultado esperado
+(OK) o no (ERROR). La Tabla~\ref{tab:verificaciones_fdl} resume los resultados;
+la base registra además tres ensayos de consumo de un producto Indelplas IV~20.
+
+\begin{table}[htbp]
+\centering
+\caption{Verificaciones con patrones del equipo completo de SYGlab (versión inicial
+         del software, 2023 a 2025)}
+\label{tab:verificaciones_fdl}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabular}{@{} l c c c c c @{}}
+\toprule
+& \multicolumn{2}{c}{\textbf{Patrón que debe aprobar}}
+& \multicolumn{3}{c}{\textbf{Patrón que debe fallar}} \\
+\cmidrule(lr){2-3}\cmidrule(l){4-6}
+\textbf{Ensayo} & \textbf{OK} & \textbf{ERROR} & \textbf{OK} & \textbf{ERROR} &
+\textbf{No ensayado} \\
+\midrule
+Corte de neutro    & 86 & 0  & 76 & 0 & 10 \\
+Puesta a tierra    & 42 & 44 & 69 & 7 & 10 \\
+Tensión resistida  & 84 & 2  & 69 & 7 & 10 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Análisis.}
+\begin{itemize}
+    \item El corte de neutro y la tensión resistida se comportaron de forma
+          consistente: el patrón que debe aprobar dio el resultado esperado en
+          el \SI{100}{\percent} y el \SI{98}{\percent} de las verificaciones.
+    \item La \textbf{puesta a tierra} fue la medición más sensible: el patrón que
+          debe aprobar resultó en ERROR en 44 de las 86 verificaciones. Coincide
+          con que el sistema tenía configurada una corrección de calibración de
+          puesta a tierra, y con lo observado en el diseño de este trabajo: la
+          medición de resistencias de pocos miliohmios depende de la corriente de
+          ensayo (al menos \SI{10}{\ampere}), de la resistencia de contacto y del
+          método de medición (Anexo~\ref{anx:valores_referencia}). Esto motivó
+          exigir en la versión final que la corriente alcance el mínimo de la
+          norma para dar por válido el ensayo.
+    \item Solo 39 de las 86 verificaciones resultaron completamente correctas en
+          los seis controles, lo que muestra el valor de verificar el equipo con
+          patrones antes de cada jornada, función que la versión final conserva.
+\end{itemize}
+
+% ------------------------------------------------------------
+\subsection{Ensayos de seguridad con la versión final}
+\label{subsec:resultados_seguridad}
+% ------------------------------------------------------------
+
+En la versión final, los ensayos de fuga, puesta a tierra y rigidez dieléctrica
+están implementados con los límites de la norma y verificados con hardware
+simulado. Su ejecución con hardware real corresponde a la versión inicial en el
+equipo de SYGlab (Sección~\ref{subsec:resultados_syglab}): el prototipo propio no
+incluye su hardware de medición, y no hay registros de la versión final en
+aquel equipo (Tabla~\ref{tab:estado_ensayos}). En el prototipo se comprobó que, sin ese
+hardware, el sistema responde de forma segura: informa FALLA y deja los relés
+abiertos.
+
+\begin{table}[htbp]
+\centering
+\caption{Estado de cada ensayo al cierre del trabajo}
+\label{tab:estado_ensayos}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabularx}{\linewidth}{@{} l l X @{}}
+\toprule
+\textbf{Ensayo} & \textbf{Estado} & \textbf{Falta para validarlo en banco} \\
+\midrule
+Consumo (final de línea, perfil, cíclico) & Validado en banco & Contraste con patrón \\
+Fuga activa y pasiva & Software verificado
+  & PZEM-004T de \SI{10}{\ampere} y red de medición IEC~60990 \\
+Puesta a tierra & Software verificado
+  & PZEM3, transformador de \SI{2,2}{\volt} y verificar $\geq$ \SI{10}{\ampere} \\
+Rigidez dieléctrica & Software verificado
+  & Transformador de alta tensión y medición de \SI{5}{\milli\ampere} \\
+Verificación con patrones & Software verificado & Hardware de los tres ensayos anteriores \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ------------------------------------------------------------
+\subsection{Calidad del software}
+\label{subsec:resultados_software}
+% ------------------------------------------------------------
+
+Las pruebas automáticas pasaron de 63 a 158 a lo largo del período y cubren los
+veredictos de la norma, las tolerancias de consumo, los ensayos con hardware
+simulado, los relés (incluida la reconexión), las correcciones de calibración, las
+credenciales y todas las pestañas de la interfaz. La integración continua, que no
+ejecutaba las pruebas desde el primer commit por un error de configuración, quedó
+en verde en sus tres etapas: pruebas, análisis estático y prueba en Docker.
+
+% ------------------------------------------------------------
+\subsection{Tiempo de ensayo e intervención del operario}
+\label{subsec:resultados_tiempos}
+% ------------------------------------------------------------
+
+Como no se realizó una medición comparativa con un operario ensayando con
+instrumentos convencionales, la Tabla~\ref{tab:tiempos} presenta una
+\textbf{estimación} por aparato. Para el método manual se considera que cada
+ensayo exige conectar el instrumento, configurarlo, ejecutar y anotar el
+resultado; para el sistema, la duración configurada de cada ensayo
+(\SI{5}{\second}) más la conmutación, coherente con lo observado en el banco
+(tres ciclos de consumo en \SI{22,1}{\second}).
+
+\begin{table}[htbp]
+\centering
+\caption{Estimación del tiempo y de las intervenciones del operario por aparato}
+\label{tab:tiempos}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabularx}{\linewidth}{@{} X r r @{}}
+\toprule
+\textbf{Etapa} & \textbf{Manual} & \textbf{Sistema} \\
+\midrule
+Conexión del aparato y configuración          & \SI{75}{\second} & \SI{40}{\second} \\
+Consumo                                       & \SI{60}{\second} & \multirow{5}{*}{\SI{30}{\second}} \\
+Fuga activa                                   & \SI{45}{\second} & \\
+Fuga pasiva                                   & \SI{45}{\second} & \\
+Puesta a tierra                               & \SI{45}{\second} & \\
+Rigidez dieléctrica                           & \SI{60}{\second} & \\
+Registro de resultados                        & \SI{60}{\second} & automático \\
+\midrule
+\textbf{Tiempo total por aparato}             & \textbf{\SI{6,5}{\minute}}
+                                              & \textbf{\SI{70}{\second}} \\
+\textbf{Intervenciones del operario}          & \textbf{21} & \textbf{4} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Con estas estimaciones, el sistema reduce el tiempo de ensayo en torno al
+\SI{80}{\percent} y las intervenciones del operario de 21 (conectar, configurar,
+iniciar y anotar en cada uno de los cinco ensayos, y desconectar) a 4 (conectar,
+elegir el producto, iniciar y desconectar), es decir, un \SI{81}{\percent}.
+Ambos valores deben confirmarse con mediciones cuando estén operativos los cinco
+ensayos.
+
+% ------------------------------------------------------------
+\subsection{Evaluación de los criterios de éxito}
+\label{subsec:resultados_criterios}
+% ------------------------------------------------------------
+
+\begin{table}[htbp]
+\centering
+\caption{Evaluación de los criterios de éxito}
+\label{tab:criterios_exito}
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabularx}{\linewidth}{@{} l l X @{}}
+\toprule
+\textbf{Criterio} & \textbf{Meta} & \textbf{Resultado} \\
+\midrule
+Tiempo de prueba & $\geq$ \SI{30}{\percent} menos
+  & Cumplido según la estimación: alrededor de \SI{80}{\percent} menos
+    (Tabla~\ref{tab:tiempos}); a confirmar con mediciones \\
+Intervención del operario & $\geq$ \SI{80}{\percent} menos
+  & Cumplido según la estimación: de 21 a 4 intervenciones
+    (\SI{81}{\percent} menos); a confirmar con mediciones \\
+Seguridad & Alarmas y falla segura
+  & Cumplido en el banco: relés abiertos ante error, parada y cierre;
+    lectura fallida = FALLA \\
+Escalabilidad & Adaptable a productos y normas
+  & Cumplido: límites por atributos del producto y umbrales configurables \\
+Cumplimiento normativo & Límites IEC~60335
+  & Límites alineados con la norma; consumo validado; trazabilidad metrológica
+    pendiente de patrón \\
+Cronograma & Tolerancia de 10 días
+  & Cumplido: el hardware se demoró unos días por los envíos de componentes,
+    dentro de la tolerancia, y el software se adelantó unas dos semanas
+    (Anexo~\ref{anx:cronograma}) \\
+Presupuesto & $\leq$ \SI{1030}{USD}
+  & Cumplido: unos \SI{520}{USD} con contingencia
+    (Tabla~\ref{tab:costos_detalle}) \\
+\bottomrule
+\end{tabularx}
+\end{table}
