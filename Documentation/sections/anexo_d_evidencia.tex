@@ -61,64 +61,34 @@ tierra).
 
 \subsection{Fotografías}
 
+La Figura~\ref{fig:equipo_completo} muestra el equipo completo de referencia
+armado, con los contactores de cada ensayo (consumo, puesta a tierra y tensión
+resistida de \SI{1}{\kilo\volt} y \SI{2,5}{\kilo\volt}), los transformadores de
+ensayo, el módulo de relés y las borneras. La Figura~\ref{fig:banco_prototipo}
+muestra el primer prototipo propio durante el ensayo de consumo del soldador.
+
 \begin{figure}[htbp]
     \centering
-    \begin{subfigure}[b]{0.48\linewidth}
+    \begin{subfigure}[b]{0.66\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=5.5cm,keepaspectratio]%
-            {01_esp32_pines_uart2_gpio16_17.jpg}
-        \caption{ESP32 con el medidor en GPIO16 y GPIO17.}
+        \includegraphics[height=5.8cm]{equipo_completo_general.jpg}
+        \caption{Vista general.}
     \end{subfigure}\hfill
-    \begin{subfigure}[b]{0.48\linewidth}
+    \begin{subfigure}[b]{0.30\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=5.5cm,keepaspectratio]%
-            {02_pzem_conector_senal_gnd_tx_rx_vcc.jpg}
-        \caption{Conector de señal del PZEM-004T.}
-    \end{subfigure}\\[1em]
-    \begin{subfigure}[b]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth,height=5.5cm,keepaspectratio]%
-            {03_pzem004t_v4_placa_y_bornes.jpg}
-        \caption{PZEM-004T v4.0 y bornera de potencia.}
-    \end{subfigure}\hfill
-    \begin{subfigure}[b]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth,height=5.5cm,keepaspectratio]%
-            {08_varistor_zov_10d431k.jpg}
-        \caption{Varistor 10D431K en la bobina del contactor.}
+        \includegraphics[height=6cm]{equipo_completo_contactores.jpg}
+        \caption{Contactores de cada ensayo.}
     \end{subfigure}
-    \caption{Electrónica de medición y control del banco.}
-    \label{fig:fotos_medicion}
+    \caption{Equipo completo de referencia armado.}
+    \label{fig:equipo_completo}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \begin{subfigure}[b]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth,height=5.5cm,keepaspectratio]%
-            {04_contactor_chint_nxc12m22_frente.jpg}
-        \caption{Contactor CHINT NXC-12M/22.}
-    \end{subfigure}\hfill
-    \begin{subfigure}[b]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth,height=5.5cm,keepaspectratio]%
-            {05_contactor_chint_etiqueta_bobina_220v.jpg}
-        \caption{Datos del contactor y de su bobina.}
-    \end{subfigure}\\[1em]
-    \begin{subfigure}[b]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth,height=5.5cm,keepaspectratio]%
-            {07_portafusible_panel.jpg}
-        \caption{Portafusibles de panel.}
-    \end{subfigure}\hfill
-    \begin{subfigure}[b]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth,height=5.5cm,keepaspectratio]%
-            {06_termomagnetica_interelec_c25.jpg}
-        \caption{Termomagnética C25 (no apta como protección del banco).}
-    \end{subfigure}
-    \caption{Conmutación y protecciones del banco.}
-    \label{fig:fotos_potencia}
+    \includegraphics[height=0.6\textheight,keepaspectratio]{banco_prototipo_soldador.jpg}
+    \caption{Primer prototipo propio (ESP32, PZEM-004T, placa de relés USB y
+             contactor) durante el ensayo de consumo del soldador.}
+    \label{fig:banco_prototipo}
 \end{figure}
 
 \subsection{Registro de hallazgos}
