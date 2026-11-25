@@ -59,15 +59,6 @@ de aprobación, cuando el criterio de la norma es de \SI{5}{\milli\ampere}. Se r
 norma, distinguiendo los ensayos de tipo de los de rutina, y con pruebas
 automáticas que fijan cada límite.
 
-\paragraph{Puesta en marcha del microcontrolador.}
-El ESP32 no era reconocido (el cable USB era solo de carga, y luego faltaba el
-controlador del conversor CP2102), y una vez conectado al medidor entraba en un
-bucle de reinicio. La causa era doble: el medidor estaba en los pines del puerto
-USB y, alimentado con \SI{5}{\volt}, su salida de datos imponía \SI{5}{\volt} en
-un pin del ESP32 y le impedía arrancar. Se resolvió moviendo el medidor al
-segundo puerto serie y alimentándolo desde \SI{3,3}{\volt}. Los bornes de potencia
-del medidor, sin serigrafía, se identificaron midiendo con multímetro.
-
 \paragraph{Interferencia electromagnética en el control de los relés.}
 La placa de relés USB se desconectaba de la PC al abrir el contactor con una carga
 con motor; con la carga resistiva no ocurría. La placa implementa el USB por

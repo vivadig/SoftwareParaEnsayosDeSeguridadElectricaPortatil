@@ -30,11 +30,12 @@ El trabajo se apoyó en dos equipos con propósitos distintos:
           conexionado y los esquemas de conexión de cada ensayo
           (Anexo~\ref{anx:evidencia})--- fue realizada por la autora. En ese equipo
           se ejecutó la versión inicial del software desarrollado en este
-          trabajo, que luego se amplió y corrigió hasta su versión final.
+          trabajo, que luego se amplió y corrigió hasta su versión final
+          (Figura~\ref{fig:equipo_completo}).
     \item \textbf{Prototipo propio:} un banco armado por la autora para el ensayo
           de consumo, sobre el que se desarrolló y verificó de punta a punta la
           versión final del software con hardware real
-          (Figura~\ref{fig:conexion_red}).
+          (Figuras~\ref{fig:conexion_red} y~\ref{fig:banco_prototipo}).
 \end{itemize}
 
 \subsubsection{Criterios de selección de componentes}
@@ -181,7 +182,7 @@ versión ilustrada se incluyen en el Anexo~\ref{anx:evidencia}.
           recepción y GPIO17 como transmisión). Los medidores comparten el bus y
           cada uno responde a su dirección (1, 2 y 3), que se graba en el módulo
           con un comando específico. Los medidores se alimentan desde
-          \SI{3,3}{\volt} (ver Sección~\ref{subsec:dificultades}).
+          \SI{3,3}{\volt}.
     \item \textbf{PC $\leftrightarrow$ ESP32:} puerto serie virtual sobre USB a
           \SI{115200}{\baud}, con un protocolo de texto de una línea por comando,
           implementado en un firmware propio: \texttt{PING}, \texttt{INFO},
